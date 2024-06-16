@@ -25,7 +25,7 @@ account_address = "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e582
 private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
 
 [profile.slot.tool.dojo.env]
-rpc_url = "https://api.cartridge.gg/x/guild-era/katana"
+rpc_url = "https://api.cartridge.gg/x/zkastle/katana"
 account_address = "0x643ee26c8024dd6772e8b70a507a3cba79e64e96ef63e0d11b0842d914268c0"
 private_key = "0x788eec0cb57a076de8529c23697ae456e70ae1a6a9810cd5e7ab01313007134"
 
