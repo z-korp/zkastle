@@ -7,6 +7,7 @@ mod models {
     mod game;
     mod player;
 }
+
 mod types {
     mod action;
     mod card;
@@ -14,6 +15,7 @@ mod types {
     mod resource;
     mod side;
 }
+
 mod elements {
     mod cards {
         mod interface;

@@ -976,8 +976,8 @@
     {
       "kind": "DojoContract",
       "address": "0x453493a276bfe46905a37d4fe8a52d3fc373000c052469b819e63c19bfc9e74",
-      "class_hash": "0x29b34394d732a6d3da930f49b7620687bf44a59fa62ea3a918a13e4dd489615",
-      "original_class_hash": "0x29b34394d732a6d3da930f49b7620687bf44a59fa62ea3a918a13e4dd489615",
+      "class_hash": "0x38821019a0fb128f4d98b1a7d2c2f6ce49a330dbf334b2f51f5d16dc1917e9c",
+      "original_class_hash": "0x38821019a0fb128f4d98b1a7d2c2f6ce49a330dbf334b2f51f5d16dc1917e9c",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -1102,10 +1102,6 @@
                   "type": "dojo::world::IWorldDispatcher"
                 },
                 {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
                   "name": "action",
                   "type": "zkastle::types::action::Action"
                 },
@@ -1224,6 +1220,11 @@
           "key": true
         },
         {
+          "name": "player_id",
+          "type": "felt252",
+          "key": true
+        },
+        {
           "name": "over",
           "type": "bool",
           "key": false
@@ -1287,15 +1288,10 @@
           "name": "seed",
           "type": "felt252",
           "key": false
-        },
-        {
-          "name": "host",
-          "type": "felt252",
-          "key": false
         }
       ],
-      "class_hash": "0x649dede20fba792440bdbeca5bae1931ed5b1782f29672fa677b2479c0067e2",
-      "original_class_hash": "0x649dede20fba792440bdbeca5bae1931ed5b1782f29672fa677b2479c0067e2",
+      "class_hash": "0x4c8f7ba6e969f568fc32b44915c2fa890ebce91ecc12a77452c772d39d51546",
+      "original_class_hash": "0x4c8f7ba6e969f568fc32b44915c2fa890ebce91ecc12a77452c772d39d51546",
       "abi": [
         {
           "type": "impl",
@@ -1643,6 +1639,10 @@
               "type": "core::integer::u32"
             },
             {
+              "name": "player_id",
+              "type": "core::felt252"
+            },
+            {
               "name": "over",
               "type": "core::bool"
             },
@@ -1693,10 +1693,6 @@
             {
               "name": "seed",
               "type": "core::felt252"
-            },
-            {
-              "name": "host",
-              "type": "core::felt252"
             }
           ]
         },
@@ -1736,6 +1732,11 @@
           "key": true
         },
         {
+          "name": "game_id",
+          "type": "u32",
+          "key": false
+        },
+        {
           "name": "achievements",
           "type": "u64",
           "key": false
@@ -1746,8 +1747,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x44576154442c9de4941807404f55f8b65f64a1247c425f2000f1534188dffed",
-      "original_class_hash": "0x44576154442c9de4941807404f55f8b65f64a1247c425f2000f1534188dffed",
+      "class_hash": "0x51d7aade4568c82305c03389db2499d12da087903e0699d03b484cec9a73dc9",
+      "original_class_hash": "0x51d7aade4568c82305c03389db2499d12da087903e0699d03b484cec9a73dc9",
       "abi": [
         {
           "type": "impl",
@@ -2079,6 +2080,10 @@
             {
               "name": "id",
               "type": "core::felt252"
+            },
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
             },
             {
               "name": "achievements",

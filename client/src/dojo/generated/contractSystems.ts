@@ -16,12 +16,9 @@ export interface Create extends Signer {
   name: string;
 }
 
-export interface Start extends Signer {
-  game_id: number;
-}
+export interface Start extends Signer {}
 
 export interface Play extends Signer {
-  game_id: number;
   action: number;
   choice: number;
   resources: number;
@@ -83,13 +80,13 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       }
     };
 
-    const start = async ({ account, game_id }: Start) => {
+    const start = async ({ account }: Start) => {
       try {
         return await provider.execute(
           account,
           contract_name,
           "start",
-          [game_id],
+          [provider.getWorldAddress()],
           details,
         );
       } catch (error) {
@@ -98,19 +95,13 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       }
     };
 
-    const play = async ({
-      account,
-      game_id,
-      action,
-      choice,
-      resources,
-    }: Play) => {
+    const play = async ({ account, action, choice, resources }: Play) => {
       try {
         return await provider.execute(
           account,
           contract_name,
           "play",
-          [game_id, action, choice, resources],
+          [provider.getWorldAddress(), action, choice, resources],
           details,
         );
       } catch (error) {

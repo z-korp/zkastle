@@ -47,6 +47,7 @@ impl IntoSideFelt252 of core::Into<Side, felt252> {
         }
     }
 }
+
 impl IntoSideU8 of core::Into<Side, u8> {
     #[inline(always)]
     fn into(self: Side) -> u8 {
@@ -59,6 +60,7 @@ impl IntoSideU8 of core::Into<Side, u8> {
         }
     }
 }
+
 impl IntoU8Side of core::Into<u8, Side> {
     #[inline(always)]
     fn into(self: u8) -> Side {
@@ -73,6 +75,7 @@ impl IntoU8Side of core::Into<u8, Side> {
         }
     }
 }
+
 impl SidePrint of core::debug::PrintTrait<Side> {
     #[inline(always)]
     fn print(self: Side) {

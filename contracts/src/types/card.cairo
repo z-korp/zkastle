@@ -1,5 +1,4 @@
 use core::clone::Clone;
-
 // Internal imports
 
 use zkastle::elements::cards;
@@ -114,6 +113,7 @@ impl IntoCardFelt252 of core::Into<Card, felt252> {
         }
     }
 }
+
 impl IntoCardU8 of core::Into<Card, u8> {
     #[inline(always)]
     fn into(self: Card) -> u8 {
@@ -130,6 +130,7 @@ impl IntoCardU8 of core::Into<Card, u8> {
         }
     }
 }
+
 impl IntoU8Card of core::Into<u8, Card> {
     #[inline(always)]
     fn into(self: u8) -> Card {
@@ -148,6 +149,7 @@ impl IntoU8Card of core::Into<u8, Card> {
         }
     }
 }
+
 impl CardPrint of core::debug::PrintTrait<Card> {
     #[inline(always)]
     fn print(self: Card) {

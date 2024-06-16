@@ -13,6 +13,7 @@ export function defineContractComponents(world: World) {
         world,
         {
           id: RecsType.Number,
+          player_id: RecsType.BigInt,
           over: RecsType.Boolean,
           card_one: RecsType.Number,
           card_two: RecsType.Number,
@@ -26,13 +27,13 @@ export function defineContractComponents(world: World) {
           sides: RecsType.Number,
           indexes: RecsType.Number,
           seed: RecsType.BigInt,
-          host: RecsType.BigInt,
         },
         {
           metadata: {
             name: "Game",
             types: [
               "u32",
+              "felt252",
               "bool",
               "u8",
               "u8",
@@ -46,7 +47,6 @@ export function defineContractComponents(world: World) {
               "u64",
               "u64",
               "felt252",
-              "felt252",
             ],
           },
         },
@@ -57,13 +57,14 @@ export function defineContractComponents(world: World) {
         world,
         {
           id: RecsType.BigInt,
+          game_id: RecsType.Number,
           achievements: RecsType.Number,
           name: RecsType.BigInt,
         },
         {
           metadata: {
             name: "Player",
-            types: ["felt252", "u64", "felt252"],
+            types: ["felt252", "u32", "u64", "felt252"],
           },
         },
       );

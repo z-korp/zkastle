@@ -1,11 +1,11 @@
 impl PlayerIntrospect<> of dojo::database::introspect::Introspect<Player<>> {
     #[inline(always)]
     fn size() -> Option<usize> {
-        Option::Some(2)
+        Option::Some(3)
     }
 
     fn layout() -> dojo::database::introspect::Layout {
-        dojo::database::introspect::Layout::Fixed(array![64, 251].span())
+        dojo::database::introspect::Layout::Fixed(array![32, 64, 251].span())
     }
 
     #[inline(always)]
@@ -19,6 +19,11 @@ impl PlayerIntrospect<> of dojo::database::introspect::Introspect<Player<>> {
                         name: 'id',
                         attrs: array!['key'].span(),
                         ty: dojo::database::introspect::Introspect::<felt252>::ty()
+                    },
+                    dojo::database::introspect::Member {
+                        name: 'game_id',
+                        attrs: array![].span(),
+                        ty: dojo::database::introspect::Introspect::<u32>::ty()
                     },
                     dojo::database::introspect::Member {
                         name: 'achievements',
@@ -98,6 +103,7 @@ impl PlayerModel of dojo::model::Model<Player> {
     #[inline(always)]
     fn values(self: @Player) -> Span<felt252> {
         let mut serialized = core::array::ArrayTrait::new();
+        core::serde::Serde::serialize(self.game_id, ref serialized);
         core::serde::Serde::serialize(self.achievements, ref serialized);
         core::array::ArrayTrait::append(ref serialized, *self.name);
         core::array::ArrayTrait::span(@serialized)

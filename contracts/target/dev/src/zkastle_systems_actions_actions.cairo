@@ -17,12 +17,7 @@ trait IActions<TContractState> {
     fn create(self: @TContractState, world: IWorldDispatcher, name: felt252);
     fn start(self: @TContractState, world: IWorldDispatcher) -> u32;
     fn play(
-        self: @TContractState,
-        world: IWorldDispatcher,
-        game_id: u32,
-        action: Action,
-        choice: bool,
-        resources: u16
+        self: @TContractState, world: IWorldDispatcher, action: Action, choice: bool, resources: u16
     );
 }
 
@@ -108,12 +103,11 @@ mod actions {
         fn play(
             self: @ContractState,
             world: IWorldDispatcher,
-            game_id: u32,
             action: Action,
             choice: bool,
             resources: u16
         ) {
-            self.playable._play(world, game_id, action, choice, resources);
+            self.playable._play(world, action, choice, resources);
         }
     }
 }

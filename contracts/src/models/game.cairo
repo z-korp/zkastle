@@ -32,13 +32,14 @@ mod errors {
 #[generate_trait]
 impl GameImpl of GameTrait {
     #[inline(always)]
-    fn new(id: u32, host: felt252) -> Game {
+    fn new(id: u32, player_id: felt252) -> Game {
         // [Check] Validate parameters
-        AssertTrait::assert_valid_host(host);
+        AssertTrait::assert_valid_host(player_id);
         // [Effect] Create a new game
         let deck: Deck = Deck::Base;
         let mut game = Game {
             id,
+            player_id,
             over: false,
             card_one: 0,
             card_two: 0,
@@ -52,7 +53,6 @@ impl GameImpl of GameTrait {
             sides: 0,
             indexes: 0,
             seed: 0,
-            host,
         };
         game.reseed();
         game
@@ -241,6 +241,7 @@ impl ZeroableGame of core::Zeroable<Game> {
     fn zero() -> Game {
         Game {
             id: 0,
+            player_id: 0,
             over: false,
             card_one: 0,
             card_two: 0,
@@ -254,13 +255,12 @@ impl ZeroableGame of core::Zeroable<Game> {
             sides: 0,
             indexes: 0,
             seed: 0,
-            host: 0,
         }
     }
 
     #[inline(always)]
     fn is_zero(self: Game) -> bool {
-        0 == self.host.into()
+        0 == self.seed.into()
     }
 
     #[inline(always)]
@@ -283,12 +283,7 @@ impl GameAssert of AssertTrait {
 
     #[inline(always)]
     fn assert_is_over(self: Game) {
-        assert(self.over, errors::GAME_NOT_OVER);
-    }
-
-    #[inline(always)]
-    fn assert_is_host(self: Game, host: felt252) {
-        assert(self.host == host, errors::GAME_INVALID_HOST);
+        assert(self.over || self.is_zero(), errors::GAME_NOT_OVER);
     }
 
     #[inline(always)]

@@ -22,8 +22,8 @@ name = "dojo::base::base"
 [[contracts]]
 kind = "DojoContract"
 address = "0x453493a276bfe46905a37d4fe8a52d3fc373000c052469b819e63c19bfc9e74"
-class_hash = "0x29b34394d732a6d3da930f49b7620687bf44a59fa62ea3a918a13e4dd489615"
-original_class_hash = "0x29b34394d732a6d3da930f49b7620687bf44a59fa62ea3a918a13e4dd489615"
+class_hash = "0x38821019a0fb128f4d98b1a7d2c2f6ce49a330dbf334b2f51f5d16dc1917e9c"
+original_class_hash = "0x38821019a0fb128f4d98b1a7d2c2f6ce49a330dbf334b2f51f5d16dc1917e9c"
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
 abi = "manifests/dev/abis/deployments/contracts/zkastle_systems_actions_actions.json"
 reads = []
@@ -37,14 +37,19 @@ name = "zkastle::systems::actions::actions"
 
 [[models]]
 kind = "DojoModel"
-class_hash = "0x649dede20fba792440bdbeca5bae1931ed5b1782f29672fa677b2479c0067e2"
-original_class_hash = "0x649dede20fba792440bdbeca5bae1931ed5b1782f29672fa677b2479c0067e2"
+class_hash = "0x4c8f7ba6e969f568fc32b44915c2fa890ebce91ecc12a77452c772d39d51546"
+original_class_hash = "0x4c8f7ba6e969f568fc32b44915c2fa890ebce91ecc12a77452c772d39d51546"
 abi = "manifests/dev/abis/deployments/models/zkastle_models_index_game.json"
 name = "zkastle::models::index::game"
 
 [[models.members]]
 name = "id"
 type = "u32"
+key = true
+
+[[models.members]]
+name = "player_id"
+type = "felt252"
 key = true
 
 [[models.members]]
@@ -112,15 +117,10 @@ name = "seed"
 type = "felt252"
 key = false
 
-[[models.members]]
-name = "host"
-type = "felt252"
-key = false
-
 [[models]]
 kind = "DojoModel"
-class_hash = "0x44576154442c9de4941807404f55f8b65f64a1247c425f2000f1534188dffed"
-original_class_hash = "0x44576154442c9de4941807404f55f8b65f64a1247c425f2000f1534188dffed"
+class_hash = "0x51d7aade4568c82305c03389db2499d12da087903e0699d03b484cec9a73dc9"
+original_class_hash = "0x51d7aade4568c82305c03389db2499d12da087903e0699d03b484cec9a73dc9"
 abi = "manifests/dev/abis/deployments/models/zkastle_models_index_player.json"
 name = "zkastle::models::index::player"
 
@@ -128,6 +128,11 @@ name = "zkastle::models::index::player"
 name = "id"
 type = "felt252"
 key = true
+
+[[models.members]]
+name = "game_id"
+type = "u32"
+key = false
 
 [[models.members]]
 name = "achievements"
