@@ -1,0 +1,10 @@
+kind = "DojoContract"
+class_hash = "0x29b34394d732a6d3da930f49b7620687bf44a59fa62ea3a918a13e4dd489615"
+original_class_hash = "0x29b34394d732a6d3da930f49b7620687bf44a59fa62ea3a918a13e4dd489615"
+base_class_hash = "0x0"
+abi = "manifests/dev/abis/base/contracts/zkastle_systems_actions_actions.json"
+reads = []
+writes = []
+computed = []
+init_calldata = []
+name = "zkastle::systems::actions::actions"

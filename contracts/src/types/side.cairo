@@ -1,3 +1,7 @@
+// Internal imports
+
+use zkastle::types::action::Action;
+
 #[derive(Copy, Drop, Serde, Introspect)]
 enum Side {
     None,
@@ -5,6 +9,30 @@ enum Side {
     Two,
     Three,
     Four,
+}
+
+#[generate_trait]
+impl SideImpl of SideTrait {
+    #[inline(always)]
+    fn update(self: Side, action: Action) -> Side {
+        match action {
+            Action::Rotate => match self {
+                Side::One => Side::Two,
+                Side::Two => Side::One,
+                Side::Three => Side::Four,
+                Side::Four => Side::Three,
+                _ => Side::None,
+            },
+            Action::Flip => match self {
+                Side::One => Side::Three,
+                Side::Two => Side::Four,
+                Side::Three => Side::One,
+                Side::Four => Side::Two,
+                _ => Side::None,
+            },
+            _ => self,
+        }
+    }
 }
 
 impl IntoSideFelt252 of core::Into<Side, felt252> {
@@ -19,7 +47,6 @@ impl IntoSideFelt252 of core::Into<Side, felt252> {
         }
     }
 }
-
 impl IntoSideU8 of core::Into<Side, u8> {
     #[inline(always)]
     fn into(self: Side) -> u8 {
@@ -32,13 +59,12 @@ impl IntoSideU8 of core::Into<Side, u8> {
         }
     }
 }
-
 impl IntoU8Side of core::Into<u8, Side> {
     #[inline(always)]
     fn into(self: u8) -> Side {
         let action: felt252 = self.into();
         match action {
-            0 => Side::None,
+            0 => Side::One, // Hack to have by default Side One set for cards
             1 => Side::One,
             2 => Side::Two,
             3 => Side::Three,
@@ -47,7 +73,6 @@ impl IntoU8Side of core::Into<u8, Side> {
         }
     }
 }
-
 impl SidePrint of core::debug::PrintTrait<Side> {
     #[inline(always)]
     fn print(self: Side) {
