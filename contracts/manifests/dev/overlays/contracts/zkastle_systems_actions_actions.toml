@@ -1,0 +1,5 @@
+computed = [  ]
+name = "zkastle::systems::actions::actions"
+reads = [  ]
+writes = [ "Player", "Game" ]
+init_calldata = [  ]

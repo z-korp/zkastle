@@ -1,10 +1,10 @@
-import { useComponentValue } from '@dojoengine/react';
-import { Entity } from '@dojoengine/recs';
-import { useEffect, useState } from 'react';
-import './App.css';
-import { Direction } from './utils';
-import { getEntityIdFromKeys } from '@dojoengine/utils';
-import { useDojo } from './dojo/useDojo';
+import { useComponentValue } from "@dojoengine/react";
+import { Entity } from "@dojoengine/recs";
+import { useEffect, useState } from "react";
+import "./App.css";
+import { Direction } from "./utils";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { useDojo } from "./dojo/useDojo";
 
 function App() {
   const {
@@ -16,7 +16,7 @@ function App() {
   } = useDojo();
 
   const [clipboardStatus, setClipboardStatus] = useState({
-    message: '',
+    message: "",
     isError: false,
   });
 
@@ -35,7 +35,7 @@ function App() {
     try {
       await account?.applyFromClipboard();
       setClipboardStatus({
-        message: 'Burners restored successfully!',
+        message: "Burners restored successfully!",
         isError: false,
       });
     } catch (error) {
@@ -49,7 +49,7 @@ function App() {
   useEffect(() => {
     if (clipboardStatus.message) {
       const timer = setTimeout(() => {
-        setClipboardStatus({ message: '', isError: false });
+        setClipboardStatus({ message: "", isError: false });
       }, 3000);
 
       return () => clearTimeout(timer);
@@ -59,7 +59,7 @@ function App() {
   return (
     <>
       <button onClick={() => account?.create()}>
-        {account?.isDeploying ? 'deploying burner' : 'create burner'}
+        {account?.isDeploying ? "deploying burner" : "create burner"}
       </button>
       {account && account?.list().length > 0 && (
         <button onClick={async () => await account?.copyToClipboard()}>
@@ -70,7 +70,7 @@ function App() {
         Restore Burners from Clipboard
       </button>
       {clipboardStatus.message && (
-        <div className={clipboardStatus.isError ? 'error' : 'success'}>
+        <div className={clipboardStatus.isError ? "error" : "success"}>
           {clipboardStatus.message}
         </div>
       )}
@@ -78,9 +78,9 @@ function App() {
       <div className="card">
         <div>{`burners deployed: ${account.count}`}</div>
         <div>
-          select signer:{' '}
+          select signer:{" "}
           <select
-            value={account ? account.account.address : ''}
+            value={account ? account.account.address : ""}
             onChange={(e) => account.select(e.target.value)}
           >
             {account?.list().map((account, index) => {
@@ -103,10 +103,10 @@ function App() {
 
       <div className="card">
         <button onClick={() => spawn(account.account)}>Spawn</button>
-        <div>Moves Left: {moves ? `${moves.remaining}` : 'Need to Spawn'}</div>
+        <div>Moves Left: {moves ? `${moves.remaining}` : "Need to Spawn"}</div>
         <div>
-          Position:{' '}
-          {position ? `${position.vec.x}, ${position.vec.y}` : 'Need to Spawn'}
+          Position:{" "}
+          {position ? `${position.vec.x}, ${position.vec.y}` : "Need to Spawn"}
         </div>
 
         <div>{moves && moves.last_direction}</div>
@@ -118,7 +118,7 @@ function App() {
             onClick={() =>
               position && position.vec.y > 0
                 ? move(account.account, Direction.Up)
-                : console.log('Reach the borders of the world.')
+                : console.log("Reach the borders of the world.")
             }
           >
             Move Up
@@ -129,7 +129,7 @@ function App() {
             onClick={() =>
               position && position.vec.x > 0
                 ? move(account.account, Direction.Left)
-                : console.log('Reach the borders of the world.')
+                : console.log("Reach the borders of the world.")
             }
           >
             Move Left

@@ -1,14 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
-import { setup } from './dojo/generated/setup.ts';
-import { DojoProvider } from './dojo/DojoContext.tsx';
-import { dojoConfig } from '../dojo.config.ts';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { setup } from "./dojo/setup.ts";
+import { DojoProvider } from "./dojo/DojoContext.tsx";
+import { dojoConfig } from "../dojo.config.ts";
 
 async function init() {
-  const rootElement = document.getElementById('root');
-  if (!rootElement) throw new Error('React root not found');
+  const rootElement = document.getElementById("root");
+  if (!rootElement) throw new Error("React root not found");
   const root = ReactDOM.createRoot(rootElement as HTMLElement);
 
   const setupResult = await setup(dojoConfig);
@@ -18,7 +18,7 @@ async function init() {
       <DojoProvider value={setupResult}>
         <App />
       </DojoProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }
 
