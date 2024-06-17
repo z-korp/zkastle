@@ -18,7 +18,8 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        body: ["Rubik Mono One", "mono"],
+        display: ["Fredericka the Great", "sans"],
+        body: ["Fredericka the Great", "sans"],
       },
       colors: {
         border: "hsl(var(--border))",
