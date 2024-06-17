@@ -19,7 +19,12 @@ export const Deck = () => {
   return (
     <div className="flex gap-8 scale-[0.5]">
       <Info count={game.move_count} score={game.getScore()} />
-      <Card data={game.card_three} first={false} actionable={false} />
+      <Card
+        data={game.card_three}
+        first={false}
+        actionable={false}
+        stored={game.inStorage(game.card_three.id)}
+      />
     </div>
   );
 };

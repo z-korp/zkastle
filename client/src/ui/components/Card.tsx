@@ -17,10 +17,12 @@ export const Card = ({
   data,
   first,
   actionable,
+  stored,
 }: {
-  data: { card: CardClass; side: Side };
+  data: { card: CardClass; side: Side; id: number };
   first: boolean;
   actionable: boolean;
+  stored: boolean;
 }) => {
   const { card, side } = data;
 
@@ -65,7 +67,9 @@ export const Card = ({
         </div>
       )}
 
-      <div className="absolute bottom-1/2 left-1/2 -translate-x-1/2 z-10">
+      <div
+        className={`absolute bottom-1/2 left-1/2 -translate-x-1/2 z-10 ${stored && "opacity-50"}`}
+      >
         <Resource resource={resource} />
       </div>
 

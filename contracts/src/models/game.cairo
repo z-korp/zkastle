@@ -28,6 +28,7 @@ mod errors {
     const GAME_NOT_ENOUGH_RESOURCES: felt252 = 'Game: not enough resources';
     const GAME_STORAGE_IS_FULL: felt252 = 'Game: storage is full';
     const GAME_RESOURCES_NOT_SORTED: felt252 = 'Game: resources not sorted';
+    const GAME_RESOURCE_ALREADY_STORED: felt252 = 'Game: resource already stored';
 }
 
 #[generate_trait]
@@ -114,10 +115,18 @@ impl GameImpl of GameTrait {
         // [Check] Only card one can be discarded
         assert(action != Action::Discard || choice, errors::GAME_INVALID_ACTION);
 
+        // [Check] Card one is stored then unstore, discard and draw again
+        if SizedPacker::contains(self.stores, self.card_one, CARD_BIT_SIZE, self.store_count) {
+            // [Check] Only acceptable action is to discard the card one
+            assert(action == Action::Discard && choice, errors::GAME_INVALID_ACTION);
+            // [Effect] Unstore card one
+            self.unstore(self.card_one);
+        }
+
         // [Check] Card can be performed
         let index: u8 = match choice {
-            true => self.card_one.into(),
-            false => self.card_two.into(),
+            true => self.card_one,
+            false => self.card_two,
         };
         let deck: Deck = self.deck.into();
         let card: Card = self.discard(index);
@@ -139,10 +148,7 @@ impl GameImpl of GameTrait {
 
         // [Effect] Update card side
         let value: u8 = side.update(action).into();
-        let (sides, _) = SizedPacker::replace(
-            self.sides, index, SIDE_BIT_SIZE, value, deck.count()
-        );
-        self.sides = sides;
+        self.sides = SizedPacker::replace(self.sides, index, SIDE_BIT_SIZE, value, deck.count());
 
         // [Effect] Draw a new card
         match choice {
@@ -179,23 +185,17 @@ impl GameImpl of GameTrait {
             let pointer = (self.pointer + 2) % deck.count();
             deck.ordered_draw(self.indexes, pointer)
         };
-
-        // [Check] Card is not stored, otherwise unstore, discard and draw again
-        if SizedPacker::contains(self.stores, index, CARD_BIT_SIZE, self.store_count) {
-            self.unstore(index);
-            self.discard(index);
-            return self.draw();
-        }
         index
     }
 
     fn discard(ref self: Game, index: u8) -> Card {
         // [Effect] Update indexes at index
         let deck: Deck = self.deck.into();
-        let (indexes, _) = SizedPacker::replace(
-            self.indexes, self.pointer, CARD_BIT_SIZE, index, deck.count()
-        );
-        self.indexes = indexes;
+        self
+            .indexes =
+                SizedPacker::replace(
+                    self.indexes, self.pointer, CARD_BIT_SIZE, index, deck.count()
+                );
         // [Effect] Update pointer
         self.pointer = if self.pointer + 1 == deck.count() {
             0
@@ -210,6 +210,9 @@ impl GameImpl of GameTrait {
     fn store(ref self: Game, index: u8) {
         // [Check] Enough place to store
         self.assert_is_storable();
+        // [Check] Resource not alredy stored
+        let is_stored = SizedPacker::contains(self.stores, index, CARD_BIT_SIZE, self.store_count);
+        assert(!is_stored, errors::GAME_RESOURCE_ALREADY_STORED);
         // [Effect] Update stores
         let mut stores: Array<u8> = SizedPacker::unpack(
             self.stores, CARD_BIT_SIZE, self.store_count
@@ -222,11 +225,8 @@ impl GameImpl of GameTrait {
     #[inline(always)]
     fn unstore(ref self: Game, index: u8) {
         // [Effect] Remove last stored resource
-        let (stores, _): (u16, u8) = SizedPacker::remove(
-            self.stores, index, CARD_BIT_SIZE, self.store_count
-        );
+        self.stores = SizedPacker::remove(self.stores, index, CARD_BIT_SIZE, self.store_count);
         self.store_count -= 1;
-        self.stores = stores;
     }
 
     fn unstores(ref self: Game, resources: u16) {
@@ -243,7 +243,10 @@ impl GameImpl of GameTrait {
                     }
                     let index = shited_index - 1;
                     assert(index < previous, errors::GAME_RESOURCES_NOT_SORTED);
-                    self.unstore(index);
+                    let card_index: u8 = SizedPacker::get(
+                        self.stores, index, CARD_BIT_SIZE, self.store_count
+                    );
+                    self.unstore(card_index);
                     previous = index;
                 },
                 Option::None => { break; },
@@ -425,7 +428,7 @@ mod tests {
     }
 
     #[test]
-    fn test_game_play_case_01() {
+    fn test_game_play_case_store_and_use() {
         let mut game = GameTrait::new(1);
         game.start();
         game.perform(Action::Discard, true, 0);
@@ -464,6 +467,57 @@ mod tests {
         game.perform(Action::Discard, true, 0); // Wheat
         game.perform(Action::Discard, true, 0); // Wheat
         game.perform(Action::Store, true, 0x1); // Tavern
+    }
+
+    #[test]
+    fn test_game_play_store_discard_old_storage() {
+        let mut game = GameTrait::new(1);
+        game.start();
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+    }
+
+    #[test]
+    #[should_panic(expected: ('Game: invalid action',))]
+    fn test_game_play_store_discard_old_storage_revert_invalid_action() {
+        let mut game = GameTrait::new(1);
+        game.start();
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0);
     }
 
     #[test]

@@ -17,8 +17,18 @@ export const Cards = () => {
 
   return (
     <div className="flex gap-8 flex-row-reverse">
-      <Card data={game.card_one} first={true} actionable={true} />
-      <Card data={game.card_two} first={false} actionable={true} />
+      <Card
+        data={game.card_one}
+        first={true}
+        actionable={!game.inStorage(game.card_one.id)}
+        stored={game.inStorage(game.card_one.id)}
+      />
+      <Card
+        data={game.card_two}
+        first={false}
+        actionable={!game.inStorage(game.card_one.id)}
+        stored={game.inStorage(game.card_two.id)}
+      />
     </div>
   );
 };
