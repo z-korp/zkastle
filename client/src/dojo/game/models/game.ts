@@ -114,4 +114,13 @@ export class Game {
     const affordable = costs.filter((cost) => resource.isGe(cost)).length > 0;
     return affordable;
   }
+
+  public getStorageResource(): Resource {
+    return this.stores.reduce(
+      (resource: Resource, { card, side }) => {
+        return resource.add(card.getResource(side));
+      },
+      new Resource(0, 0, 0),
+    );
+  }
 }

@@ -16,7 +16,7 @@ export const Cost = ({
   return (
     <div className="flex gap-1">
       {resources.map((resource, index) => (
-        <div key={index} className="flex gap-2 items-center">
+        <div key={index} className="flex gap-2 items-center text-slate-700">
           {!!index && <p className="text-xs font-bold">{"or"}</p>}
           {!!resource.wheat && (
             <div className="flex items-center gap-1">
