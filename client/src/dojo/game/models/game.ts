@@ -3,6 +3,7 @@ import { Packer } from "../helpers/packer";
 import { SIDE_TYPE_COUNT, Side, SideType } from "../types/side";
 import { Card, CardType, CARD_TYPE_COUNT } from "../types/card";
 import { Deck } from "../types/deck";
+import { Resource } from "../types/resource";
 
 export const CARD_BIT_SIZE = 32;
 export const SIDE_BIT_SIZE = 8;
@@ -95,5 +96,22 @@ export class Game {
       score += card.getScore(side);
     });
     return score;
+  }
+
+  public isAffordable(resources: number, costs: Resource[]): boolean {
+    let resource = new Resource(0, 0, 0);
+    Packer.unpack(resources, CARD_BIT_SIZE)
+      .map((card: number) => {
+        return {
+          card: this.deck.reveal(card),
+          side: this.sides[card - 1],
+          id: card,
+        };
+      })
+      .forEach(({ card, side }) => {
+        resource = resource.add(card.getResource(side));
+      });
+    const affordable = costs.filter((cost) => resource.isGe(cost)).length > 0;
+    return affordable;
   }
 }

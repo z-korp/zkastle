@@ -28,6 +28,10 @@ export const Slot = ({
     return Packer.unpack(resources, CARD_BIT_SIZE).includes(id);
   }, [id, resources]);
 
+  const { height, width } = useMemo(() => {
+    return { height: "h-8", width: "w-8" };
+  }, []);
+
   const handleClick = useCallback(() => {
     if (id == 0) return;
     // Unpack resources
@@ -55,13 +59,13 @@ export const Slot = ({
       <h2 className="text-xl">{`#${index}`}</h2>
       <div className="flex gap-4 grow justify-center">
         {Array.from({ length: resource.wheat }, (_, i) => (
-          <Wheat key={i} height={8} width={8} />
+          <Wheat key={i} height={height} width={width} />
         ))}
         {Array.from({ length: resource.stone }, (_, i) => (
-          <Stone key={i} height={8} width={8} />
+          <Stone key={i} height={height} width={width} />
         ))}
         {Array.from({ length: resource.iron }, (_, i) => (
-          <Iron key={i} height={8} width={8} />
+          <Iron key={i} height={height} width={width} />
         ))}
       </div>
       {!!id && <Remove index={id} />}

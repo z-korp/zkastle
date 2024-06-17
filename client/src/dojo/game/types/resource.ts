@@ -32,4 +32,8 @@ export class Resource {
       this.iron >= resource.iron
     );
   }
+
+  public isNull(): boolean {
+    return this.isEqual(new Resource(0, 0, 0));
+  }
 }

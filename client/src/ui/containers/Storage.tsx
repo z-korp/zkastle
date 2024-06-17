@@ -13,37 +13,60 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/ui/elements/dialog";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useGameStore } from "@/stores/game";
+import { Cost } from "../components/Cost";
 
 export const Storage = () => {
   const {
     account: { account },
   } = useDojo();
 
-  const { setResources } = useGameStore();
+  const { resources, storage, costs, callback, setStorage, reset } =
+    useGameStore();
   const { player } = usePlayer({ playerId: account.address });
   const { game } = useGame({
     gameId: player?.game_id || "0x0",
   });
 
+  const hidden = useMemo(() => {
+    return costs.filter((cost) => !cost.isNull()).length === 0;
+  }, [costs]);
+
+  const disabled = useMemo(() => {
+    if (!game) return true;
+    return !game.isAffordable(resources, costs);
+  }, [resources, game, costs]);
+
   const handleClose = useCallback(() => {
-    setResources(0);
+    reset();
+  }, []);
+
+  const handleConfirm = useCallback(() => {
+    callback(resources);
+    reset();
+  }, [resources, callback]);
+
+  const handleChange = useCallback((state: boolean) => {
+    setStorage(state);
+    if (state) return;
+    handleClose();
   }, []);
 
   if (!player || !game) return null;
 
   return (
-    <Dialog>
+    <Dialog open={storage} onOpenChange={handleChange}>
       <DialogTrigger asChild>
         <Button variant="default" className="text-2xl">
           Storage
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+        <DialogHeader className="flex flex-col items-center">
           <DialogTitle className="text-2xl">Storage</DialogTitle>
           <DialogDescription>Select the resources to spend</DialogDescription>
+          <Cost resources={costs} />
         </DialogHeader>
         <div className="flex flex-col gap-4 min-w-60 items-center">
           {game.stores.map((store, index) => (
@@ -56,7 +79,12 @@ export const Storage = () => {
               Close
             </Button>
           </DialogClose>
-          <Button className="m-1" type="submit">
+          <Button
+            disabled={disabled}
+            className={`m-1 ${hidden && "hidden"}`}
+            type="submit"
+            onClick={handleConfirm}
+          >
             Confirm
           </Button>
         </DialogFooter>

@@ -73,7 +73,11 @@ export const Card = ({
         <div className="flex flex-col gap-2 items-start z-10 ml-2">
           {card.isAllowed(side, new Action(ActionType.Store)) && (
             <div className="flex gap-2 items-center">
-              <Store choice={first} enabled={actionable && !stored} />
+              <Store
+                choice={first}
+                enabled={actionable && !stored}
+                costs={card.getCost(side, new Action(ActionType.Store))}
+              />
               <Cost
                 resources={card.getCost(side, new Action(ActionType.Store))}
               />
@@ -81,7 +85,11 @@ export const Card = ({
           )}
           {card.isAllowed(side, new Action(ActionType.Rotate)) && (
             <div className="flex gap-2 items-center">
-              <Rotate choice={first} enabled={actionable} />
+              <Rotate
+                choice={first}
+                enabled={actionable}
+                costs={card.getCost(side, new Action(ActionType.Rotate))}
+              />
               <Cost
                 resources={card.getCost(side, new Action(ActionType.Rotate))}
               />
@@ -89,7 +97,11 @@ export const Card = ({
           )}
           {card.isAllowed(side, new Action(ActionType.Flip)) && (
             <div className="flex gap-2 items-center">
-              <Flip choice={first} enabled={actionable} />
+              <Flip
+                choice={first}
+                enabled={actionable}
+                costs={card.getCost(side, new Action(ActionType.Flip))}
+              />
               <Cost
                 resources={card.getCost(side, new Action(ActionType.Flip))}
               />

@@ -4,28 +4,34 @@ import { Stone } from "@/ui/components/Resource";
 import { Iron } from "@/ui/components/Resource";
 import { useMemo } from "react";
 
-export const Cost = ({ resources }: { resources: ResourceClass[] }) => {
-  const { height, width } = useMemo(() => ({ height: 4, width: 4 }), []);
-
+export const Cost = ({
+  resources,
+  height = "h-6",
+  width = "w-6",
+}: {
+  resources: ResourceClass[];
+  height?: string;
+  width?: string;
+}) => {
   return (
     <div className="flex gap-1">
       {resources.map((resource, index) => (
-        <div key={index} className="flex gap-2 items-center text-black">
+        <div key={index} className="flex gap-2 items-center">
           {!!index && <p className="text-xs font-bold">{"or"}</p>}
           {!!resource.wheat && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
               <p className="font-bold">{resource.wheat}</p>
               <Wheat height={height} width={width} />
             </div>
           )}
           {!!resource.stone && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
               <p className="font-bold">{resource.stone}</p>
               <Stone height={height} width={width} />
             </div>
           )}
           {!!resource.iron && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
               <p className="font-bold">{resource.iron}</p>
               <Iron height={height} width={width} />
             </div>
