@@ -29,7 +29,7 @@ export const Info = ({
     gameId: player?.game_id || "0x0",
   });
 
-  if (!player || !game) return null;
+  if (!player || !game || game.isOver()) return null;
 
   return (
     <div

@@ -53,7 +53,7 @@ export const Storage = () => {
     handleClose();
   }, []);
 
-  if (!player || !game) return null;
+  if (!player || !game || game.isOver()) return null;
 
   return (
     <Dialog open={storage} onOpenChange={handleChange}>

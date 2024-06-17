@@ -6,6 +6,7 @@ import { ModeToggle } from "@/ui/components/Theme";
 import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Collection } from "./Collection";
+import { MusicPlayer } from "../modules/MusicPlayer";
 
 export const Header = () => {
   const {
@@ -28,6 +29,7 @@ export const Header = () => {
           onClick={handleClick}
         >
           <p className="text-4xl font-bold">zKastle</p>
+          <MusicPlayer />
           <Collection />
         </div>
         <div className="flex flex-col gap-4 items-center md:flex-row">
