@@ -21,7 +21,7 @@ export const Home = () => {
             <Cards />
             <Deck />
           </div>
-          <div className="absolute right-0 top-1/3">
+          <div className="absolute right-4 top-1/4">
             <Storage />
           </div>
         </div>

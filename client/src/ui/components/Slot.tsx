@@ -30,6 +30,7 @@ export const Slot = ({
   }, [count, index, resources]);
 
   const handleClick = useCallback(() => {
+    if (index > count) return;
     // Unpack resources
     const indexes = Packer.unpack(resources, 16, count);
     // If the index is already in the array
@@ -67,7 +68,7 @@ export const Slot = ({
           <Iron key={i} height={8} width={8} />
         ))}
       </div>
-      <Remove index={index - 1} />
+      {index <= count && <Remove index={index - 1} />}
     </div>
   );
 };

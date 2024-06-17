@@ -1,7 +1,7 @@
 import { ComponentValue } from "@dojoengine/recs";
 import { Packer } from "../helpers/packer";
-import { Side } from "../types/side";
-import { Card } from "../types/card";
+import { Side, SideType } from "../types/side";
+import { Card, CardType } from "../types/card";
 import { Deck } from "../types/deck";
 
 export class Game {
@@ -52,8 +52,10 @@ export class Game {
     this.stores = Packer.unpack(
       parseInt(`0x${game.stores.toString(16)}`),
       16,
-      game.store_count,
-    ).map((card: number) => {
+      4,
+    ).map((card: number, index: number) => {
+      if (index >= game.store_count)
+        return { card: new Card(CardType.None), side: new Side(SideType.None) };
       return { card: this.deck.reveal(card), side: this.sides[card] };
     });
     this.indexes = Packer.unpack(
