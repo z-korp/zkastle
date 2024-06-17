@@ -19,11 +19,7 @@ struct Game {
     card_three: u8,
     deck: u8,
     move_count: u8,
-    pointer: u8,
-    store_count: u8,
-    stores: u16,
-    cards: u64,
+    stores: u32,
     sides: u64,
-    indexes: u64,
-    seed: felt252,
+    cards: u128,
 }

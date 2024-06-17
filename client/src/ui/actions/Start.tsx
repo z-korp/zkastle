@@ -29,7 +29,7 @@ export const Start = () => {
 
   return (
     <Button disabled={disabled} onClick={handleClick}>
-      Start Game
+      Start
     </Button>
   );
 };

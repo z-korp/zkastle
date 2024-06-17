@@ -1,3 +1,4 @@
+use core::array::ArrayTrait;
 // Core imports
 
 use core::debug::PrintTrait;
@@ -7,11 +8,12 @@ use core::hash::HashStateTrait;
 // External imports
 
 use alexandria_math::bitmap::Bitmap;
+use origami::random::deck::{Deck as OrigamiDeck, DeckTrait as OrigamiDeckTrait};
 
 // Inernal imports
 
 use zkastle::constants::{DEFAULT_ROUND_COUNT, DEFAULT_STORE_SIZE, CARD_BIT_SIZE, SIDE_BIT_SIZE};
-use zkastle::helpers::packer::SizedPacker;
+use zkastle::helpers::packer::{Packer, SizedPacker};
 use zkastle::models::index::Game;
 use zkastle::types::action::Action;
 use zkastle::types::card::{Card, CardTrait};
@@ -27,7 +29,6 @@ mod errors {
     const GAME_NOT_OVER: felt252 = 'Game: not over';
     const GAME_NOT_ENOUGH_RESOURCES: felt252 = 'Game: not enough resources';
     const GAME_STORAGE_IS_FULL: felt252 = 'Game: storage is full';
-    const GAME_RESOURCES_NOT_SORTED: felt252 = 'Game: resources not sorted';
     const GAME_RESOURCE_ALREADY_STORED: felt252 = 'Game: resource already stored';
 }
 
@@ -35,6 +36,11 @@ mod errors {
 impl GameImpl of GameTrait {
     #[inline(always)]
     fn new(id: u32) -> Game {
+        // [Compute] Seed
+        let state = PoseidonTrait::new();
+        let state = state.update(id.into());
+        let seed = state.finalize();
+
         // [Effect] Create a new game
         let deck: Deck = Deck::Base;
         let mut game = Game {
@@ -44,40 +50,23 @@ impl GameImpl of GameTrait {
             card_two: 0,
             card_three: 0,
             deck: deck.into(),
-            move_count: 0,
-            pointer: 0,
-            store_count: 0,
+            move_count: DEFAULT_ROUND_COUNT * deck.count(),
             stores: 0,
-            cards: 0,
             sides: 0,
-            indexes: 0,
-            seed: 0,
+            cards: deck.setup(seed),
         };
-        game.reseed();
         game
     }
 
-    fn resource(self: Game, resources: u16) -> Resource {
-        let mut shifted_indexes: Array<u8> = SizedPacker::unpack(
-            resources, CARD_BIT_SIZE, self.store_count
-        );
+    fn resource(self: Game, resources: u32) -> Resource {
+        let mut card_ids: Array<u8> = Packer::unpack(resources, CARD_BIT_SIZE);
         let deck: Deck = self.deck.into();
         let mut resource: Resource = core::Zeroable::zero();
         loop {
-            match shifted_indexes.pop_front() {
-                Option::Some(shifted_index) => {
-                    if shifted_index == 0 {
-                        continue;
-                    }
-                    let index = shifted_index - 1;
-                    let card_index: u8 = SizedPacker::get(
-                        self.stores, index, CARD_BIT_SIZE, self.store_count
-                    );
-                    let card: Card = deck.get(card_index);
-                    let raw: u8 = SizedPacker::get(
-                        self.sides, card_index, SIDE_BIT_SIZE, deck.count()
-                    );
-                    let side: Side = raw.into();
+            match card_ids.pop_front() {
+                Option::Some(card_id) => {
+                    let side: Side = self.side(card_id);
+                    let card = deck.get(card_id);
                     resource = resource + card.resource(side);
                 },
                 Option::None => { break resource; },
@@ -86,37 +75,20 @@ impl GameImpl of GameTrait {
     }
 
     #[inline(always)]
-    fn reseed(ref self: Game) {
-        // [Effect] Reseed the game
-        let state = PoseidonTrait::new();
-        let state = state.update(self.seed);
-        let state = state.update(self.id.into());
-        self.seed = state.finalize();
-    }
-
-    #[inline(always)]
     fn start(ref self: Game) {
-        // [Effect] Start the game
-        let deck: Deck = self.deck.into();
-        let size: u8 = deck.count();
-        self.move_count = DEFAULT_ROUND_COUNT * size;
-
         // [Effect] Draw 3 cards
         self.card_one = self.draw();
         self.card_two = self.draw();
         self.card_three = self.draw();
-
-        // [Effect] Update seed
-        self.reseed();
     }
 
     #[inline(always)]
-    fn perform(ref self: Game, action: Action, choice: bool, resources: u16) {
+    fn perform(ref self: Game, action: Action, choice: bool, resources: u32) {
         // [Check] Only card one can be discarded
         assert(action != Action::Discard || choice, errors::GAME_INVALID_ACTION);
 
         // [Check] Card one is stored then unstore, discard and draw again
-        if SizedPacker::contains(self.stores, self.card_one, CARD_BIT_SIZE, self.store_count) {
+        if Packer::contains(self.stores, self.card_one, CARD_BIT_SIZE) {
             // [Check] Only acceptable action is to discard the card one
             assert(action == Action::Discard && choice, errors::GAME_INVALID_ACTION);
             // [Effect] Unstore card one
@@ -124,14 +96,12 @@ impl GameImpl of GameTrait {
         }
 
         // [Check] Card can be performed
-        let index: u8 = match choice {
+        let card_id: u8 = match choice {
             true => self.card_one,
             false => self.card_two,
         };
-        let deck: Deck = self.deck.into();
-        let card: Card = self.discard(index);
-        let raw: u8 = SizedPacker::get(self.sides, index, SIDE_BIT_SIZE, deck.count());
-        let side: Side = raw.into();
+        let card: Card = self.discard(card_id);
+        let side: Side = self.side(card_id);
         assert(card.can(side, action), errors::GAME_INVALID_ACTION);
 
         // [Check] Affordable
@@ -143,12 +113,11 @@ impl GameImpl of GameTrait {
 
         // [Effect] Store action
         if action == Action::Store {
-            self.store(index);
+            self.store(card_id);
         }
 
         // [Effect] Update card side
-        let value: u8 = side.update(action).into();
-        self.sides = SizedPacker::replace(self.sides, index, SIDE_BIT_SIZE, value, deck.count());
+        self.update(card_id, action);
 
         // [Effect] Draw a new card
         match choice {
@@ -164,91 +133,75 @@ impl GameImpl of GameTrait {
         };
 
         // [Effect] Assess game over
-        self.over = self.move_count == 0;
-    }
-
-    fn draw(ref self: Game) -> u8 {
-        let deck: Deck = self.deck.into();
-        // [Check] Draw randomly if all cards has not yet be drawn once
-        let index = if self.move_count > (DEFAULT_ROUND_COUNT - 1) * deck.count() {
-            // [Effect] Draw a card randomly
-            let index = deck.random_draw(self.seed, self.cards.into());
-            self.cards = Bitmap::set_bit_at(self.cards, index, true);
-            if deck.is_empty(self.cards.into()) {
-                self.cards = 0
-            };
-            self.move_count -= 1;
-            index
-        } else {
-            // [Effect] Draw a card orderly
-            self.move_count -= 1;
-            let pointer = (self.pointer + 2) % deck.count();
-            deck.ordered_draw(self.indexes, pointer)
-        };
-        index
-    }
-
-    fn discard(ref self: Game, index: u8) -> Card {
-        // [Effect] Update indexes at index
-        let deck: Deck = self.deck.into();
-        self
-            .indexes =
-                SizedPacker::replace(
-                    self.indexes, self.pointer, CARD_BIT_SIZE, index, deck.count()
-                );
-        // [Effect] Update pointer
-        self.pointer = if self.pointer + 1 == deck.count() {
-            0
-        } else {
-            self.pointer + 1
-        };
-        // [Return] Discarded Card
-        deck.get(index)
+        self.over = self.move_count == 0 && self.card_one == 0;
     }
 
     #[inline(always)]
-    fn store(ref self: Game, index: u8) {
+    fn draw(ref self: Game) -> u8 {
+        if self.move_count == 0 {
+            return 0;
+        }
+        // [Effect] Draw the first card and update the cards map
+        let deck: Deck = self.deck.into();
+        let (card_id, cards) = deck.draw(self.cards);
+        self.cards = cards;
+        // [Effect] Decrease move count
+        self.move_count -= 1;
+        // [Return] Card id
+        card_id
+    }
+
+    #[inline(always)]
+    fn discard(ref self: Game, card_id: u8) -> Card {
+        // [Effect] Discard the card
+        let deck: Deck = self.deck.into();
+        self.cards = deck.discard(self.cards, card_id);
+        // [Return] Card
+        deck.get(card_id)
+    }
+
+    #[inline(always)]
+    fn side(self: Game, card_id: u8) -> Side {
+        let deck: Deck = self.deck.into();
+        let index = card_id - 1;
+        let side: u8 = SizedPacker::get(self.sides, index, SIDE_BIT_SIZE, deck.count());
+        side.into()
+    }
+
+    #[inline(always)]
+    fn update(ref self: Game, card_id: u8, action: Action) {
+        let deck: Deck = self.deck.into();
+        let index = card_id - 1;
+        let side: Side = self.side(card_id);
+        let value: u8 = side.update(action).into();
+        self.sides = SizedPacker::replace(self.sides, index, SIDE_BIT_SIZE, value, deck.count());
+    }
+
+    #[inline(always)]
+    fn store(ref self: Game, card_id: u8) {
         // [Check] Enough place to store
-        self.assert_is_storable();
+        let mut stores: Array<u8> = Packer::unpack(self.stores, CARD_BIT_SIZE);
+        self.assert_is_storable(stores.len());
         // [Check] Resource not alredy stored
-        let is_stored = SizedPacker::contains(self.stores, index, CARD_BIT_SIZE, self.store_count);
+        let is_stored = Packer::contains(self.stores, card_id, CARD_BIT_SIZE);
         assert(!is_stored, errors::GAME_RESOURCE_ALREADY_STORED);
         // [Effect] Update stores
-        let mut stores: Array<u8> = SizedPacker::unpack(
-            self.stores, CARD_BIT_SIZE, self.store_count
-        );
-        stores.append(index);
-        self.store_count += 1;
-        self.stores = SizedPacker::pack(stores, CARD_BIT_SIZE);
+        stores.append(card_id);
+        self.stores = Packer::pack(stores, CARD_BIT_SIZE);
     }
 
     #[inline(always)]
-    fn unstore(ref self: Game, index: u8) {
+    fn unstore(ref self: Game, card_id: u8) {
         // [Effect] Remove last stored resource
-        self.stores = SizedPacker::remove(self.stores, index, CARD_BIT_SIZE, self.store_count);
-        self.store_count -= 1;
+        self.stores = Packer::remove(self.stores, card_id, CARD_BIT_SIZE);
     }
 
-    fn unstores(ref self: Game, resources: u16) {
+    fn unstores(ref self: Game, resources: u32) {
         // [Effect] Remove resources from store
-        let mut shited_indexes: Array<u8> = SizedPacker::unpack(
-            resources, CARD_BIT_SIZE, self.store_count
-        );
-        let mut previous = DEFAULT_STORE_SIZE;
+        let mut card_ids: Array<u8> = Packer::unpack(resources, CARD_BIT_SIZE);
         loop {
-            match shited_indexes.pop_front() {
-                Option::Some(shited_index) => {
-                    if shited_index == 0 {
-                        break;
-                    }
-                    let index = shited_index - 1;
-                    assert(index < previous, errors::GAME_RESOURCES_NOT_SORTED);
-                    let card_index: u8 = SizedPacker::get(
-                        self.stores, index, CARD_BIT_SIZE, self.store_count
-                    );
-                    self.unstore(card_index);
-                    previous = index;
-                },
+            match card_ids.pop_front() {
+                Option::Some(card_id) => { self.unstore(card_id); },
                 Option::None => { break; },
             }
         };
@@ -266,19 +219,15 @@ impl ZeroableGame of core::Zeroable<Game> {
             card_three: 0,
             deck: 0,
             move_count: 0,
-            pointer: 0,
-            store_count: 0,
             stores: 0,
-            cards: 0,
             sides: 0,
-            indexes: 0,
-            seed: 0,
+            cards: 0,
         }
     }
 
     #[inline(always)]
     fn is_zero(self: Game) -> bool {
-        0 == self.seed.into()
+        0 == self.deck.into()
     }
 
     #[inline(always)]
@@ -309,7 +258,7 @@ impl GameAssert of AssertTrait {
         assert(host != 0, errors::GAME_INVALID_HOST);
     }
 
-    fn assert_is_affordable(self: Game, resources: u16, mut costs: Array<Resource>) {
+    fn assert_is_affordable(self: Game, resources: u32, mut costs: Array<Resource>) {
         // [Check] No check if there is no cost
         if costs.is_empty() {
             return;
@@ -329,8 +278,8 @@ impl GameAssert of AssertTrait {
     }
 
     #[inline(always)]
-    fn assert_is_storable(self: Game) {
-        assert(self.store_count < DEFAULT_STORE_SIZE, errors::GAME_STORAGE_IS_FULL);
+    fn assert_is_storable(self: Game, count: u32) {
+        assert(count < DEFAULT_STORE_SIZE.into(), errors::GAME_STORAGE_IS_FULL);
     }
 }
 
@@ -350,132 +299,95 @@ mod tests {
         let game = GameTrait::new(1);
         game.assert_exists();
         game.assert_not_over();
-        assert(game.seed.into() > 0_u256, 'Game: seed is zero');
     }
 
     #[test]
     fn test_game_start() {
         let mut game = GameTrait::new(1);
-        let seed = game.seed;
         game.start();
-        // Cards: 0010000010010000
-        // Card 1: Mine = 0x7
-        // Card 2: Forge = 0xd
-        // Card 3: Quarry = 0x4
         assert(game.card_one + game.card_two + game.card_three > 0, 'Game: cards are zero');
-        assert(seed != game.seed, 'Game: seed is the same');
-        assert(game.cards == 0x2090, 'Game: seed is the same');
+        assert(game.cards == 0x57c02b3b9834a882, 'Game: unexpected cards');
     }
 
     #[test]
     fn test_game_play_quarry() {
         let mut game = GameTrait::new(1);
         game.start();
-        // Cards: 0010000010010000
-        // Card 1: Mine = 0x7
-        // Card 2: Forge = 0xd
-        // Card 3: Quarry = 0x4
+        // Card 1: Quarry = 0x6
+        // Card 2: Tower = 0xd
+        // Card 3: Mine = 0x8
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
-        // Cards: 0010000010011000
-        // Card 1: Forge = 0xd
-        // Card 2: Quarry = 0x4
-        // Card 3: Quarry = 0x3
-        game.perform(Action::Store, false, 0);
-        // Cards: 0010000010011100
-        // Card 1: Forge = 0xd
-        // Card 2: Quarry = 0x3
-        // Card 3: Farm = 0x2
-        assert(game.resource(0x1) == ResourceTrait::new(0, 1, 0), 'Game: unexpected resource');
+        assert(game.resource(0x6) == ResourceTrait::new(0, 1, 0), 'Game: unexpected resource');
     }
 
     #[test]
-    fn test_game_play_store_twice() {
+    fn test_game_play_multiple_store() {
         let mut game = GameTrait::new(1);
         game.start();
+        // Card 1: Quarry = 0x6
+        // Card 2: Tower = 0xd
+        // Card 3: Mine = 0x8
+        // Card 4: Farm = 0x2
+        // Card 5: Quarry = 0x4
+        // Card 6: Monastery = 0xa
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Store, true, 0);
         game.perform(Action::Store, true, 0);
-        assert(game.stores == 0x34, 'Game: unexpected stores');
+        game.perform(Action::Discard, true, 0);
+        assert_eq!(game.stores, 0b00100_00010_00110);
     }
 
     #[test]
     fn test_game_play_rotate() {
         let mut game = GameTrait::new(1);
         game.start();
+        // Card 1: Quarry = 0x6
+        // Card 2: Tower = 0xd
+        // Card 3: Mine = 0x8
+        // Card 4: Farm = 0x2
+        // Card 5: Quarry = 0x4
+        // Card 6: Monastery = 0xa
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Store, true, 0); // Wheat
-        assert(game.stores == 0x234, 'Game: unexpected stores');
-        game.perform(Action::Rotate, true, 0x3);
-        assert(game.stores == 0x34, 'Game: unexpected stores');
+        game.perform(Action::Store, false, 0);
+        game.perform(Action::Store, false, 0);
+        game.perform(Action::Rotate, true, 0b00100_00110);
+        assert(game.stores == 0b00010, 'Game: unexpected stores');
     }
 
     #[test]
     fn test_game_play_flip() {
         let mut game = GameTrait::new(1);
         game.start();
+        // Card 1: Quarry = 0x6
+        // Card 2: Tower = 0xd
+        // Card 3: Mine = 0x8
+        // Card 4: Farm = 0x2
+        // Card 5: Quarry = 0x4
+        // Card 6: Monastery = 0xa
+        // Card 7: Mine = 0x9
+        // Card 8: Farm = 0x3
+        // Card 9: Tower = 0xc
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Store, true, 0); // Wheat
-        assert(game.stores == 0x234, 'Game: unexpected stores');
-        game.perform(Action::Flip, true, 0x3);
-        assert(game.stores == 0x34, 'Game: unexpected stores');
-    }
-
-    #[test]
-    fn test_game_play_case_store_and_use() {
-        let mut game = GameTrait::new(1);
-        game.start();
+        game.perform(Action::Store, true, 0);
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Store, true, 0); // Wheat
-        game.perform(Action::Rotate, true, 0x3); // Wheat
-        game.perform(Action::Discard, true, 0); // Tavern
-        game.perform(Action::Store, true, 0x12); // Citadel
-    }
-
-    #[test]
-    #[should_panic(expected: ('Game: resources not sorted',))]
-    fn test_game_play_case_01_revert_not_sorted() {
-        let mut game = GameTrait::new(1);
-        game.start();
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Store, true, 0); // Wheat
-        game.perform(Action::Rotate, true, 0x3); // Wheat
-        game.perform(Action::Discard, true, 0); // Tavern
-        game.perform(Action::Store, true, 0x21); // Citadel
-    }
-
-    #[test]
-    fn test_game_play_store_multi_ressources() {
-        let mut game = GameTrait::new(1);
-        game.start();
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, true, 0); // Stone
-        game.perform(Action::Discard, true, 0); // Stone
-        game.perform(Action::Discard, true, 0); // Wheat
-        game.perform(Action::Discard, true, 0); // Wheat
-        game.perform(Action::Store, true, 0x1); // Tavern
+        game.perform(Action::Store, false, 0);
+        game.perform(Action::Flip, true, 0b00010_00011);
+        assert(game.stores == 0b00100_00110, 'Game: unexpected stores');
     }
 
     #[test]
     fn test_game_play_store_discard_old_storage() {
         let mut game = GameTrait::new(1);
         game.start();
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, true, 0); // Stone
+        // Card 1: Quarry = 0x6
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -499,9 +411,8 @@ mod tests {
     fn test_game_play_store_discard_old_storage_revert_invalid_action() {
         let mut game = GameTrait::new(1);
         game.start();
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, true, 0); // Stone
+        // Card 1: Quarry = 0x6
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -525,10 +436,11 @@ mod tests {
         let mut game = GameTrait::new(1);
         game.start();
         loop {
-            if game.over {
+            if game.card_one == 0 {
                 break;
             }
             game.perform(Action::Discard, true, 0);
         };
+        assert_eq!(game.over, true);
     }
 }

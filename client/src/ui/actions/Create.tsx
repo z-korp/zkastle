@@ -37,7 +37,7 @@ export const Create = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={disabled}>Create Player</Button>
+        <Button disabled={disabled}>Create</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

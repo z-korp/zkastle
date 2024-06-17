@@ -5,5 +5,5 @@ const DEFAULT_ROUND_COUNT: u8 = 8;
 
 // Packing
 
-const CARD_BIT_SIZE: u8 = 16;
+const CARD_BIT_SIZE: u8 = 32;
 const SIDE_BIT_SIZE: u8 = 8;

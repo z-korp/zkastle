@@ -1,13 +1,11 @@
 // External imports
 
-use alexandria_math::bitmap::Bitmap;
-use alexandria_math::fast_power::fast_power;
 use origami::random::deck::{Deck as OrigamiDeck, DeckTrait as OrigamiDeckTrait};
 
 // Internal imports
 
 use zkastle::constants::CARD_BIT_SIZE;
-use zkastle::helpers::packer::SizedPacker;
+use zkastle::helpers::packer::{Packer, SizedPacker};
 use zkastle::elements::decks;
 use zkastle::types::card::Card;
 
@@ -36,25 +34,31 @@ impl DeckImpl of DeckTrait {
     }
 
     #[inline(always)]
-    fn is_empty(self: Deck, bitmap: u128) -> bool {
-        match self {
-            Deck::None => false,
-            Deck::Base => fast_power(2_u128, self.count().into()) - 1 == bitmap,
-        }
+    fn draw(self: Deck, packed: u128) -> (u8, u128) {
+        let mut card_ids: Array<u8> = Packer::unpack(packed, CARD_BIT_SIZE);
+        let id: u8 = card_ids.pop_front().unwrap();
+        (id, Packer::pack(card_ids, CARD_BIT_SIZE))
     }
 
     #[inline(always)]
-    fn random_draw(self: Deck, seed: felt252, bitmap: u128) -> u8 {
-        let mut drawer: OrigamiDeck = OrigamiDeckTrait::from_bitmap(
-            seed, self.count().into(), bitmap
-        );
-        drawer.draw() - 1
+    fn discard(self: Deck, packed: u128, card_id: u8) -> u128 {
+        let mut card_ids: Array<u8> = Packer::unpack(packed, CARD_BIT_SIZE);
+        card_ids.append(card_id);
+        Packer::pack(card_ids, CARD_BIT_SIZE)
     }
 
-    #[inline(always)]
-    fn ordered_draw(self: Deck, indexes: u64, index: u8) -> u8 {
-        let indexes: Array<u8> = SizedPacker::unpack(indexes, CARD_BIT_SIZE, self.count().into());
-        *indexes.at(index.into())
+    fn setup(self: Deck, seed: felt252) -> u128 {
+        // [Compute] Draw a cards randomly to design the deck
+        let count: u32 = self.count().into();
+        let mut drawer: OrigamiDeck = OrigamiDeckTrait::new(seed, count);
+        let mut cards: Array<u8> = array![];
+        loop {
+            if drawer.remaining == 0 {
+                break;
+            }
+            cards.append(drawer.draw());
+        };
+        SizedPacker::pack(cards, CARD_BIT_SIZE)
     }
 }
 

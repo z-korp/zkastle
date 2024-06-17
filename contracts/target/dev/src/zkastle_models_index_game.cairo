@@ -1,13 +1,11 @@
 impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
     #[inline(always)]
     fn size() -> Option<usize> {
-        Option::Some(13)
+        Option::Some(9)
     }
 
     fn layout() -> dojo::database::introspect::Layout {
-        dojo::database::introspect::Layout::Fixed(
-            array![1, 8, 8, 8, 8, 8, 8, 8, 16, 64, 64, 64, 251].span()
-        )
+        dojo::database::introspect::Layout::Fixed(array![1, 8, 8, 8, 8, 8, 32, 64, 128].span())
     }
 
     #[inline(always)]
@@ -53,24 +51,9 @@ impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
                         ty: dojo::database::introspect::Introspect::<u8>::ty()
                     },
                     dojo::database::introspect::Member {
-                        name: 'pointer',
-                        attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<u8>::ty()
-                    },
-                    dojo::database::introspect::Member {
-                        name: 'store_count',
-                        attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<u8>::ty()
-                    },
-                    dojo::database::introspect::Member {
                         name: 'stores',
                         attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<u16>::ty()
-                    },
-                    dojo::database::introspect::Member {
-                        name: 'cards',
-                        attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<u64>::ty()
+                        ty: dojo::database::introspect::Introspect::<u32>::ty()
                     },
                     dojo::database::introspect::Member {
                         name: 'sides',
@@ -78,14 +61,9 @@ impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
                         ty: dojo::database::introspect::Introspect::<u64>::ty()
                     },
                     dojo::database::introspect::Member {
-                        name: 'indexes',
+                        name: 'cards',
                         attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<u64>::ty()
-                    },
-                    dojo::database::introspect::Member {
-                        name: 'seed',
-                        attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<felt252>::ty()
+                        ty: dojo::database::introspect::Introspect::<u128>::ty()
                     }
                 ]
                     .span()
@@ -161,13 +139,9 @@ impl GameModel of dojo::model::Model<Game> {
         core::serde::Serde::serialize(self.card_three, ref serialized);
         core::serde::Serde::serialize(self.deck, ref serialized);
         core::serde::Serde::serialize(self.move_count, ref serialized);
-        core::serde::Serde::serialize(self.pointer, ref serialized);
-        core::serde::Serde::serialize(self.store_count, ref serialized);
         core::serde::Serde::serialize(self.stores, ref serialized);
-        core::serde::Serde::serialize(self.cards, ref serialized);
         core::serde::Serde::serialize(self.sides, ref serialized);
-        core::serde::Serde::serialize(self.indexes, ref serialized);
-        core::array::ArrayTrait::append(ref serialized, *self.seed);
+        core::serde::Serde::serialize(self.cards, ref serialized);
         core::array::ArrayTrait::span(@serialized)
     }
 

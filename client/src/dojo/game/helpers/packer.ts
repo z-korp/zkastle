@@ -1,5 +1,15 @@
 export class Packer {
-  public static unpack(packed: number, size: number, len: number) {
+  public static unpack(packed: number, size: number) {
+    let result = [];
+    let modulo = size;
+    while (packed != 0) {
+      const value = packed % modulo;
+      result.push(value);
+      packed = Math.floor(packed / modulo);
+    }
+    return result;
+  }
+  public static sized_unpack(packed: number, size: number, len: number) {
     let result = [];
     let modulo = size;
     let index = 0;

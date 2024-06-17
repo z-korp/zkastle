@@ -9,25 +9,25 @@ impl DeckImpl of DeckTrait {
     }
 
     #[inline(always)]
-    fn draw(index: u8) -> Card {
-        let id: felt252 = (index % Self::count().into()).into();
+    fn draw(id: u8) -> Card {
         match id {
-            0 => Card::Farm,
+            0 => Card::None,
             1 => Card::Farm,
             2 => Card::Farm,
-            3 => Card::Quarry,
+            3 => Card::Farm,
             4 => Card::Quarry,
             5 => Card::Quarry,
-            6 => Card::Mine,
+            6 => Card::Quarry,
             7 => Card::Mine,
             8 => Card::Mine,
-            9 => Card::Monastery,
+            9 => Card::Mine,
             10 => Card::Monastery,
-            11 => Card::Tower,
+            11 => Card::Monastery,
             12 => Card::Tower,
-            13 => Card::Forge,
-            14 => Card::Tavern,
-            15 => Card::Citadel,
+            13 => Card::Tower,
+            14 => Card::Forge,
+            15 => Card::Tavern,
+            16 => Card::Citadel,
             _ => Card::None,
         }
     }

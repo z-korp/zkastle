@@ -47,7 +47,7 @@ export const Rotate = ({
 
   return (
     <Button disabled={disabled} onClick={handleClick}>
-      Rotate
+      Improve
     </Button>
   );
 };

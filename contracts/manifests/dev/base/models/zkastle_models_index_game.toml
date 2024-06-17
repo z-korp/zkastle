@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x6308886f3055519e49edb15fcf180601b3d11fef4e8d1ad54eb25b54b39b684"
-original_class_hash = "0x6308886f3055519e49edb15fcf180601b3d11fef4e8d1ad54eb25b54b39b684"
+class_hash = "0xf8fbe41898f7ba807ccb121450c436c3f2311b55f23867c13617a74ba07032"
+original_class_hash = "0xf8fbe41898f7ba807ccb121450c436c3f2311b55f23867c13617a74ba07032"
 abi = "manifests/dev/abis/base/models/zkastle_models_index_game.json"
 name = "zkastle::models::index::game"
 
@@ -40,23 +40,8 @@ type = "u8"
 key = false
 
 [[members]]
-name = "pointer"
-type = "u8"
-key = false
-
-[[members]]
-name = "store_count"
-type = "u8"
-key = false
-
-[[members]]
 name = "stores"
-type = "u16"
-key = false
-
-[[members]]
-name = "cards"
-type = "u64"
+type = "u32"
 key = false
 
 [[members]]
@@ -65,11 +50,6 @@ type = "u64"
 key = false
 
 [[members]]
-name = "indexes"
-type = "u64"
-key = false
-
-[[members]]
-name = "seed"
-type = "felt252"
+name = "cards"
+type = "u128"
 key = false

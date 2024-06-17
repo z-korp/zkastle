@@ -31,10 +31,10 @@ export class Deck {
     }
   }
 
-  public reveal(index: number): Card {
+  public reveal(id: number): Card {
     switch (this.value) {
       case DeckType.Base:
-        return new Card(Base.draw(index));
+        return new Card(Base.reveal(id));
       default:
         return new Card(CardType.None);
     }

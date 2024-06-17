@@ -17,7 +17,7 @@ trait IActions<TContractState> {
     fn create(self: @TContractState, world: IWorldDispatcher, name: felt252);
     fn start(self: @TContractState, world: IWorldDispatcher) -> u32;
     fn play(
-        self: @TContractState, world: IWorldDispatcher, action: Action, choice: bool, resources: u16
+        self: @TContractState, world: IWorldDispatcher, action: Action, choice: bool, resources: u32
     );
     fn discard(self: @TContractState, world: IWorldDispatcher, slot_index: u8);
     fn surrender(self: @TContractState, world: IWorldDispatcher);
@@ -107,7 +107,7 @@ mod actions {
             world: IWorldDispatcher,
             action: Action,
             choice: bool,
-            resources: u16
+            resources: u32
         ) {
             self.playable._play(world, action, choice, resources);
         }

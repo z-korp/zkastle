@@ -17,14 +17,16 @@ export const Deck = () => {
   if (!player || !game) return null;
 
   return (
-    <div className="flex gap-8 scale-[0.5]">
-      <Info count={game.move_count} score={game.getScore()} />
-      <Card
-        data={game.card_three}
-        first={false}
-        actionable={false}
-        stored={game.inStorage(game.card_three.id)}
-      />
+    <div className="relative">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-8 scale-[0.5]">
+        <Info count={game.move_count} score={game.getScore()} />
+        <Card
+          data={game.card_three}
+          first={false}
+          actionable={false}
+          stored={game.inStorage(game.card_three.id)}
+        />
+      </div>
     </div>
   );
 };

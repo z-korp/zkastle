@@ -5,32 +5,31 @@ export class Base {
     return 16;
   }
 
-  public static draw(index: number): CardType {
-    const id = index % this.count();
+  public static reveal(id: number): CardType {
     switch (id) {
-      case 0:
       case 1:
       case 2:
-        return CardType.Farm;
       case 3:
+        return CardType.Farm;
       case 4:
       case 5:
-        return CardType.Quarry;
       case 6:
+        return CardType.Quarry;
       case 7:
       case 8:
-        return CardType.Mine;
       case 9:
+        return CardType.Mine;
       case 10:
-        return CardType.Monastery;
       case 11:
+        return CardType.Monastery;
       case 12:
-        return CardType.Tower;
       case 13:
-        return CardType.Forge;
+        return CardType.Tower;
       case 14:
-        return CardType.Tavern;
+        return CardType.Forge;
       case 15:
+        return CardType.Tavern;
+      case 16:
         return CardType.Citadel;
       default:
         return CardType.None;

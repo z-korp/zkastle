@@ -1,3 +1,5 @@
+export const SIDE_TYPE_COUNT = 4;
+
 export enum SideType {
   None = "None",
   One = "One",
@@ -24,5 +26,20 @@ export class Side {
     }
     const item = Object.values(SideType)[index];
     return new Side(item);
+  }
+
+  public getName(): string {
+    switch (this.value) {
+      case SideType.One:
+        return "I";
+      case SideType.Two:
+        return "II";
+      case SideType.Three:
+        return "III";
+      case SideType.Four:
+        return "IV";
+      default:
+        return "";
+    }
   }
 }

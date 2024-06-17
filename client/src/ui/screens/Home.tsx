@@ -10,7 +10,7 @@ export const Home = () => {
   return (
     <div className="relative flex flex-col h-screen">
       <Header />
-      <div className="flex flex-col gap-4 grow items-center justify-between">
+      <div className="flex flex-col gap-8 grow items-center justify-start">
         <div className="flex justify-center gap-4">
           <Create />
           <Start />
@@ -19,13 +19,13 @@ export const Home = () => {
         <div className="flex justify-between w-full">
           <div className="flex flex-col grow items-center">
             <Cards />
-            <Deck />
           </div>
           <div className="absolute right-4 top-1/4">
             <Storage />
           </div>
         </div>
       </div>
+      <Deck />
     </div>
   );
 };

@@ -6,15 +6,14 @@ import { Stone } from "@/ui/components/Resource";
 import { Iron } from "@/ui/components/Resource";
 import { useGameStore } from "@/stores/game";
 import { Packer } from "@/dojo/game/helpers/packer";
+import { CARD_BIT_SIZE } from "@/dojo/game/models/game";
 import { Remove } from "../actions/Remove";
 
 export const Slot = ({
   data,
-  count,
   index,
 }: {
   data: { card: Card; side: Side; id: number };
-  count: number;
   index: number;
 }) => {
   const { card, side, id } = data;
@@ -26,34 +25,32 @@ export const Slot = ({
   }, [card, side]);
 
   const selected = useMemo(() => {
-    return Packer.unpack(resources, 16, count).includes(index);
-  }, [count, index, resources]);
+    return Packer.unpack(resources, CARD_BIT_SIZE).includes(id);
+  }, [id, resources]);
 
   const handleClick = useCallback(() => {
-    if (index > count) return;
+    if (id == 0) return;
     // Unpack resources
-    const indexes = Packer.unpack(resources, 16, count);
-    // If the index is already in the array
-    if (indexes.includes(index)) {
-      // Remove the index from the array
+    const ids = Packer.unpack(resources, CARD_BIT_SIZE);
+    console.log(resources, ids, id);
+    // If the id is already in the array
+    if (ids.includes(id)) {
+      // Remove the id from the array
       setResources(
         Packer.pack(
-          indexes.filter((i) => i !== index),
-          16,
+          ids.filter((i) => i !== id),
+          CARD_BIT_SIZE,
         ),
       );
     } else {
-      // Otherwise, add the index to the array, sort the array, and pack the array
-      const sorted = [...indexes.filter((i) => !!i), index].sort(
-        (a, b) => b - a,
-      );
-      setResources(Packer.pack(sorted, 16));
+      // Otherwise, add the id to the array and pack
+      setResources(Packer.pack([...ids, id], CARD_BIT_SIZE));
     }
-  }, [count, index, resources]);
+  }, [id, resources]);
 
   return (
     <div
-      className={`flex gap-2 justify-between items-center border-2 rounded h-16 w-60 p-4 cursor-pointer ${selected ? "bg-slate-500" : ""}`}
+      className={`flex gap-2 justify-between items-center border-2 rounded h-16 w-60 p-4 ${!!id && "cursor-pointer"} ${selected && "bg-slate-500"}`}
       onClick={handleClick}
     >
       <h2 className="text-xl">{`#${index}`}</h2>
@@ -68,7 +65,7 @@ export const Slot = ({
           <Iron key={i} height={8} width={8} />
         ))}
       </div>
-      {index <= count && <Remove index={id} />}
+      {!!id && <Remove index={id} />}
     </div>
   );
 };

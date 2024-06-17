@@ -47,7 +47,7 @@ export const Flip = ({
 
   return (
     <Button disabled={disabled} onClick={handleClick}>
-      Flip
+      Upgrade
     </Button>
   );
 };

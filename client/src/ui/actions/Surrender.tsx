@@ -29,7 +29,7 @@ export const Surrender = () => {
 
   return (
     <Button disabled={disabled} onClick={handleClick}>
-      Surrender Game
+      Surrender
     </Button>
   );
 };

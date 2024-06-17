@@ -15,31 +15,24 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export const Card = ({
   data,
-  first,
-  actionable,
-  stored,
+  first = false,
+  actionable = false,
+  stored = false,
+  height = "h-96",
+  width = "w-60",
+  scale = "scale-100",
 }: {
   data: { card: CardClass; side: Side; id: number };
-  first: boolean;
-  actionable: boolean;
-  stored: boolean;
+  first?: boolean;
+  actionable?: boolean;
+  stored?: boolean;
+  height?: string;
+  width?: string;
+  scale?: string;
 }) => {
   const { card, side } = data;
 
-  const label = useMemo(() => {
-    switch (side.value) {
-      case SideType.One:
-        return "I";
-      case SideType.Two:
-        return "II";
-      case SideType.Three:
-        return "III";
-      case SideType.Four:
-        return "IV";
-      default:
-        return "";
-    }
-  }, [side]);
+  const label = useMemo(() => side.getName(), [side]);
 
   const score = useMemo(() => {
     return card.getScore(side);
@@ -50,7 +43,9 @@ export const Card = ({
   if (!card) return null;
 
   return (
-    <div className="relative h-96 w-60 rounded-2xl overflow-clip bg-white border-2 border-slate-700">
+    <div
+      className={`relative ${height} ${width} ${scale} rounded-2xl overflow-clip border border-slate-900 bg-slate-200`}
+    >
       <div
         className="absolute h-full w-full bg-cover bg-center opacity-50 z-0"
         style={{ backgroundImage: `url('${card.getImage()}')` }}

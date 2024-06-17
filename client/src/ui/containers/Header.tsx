@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "@/ui/components/Theme";
 import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
+import { Collection } from "./Collection";
 
 export const Header = () => {
   const {
@@ -21,14 +22,20 @@ export const Header = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center p-4">
-        <div className="cursor-pointer" onClick={handleClick}>
+      <div className="flex justify-center items-center p-4 flex-wrap md:justify-between">
+        <div
+          className="cursor-pointer flex gap-8 items-center"
+          onClick={handleClick}
+        >
           <p className="text-4xl font-bold">zKastle</p>
+          <Collection />
         </div>
-        <div className="flex gap-2 items-center">
-          {!!player && <p className="mr-4">{player.name}</p>}
-          <ModeToggle />
-          <Account />
+        <div className="flex flex-col gap-4 items-center md:flex-row">
+          {!!player && <p className="text-2xl">{player.name}</p>}
+          <div className="flex gap-2">
+            <ModeToggle />
+            <Account />
+          </div>
         </div>
       </div>
       <Separator className="mb-8" />

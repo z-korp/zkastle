@@ -69,7 +69,7 @@ mod PlayableComponent {
             world: IWorldDispatcher,
             action: Action,
             choice: bool,
-            resources: u16
+            resources: u32
         ) {
             // [Setup] Datastore
             let store: Store = StoreImpl::new(world);

@@ -19,12 +19,7 @@ export const Storage = () => {
     <div className="flex flex-col gap-4 min-w-60 items-center">
       <h2 className="text-xl">Storage</h2>
       {game.stores.map((store, index) => (
-        <Slot
-          key={index}
-          data={store}
-          count={game.store_count}
-          index={index + 1}
-        />
+        <Slot key={index} data={store} index={index + 1} />
       ))}
     </div>
   );

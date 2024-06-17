@@ -19,6 +19,8 @@ import tavern from "/assets/tavern-bg.png";
 import tower from "/assets/tower-bg.png";
 import { Action } from "./action";
 
+export const CARD_TYPE_COUNT = 8;
+
 export enum CardType {
   None = "None",
   Farm = "Farm",
