@@ -89,9 +89,47 @@ export function systems({
     }
   };
 
+  const remove = async ({ account, ...props }: SystemTypes.Discard) => {
+    try {
+      const { transaction_hash } = await client.actions.discard({
+        account,
+        ...props,
+      });
+
+      notify(
+        `Game has been discarded.`,
+        await account.waitForTransaction(transaction_hash, {
+          retryInterval: 100,
+        }),
+      );
+    } catch (error) {
+      console.error("Error discarding game:", error);
+    }
+  };
+
+  const surrender = async ({ account, ...props }: SystemTypes.Surrender) => {
+    try {
+      const { transaction_hash } = await client.actions.surrender({
+        account,
+        ...props,
+      });
+
+      notify(
+        `Game has been surrendered.`,
+        await account.waitForTransaction(transaction_hash, {
+          retryInterval: 100,
+        }),
+      );
+    } catch (error) {
+      console.error("Error surrendering game:", error);
+    }
+  };
+
   return {
     create,
     start,
     play,
+    remove,
+    surrender,
   };
 }

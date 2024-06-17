@@ -29,7 +29,8 @@ export async function setup({ ...config }: Config) {
   const clientModels = models({ contractModels });
 
   // fetch all existing entities from torii
-  await getSyncEntities(toriiClient, contractModels as any, []);
+  // await getSyncEntities(toriiClient, contractModels as any, []);
+  await getSyncEntities(toriiClient, contractModels as any, 1000);
 
   const client = await setupWorld(
     new DojoProvider(config.manifest, config.rpcUrl),

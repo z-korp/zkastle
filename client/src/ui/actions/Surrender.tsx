@@ -4,19 +4,15 @@ import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
-import { Action, ActionType } from "@/dojo/game/types/action";
-import { useGameStore } from "@/stores/game";
 
-export const Discard = ({ choice }: { choice: boolean }) => {
+export const Surrender = () => {
   const {
     account: { account },
     master,
     setup: {
-      systemCalls: { play },
+      systemCalls: { surrender },
     },
   } = useDojo();
-
-  const { setResources } = useGameStore();
 
   const { player } = usePlayer({ playerId: account.address });
   const { game } = useGame({
@@ -24,13 +20,7 @@ export const Discard = ({ choice }: { choice: boolean }) => {
   });
 
   const handleClick = useCallback(() => {
-    play({
-      account: account as Account,
-      action: new Action(ActionType.Discard).into(),
-      choice,
-      resources: 0,
-    });
-    setResources(0);
+    surrender({ account: account as Account });
   }, [account]);
 
   const disabled = useMemo(() => {
@@ -39,7 +29,7 @@ export const Discard = ({ choice }: { choice: boolean }) => {
 
   return (
     <Button disabled={disabled} onClick={handleClick}>
-      Discard
+      Surrender Game
     </Button>
   );
 };

@@ -19,6 +19,8 @@ trait IActions<TContractState> {
     fn play(
         self: @TContractState, world: IWorldDispatcher, action: Action, choice: bool, resources: u16
     );
+    fn discard(self: @TContractState, world: IWorldDispatcher, slot_index: u8);
+    fn surrender(self: @TContractState, world: IWorldDispatcher);
 }
 
 // Contracts
@@ -108,6 +110,14 @@ mod actions {
             resources: u16
         ) {
             self.playable._play(world, action, choice, resources);
+        }
+
+        fn discard(self: @ContractState, world: IWorldDispatcher, slot_index: u8) {
+            self.playable._discard(world, slot_index);
+        }
+
+        fn surrender(self: @ContractState, world: IWorldDispatcher) {
+            self.playable._surrender(world);
         }
     }
 }

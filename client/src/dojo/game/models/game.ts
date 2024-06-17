@@ -26,12 +26,16 @@ export class Game {
     this.deck = Deck.from(game.deck);
     this.move_count = game.move_count;
     this.pointer = game.pointer;
-    this.cards = Packer.unpack(game.cards, 16, 16).map((card: number) =>
-      Card.from(card),
-    );
-    this.sides = Packer.unpack(game.sides, 8, 16).map((side: number) =>
-      Side.from(side),
-    );
+    this.cards = Packer.unpack(
+      parseInt(`0x${game.cards.toString(16)}`),
+      16,
+      16,
+    ).map((card: number) => Card.from(card));
+    this.sides = Packer.unpack(
+      parseInt(`0x${game.sides.toString(16)}`),
+      8,
+      16,
+    ).map((side: number) => Side.from(side));
     this.card_one = {
       card: this.deck.reveal(game.card_one),
       side: this.sides[game.card_one],
@@ -45,12 +49,18 @@ export class Game {
       side: this.sides[game.card_three],
     };
     this.store_count = game.store_count;
-    this.stores = Packer.unpack(game.stores, 16, game.store_count).map(
-      (card: number) => {
-        return { card: this.deck.reveal(card), side: this.sides[card] };
-      },
+    this.stores = Packer.unpack(
+      parseInt(`0x${game.stores.toString(16)}`),
+      16,
+      game.store_count,
+    ).map((card: number) => {
+      return { card: this.deck.reveal(card), side: this.sides[card] };
+    });
+    this.indexes = Packer.unpack(
+      parseInt(`0x${game.indexes.toString(16)}`),
+      16,
+      16,
     );
-    this.indexes = Packer.unpack(game.indexes, 16, 16);
     this.seed = game.seed;
   }
 

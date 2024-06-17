@@ -4,15 +4,16 @@ import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
-import { Action, ActionType } from "@/dojo/game/types/action";
 import { useGameStore } from "@/stores/game";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-export const Discard = ({ choice }: { choice: boolean }) => {
+export const Remove = ({ index }: { index: number }) => {
   const {
     account: { account },
     master,
     setup: {
-      systemCalls: { play },
+      systemCalls: { remove },
     },
   } = useDojo();
 
@@ -24,11 +25,9 @@ export const Discard = ({ choice }: { choice: boolean }) => {
   });
 
   const handleClick = useCallback(() => {
-    play({
+    remove({
       account: account as Account,
-      action: new Action(ActionType.Discard).into(),
-      choice,
-      resources: 0,
+      slot_index: index,
     });
     setResources(0);
   }, [account]);
@@ -39,7 +38,7 @@ export const Discard = ({ choice }: { choice: boolean }) => {
 
   return (
     <Button disabled={disabled} onClick={handleClick}>
-      Discard
+      <FontAwesomeIcon icon={faTrash} />
     </Button>
   );
 };

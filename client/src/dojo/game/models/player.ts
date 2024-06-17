@@ -12,7 +12,8 @@ export class Player {
     this.id = player.id;
     this.game_id = player.game_id;
     this.achievements = player.achievements;
-    this.name = shortString.decodeShortString(player.name);
+    // this.name = shortString.decodeShortString(player.name);
+    this.name = shortString.decodeShortString(`0x${player.name.toString(16)}`);
   }
 
   getShortAddress(): string {

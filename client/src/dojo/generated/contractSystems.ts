@@ -29,6 +29,12 @@ export interface Play extends Signer {
   resources: number;
 }
 
+export interface Discard extends Signer {
+  slot_index: number;
+}
+
+export interface Surrender extends Signer {}
+
 export type IWorld = Awaited<ReturnType<typeof setupWorld>>;
 
 export const getContractByName = (manifest: any, name: string) => {
@@ -58,11 +64,14 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       try {
         return await provider.execute(
           account,
-          {
-            contractName: contract_name,
-            entrypoint: "initialize",
-            calldata: [world],
-          },
+          // {
+          //   contractName: contract_name,
+          //   entrypoint: "initialize",
+          //   calldata: [world],
+          // },
+          contract_name,
+          "initialize",
+          [world],
           details,
         );
       } catch (error) {
@@ -76,11 +85,14 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
         const encoded_name = shortString.encodeShortString(name);
         return await provider.execute(
           account,
-          {
-            contractName: contract_name,
-            entrypoint: "create",
-            calldata: [provider.getWorldAddress(), encoded_name],
-          },
+          // {
+          //   contractName: contract_name,
+          //   entrypoint: "create",
+          //   calldata: [provider.getWorldAddress(), encoded_name],
+          // },
+          contract_name,
+          "create",
+          [provider.getWorldAddress(), encoded_name],
           details,
         );
       } catch (error) {
@@ -93,11 +105,14 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       try {
         return await provider.execute(
           account,
-          {
-            contractName: contract_name,
-            entrypoint: "start",
-            calldata: [provider.getWorldAddress()],
-          },
+          // {
+          //   contractName: contract_name,
+          //   entrypoint: "start",
+          //   calldata: [provider.getWorldAddress()],
+          // },
+          contract_name,
+          "start",
+          [provider.getWorldAddress()],
           details,
         );
       } catch (error) {
@@ -110,20 +125,63 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       try {
         return await provider.execute(
           account,
-          {
-            contractName: contract_name,
-            entrypoint: "play",
-            calldata: [
-              provider.getWorldAddress(),
-              action,
-              choice ? 1 : 0,
-              resources,
-            ],
-          },
+          // {
+          //   contractName: contract_name,
+          //   entrypoint: "play",
+          //   calldata: [
+          //     provider.getWorldAddress(),
+          //     action,
+          //     choice ? 1 : 0,
+          //     resources,
+          //   ],
+          // },
+          contract_name,
+          "play",
+          [provider.getWorldAddress(), action, choice ? 1 : 0, resources],
           details,
         );
       } catch (error) {
         console.error("Error executing play:", error);
+        throw error;
+      }
+    };
+
+    const discard = async ({ account, slot_index }: Discard) => {
+      try {
+        return await provider.execute(
+          account,
+          // {
+          //   contractName: contract_name,
+          //   entrypoint: "discard",
+          //   calldata: [provider.getWorldAddress(), slot_index],
+          // },
+          contract_name,
+          "discard",
+          [provider.getWorldAddress(), slot_index],
+          details,
+        );
+      } catch (error) {
+        console.error("Error executing discard:", error);
+        throw error;
+      }
+    };
+
+    const surrender = async ({ account }: Surrender) => {
+      try {
+        return await provider.execute(
+          account,
+          // {
+          //   contractName: contract_name,
+          //   entrypoint: "surrender",
+          //   calldata: [provider.getWorldAddress()],
+          // },
+          contract_name,
+          "surrender",
+          [provider.getWorldAddress()],
+          details,
+        );
+      } catch (error) {
+        console.error("Error executing surrender:", error);
         throw error;
       }
     };
@@ -134,6 +192,8 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       create,
       start,
       play,
+      discard,
+      surrender,
     };
   }
 

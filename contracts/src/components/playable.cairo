@@ -89,5 +89,49 @@ mod PlayableComponent {
             // [Effect] Update game
             store.set_game(game);
         }
+
+        fn _discard(
+            self: @ComponentState<TContractState>, world: IWorldDispatcher, slot_index: u8
+        ) {
+            // [Setup] Datastore
+            let store: Store = StoreImpl::new(world);
+
+            // [Check] Player exists
+            let caller = get_caller_address();
+            let player = store.player(caller.into());
+            player.assert_exists();
+
+            // [Check] Game exists
+            let mut game = store.game(player.game_id);
+            game.assert_exists();
+
+            // [Effect] Discard game
+            game.unstore(slot_index);
+
+            // [Effect] Update game
+            store.set_game(game);
+        }
+
+        fn _surrender(self: @ComponentState<TContractState>, world: IWorldDispatcher) {
+            // [Setup] Datastore
+            let store: Store = StoreImpl::new(world);
+
+            // [Check] Player exists
+            let caller = get_caller_address();
+            let mut player = store.player(caller.into());
+            player.assert_exists();
+
+            // [Check] Game exists
+            let mut game = store.game(player.game_id);
+            game.assert_exists();
+
+            // [Effect] Update game
+            game.over = true;
+            store.set_game(game);
+
+            // [Effect] Update player
+            player.game_id = 0;
+            store.set_player(player);
+        }
     }
 }

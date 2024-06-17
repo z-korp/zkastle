@@ -1000,8 +1000,8 @@
       }
     ],
     "address": "0x63abf335f66aeaefe2b35c329d944e0e33e8cc225f9dcb21fb82759a774f300",
-    "transaction_hash": "0xd9af25ad945fe934cfbf2e8a2fd439b11dc03096199ead56006764a4d6776d",
-    "block_number": 3,
+    "transaction_hash": "0x1c30388c969662b393b2ff55b7ce4bada609ada9289adf13c0a9e521fa286c2",
+    "block_number": 5,
     "seed": "zkastle",
     "metadata": {
       "profile_name": "dev",
@@ -1020,8 +1020,8 @@
     {
       "kind": "DojoContract",
       "address": "0x51ec0524b87b30b3309fab1da22400d2d119d447eee7d32297a9933baa6505e",
-      "class_hash": "0x5f2f286a6c36bc04e3317d9a622a87063d6a8e90876a44dcc50477f057becb5",
-      "original_class_hash": "0x5f2f286a6c36bc04e3317d9a622a87063d6a8e90876a44dcc50477f057becb5",
+      "class_hash": "0x1f7bea04b9e5be3645558de0cb1826cbd9c2b7f720d8b2202e23be9bbbb4ad",
+      "original_class_hash": "0x1f7bea04b9e5be3645558de0cb1826cbd9c2b7f720d8b2202e23be9bbbb4ad",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -1156,6 +1156,34 @@
                 {
                   "name": "resources",
                   "type": "core::integer::u16"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "discard",
+              "inputs": [
+                {
+                  "name": "world",
+                  "type": "dojo::world::IWorldDispatcher"
+                },
+                {
+                  "name": "slot_index",
+                  "type": "core::integer::u8"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "surrender",
+              "inputs": [
+                {
+                  "name": "world",
+                  "type": "dojo::world::IWorldDispatcher"
                 }
               ],
               "outputs": [],

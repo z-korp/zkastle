@@ -6,6 +6,7 @@ import { Stone } from "@/ui/components/Resource";
 import { Iron } from "@/ui/components/Resource";
 import { useGameStore } from "@/stores/game";
 import { Packer } from "@/dojo/game/helpers/packer";
+import { Remove } from "../actions/Remove";
 
 export const Slot = ({
   data,
@@ -51,7 +52,7 @@ export const Slot = ({
 
   return (
     <div
-      className={`flex gap-2 justify-between items-center border-2 rounded h-16 w-52 p-4 cursor-pointer ${selected ? "bg-slate-500" : ""}`}
+      className={`flex gap-2 justify-between items-center border-2 rounded h-16 w-60 p-4 cursor-pointer ${selected ? "bg-slate-500" : ""}`}
       onClick={handleClick}
     >
       <h2 className="text-xl">{`#${index}`}</h2>
@@ -66,6 +67,7 @@ export const Slot = ({
           <Iron key={i} height={8} width={8} />
         ))}
       </div>
+      <Remove index={index - 1} />
     </div>
   );
 };
