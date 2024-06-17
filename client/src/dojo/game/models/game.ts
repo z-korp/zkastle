@@ -5,8 +5,7 @@ import { Card } from "../types/card";
 import { Deck } from "../types/deck";
 
 export class Game {
-  public id: number;
-  public player_id: string;
+  public id: string;
   public over: boolean;
   public card_one: { card: Card; side: Side };
   public card_two: { card: Card; side: Side };
@@ -23,8 +22,7 @@ export class Game {
 
   constructor(game: ComponentValue) {
     this.id = game.id;
-    this.player_id = `0x${game.player_id.toString(16)}`;
-    this.over = game.over;
+    this.over = game.over ? true : false;
     this.deck = Deck.from(game.deck);
     this.move_count = game.move_count;
     this.pointer = game.pointer;

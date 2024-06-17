@@ -1,9 +1,9 @@
 [world]
 kind = "WorldContract"
-class_hash = "0xf6f44afb3cacbcc01a371aff62c86ca9a45feba065424c99f7cd8637514d8f"
-original_class_hash = "0xf6f44afb3cacbcc01a371aff62c86ca9a45feba065424c99f7cd8637514d8f"
+class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
+original_class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
 abi = "manifests/dev/abis/deployments/dojo_world_world.json"
-address = "0x6756743c6a8ef75215c3d827c57b99ea103e03b9961db0c99e9a7cc3d20f986"
+address = "0x63abf335f66aeaefe2b35c329d944e0e33e8cc225f9dcb21fb82759a774f300"
 transaction_hash = "0xd9af25ad945fe934cfbf2e8a2fd439b11dc03096199ead56006764a4d6776d"
 block_number = 3
 seed = "zkastle"
@@ -21,9 +21,9 @@ name = "dojo::base::base"
 
 [[contracts]]
 kind = "DojoContract"
-address = "0x453493a276bfe46905a37d4fe8a52d3fc373000c052469b819e63c19bfc9e74"
-class_hash = "0x6657e50ff18d9f1347b99173c472958400cfef9651b77b86af14a2c99a19c0a"
-original_class_hash = "0x6657e50ff18d9f1347b99173c472958400cfef9651b77b86af14a2c99a19c0a"
+address = "0x51ec0524b87b30b3309fab1da22400d2d119d447eee7d32297a9933baa6505e"
+class_hash = "0x5f2f286a6c36bc04e3317d9a622a87063d6a8e90876a44dcc50477f057becb5"
+original_class_hash = "0x5f2f286a6c36bc04e3317d9a622a87063d6a8e90876a44dcc50477f057becb5"
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
 abi = "manifests/dev/abis/deployments/contracts/zkastle_systems_actions_actions.json"
 reads = []
@@ -37,19 +37,14 @@ name = "zkastle::systems::actions::actions"
 
 [[models]]
 kind = "DojoModel"
-class_hash = "0x4c8f7ba6e969f568fc32b44915c2fa890ebce91ecc12a77452c772d39d51546"
-original_class_hash = "0x4c8f7ba6e969f568fc32b44915c2fa890ebce91ecc12a77452c772d39d51546"
+class_hash = "0x6308886f3055519e49edb15fcf180601b3d11fef4e8d1ad54eb25b54b39b684"
+original_class_hash = "0x6308886f3055519e49edb15fcf180601b3d11fef4e8d1ad54eb25b54b39b684"
 abi = "manifests/dev/abis/deployments/models/zkastle_models_index_game.json"
 name = "zkastle::models::index::game"
 
 [[models.members]]
 name = "id"
 type = "u32"
-key = true
-
-[[models.members]]
-name = "player_id"
-type = "felt252"
 key = true
 
 [[models.members]]

@@ -33,14 +33,11 @@ mod errors {
 #[generate_trait]
 impl GameImpl of GameTrait {
     #[inline(always)]
-    fn new(id: u32, player_id: felt252) -> Game {
-        // [Check] Validate parameters
-        AssertTrait::assert_valid_host(player_id);
+    fn new(id: u32) -> Game {
         // [Effect] Create a new game
         let deck: Deck = Deck::Base;
         let mut game = Game {
             id,
-            player_id,
             over: false,
             card_one: 0,
             card_two: 0,
@@ -260,7 +257,6 @@ impl ZeroableGame of core::Zeroable<Game> {
     fn zero() -> Game {
         Game {
             id: 0,
-            player_id: 0,
             over: false,
             card_one: 0,
             card_two: 0,
@@ -348,7 +344,7 @@ mod tests {
     #[test]
     fn test_game_new() {
         // Deck: 0xab0598c6fe1234d7
-        let game = GameTrait::new(1, 1);
+        let game = GameTrait::new(1);
         game.assert_exists();
         game.assert_not_over();
         assert(game.seed.into() > 0_u256, 'Game: seed is zero');
@@ -356,7 +352,7 @@ mod tests {
 
     #[test]
     fn test_game_start() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         let seed = game.seed;
         game.start();
         // Cards: 0010000010010000
@@ -370,7 +366,7 @@ mod tests {
 
     #[test]
     fn test_game_play_quarry() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         game.start();
         // Cards: 0010000010010000
         // Card 1: Mine = 0x7
@@ -391,7 +387,7 @@ mod tests {
 
     #[test]
     fn test_game_play_store_twice() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         game.start();
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -402,7 +398,7 @@ mod tests {
 
     #[test]
     fn test_game_play_rotate() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         game.start();
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -416,7 +412,7 @@ mod tests {
 
     #[test]
     fn test_game_play_flip() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         game.start();
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -430,7 +426,7 @@ mod tests {
 
     #[test]
     fn test_game_play_case_01() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         game.start();
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -445,7 +441,7 @@ mod tests {
     #[test]
     #[should_panic(expected: ('Game: resources not sorted',))]
     fn test_game_play_case_01_revert_not_sorted() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         game.start();
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -459,7 +455,7 @@ mod tests {
 
     #[test]
     fn test_game_play_store_multi_ressources() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         game.start();
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -472,7 +468,7 @@ mod tests {
 
     #[test]
     fn test_game_play_until_over() {
-        let mut game = GameTrait::new(1, 1);
+        let mut game = GameTrait::new(1);
         game.start();
         loop {
             if game.over {

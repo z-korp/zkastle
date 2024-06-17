@@ -345,10 +345,6 @@
         "type": "core::integer::u32"
       },
       {
-        "name": "player_id",
-        "type": "core::felt252"
-      },
-      {
         "name": "over",
         "type": "core::bool"
       },

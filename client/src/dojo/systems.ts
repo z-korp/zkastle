@@ -43,7 +43,7 @@ export function systems({
       });
 
       notify(
-        `Game has been created.`,
+        `Player has been created.`,
         await account.waitForTransaction(transaction_hash, {
           retryInterval: 100,
         }),

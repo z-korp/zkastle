@@ -47,12 +47,12 @@ mod PlayableComponent {
             player.assert_exists();
 
             // [Check] Game is over
-            let game = store.game(player.game_id, player.id);
+            let game = store.game(player.game_id);
             game.assert_is_over();
 
             // [Effect] Create game
-            let game_id = world.uuid() + 1;
-            let mut game = GameTrait::new(game_id, player.id);
+            let game_id: u32 = world.uuid() + 1;
+            let mut game = GameTrait::new(game_id);
             game.start();
             store.set_game(game);
 
@@ -80,7 +80,7 @@ mod PlayableComponent {
             player.assert_exists();
 
             // [Check] Game exists
-            let mut game = store.game(player.game_id, player.id);
+            let mut game = store.game(player.game_id);
             game.assert_exists();
 
             // [Effect] Perform action

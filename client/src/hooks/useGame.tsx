@@ -4,13 +4,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useComponentValue } from "@dojoengine/react";
 import { Entity } from "@dojoengine/recs";
 
-export const useGame = ({
-  gameId,
-  playerId,
-}: {
-  gameId: number;
-  playerId: string;
-}) => {
+export const useGame = ({ gameId }: { gameId: string }) => {
   const {
     setup: {
       clientModels: {
@@ -21,10 +15,12 @@ export const useGame = ({
   } = useDojo();
 
   const gameKey = useMemo(
-    () => getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]) as Entity,
+    () => getEntityIdFromKeys([BigInt(gameId)]) as Entity,
     [gameId],
   );
+  console.log("gameKey", gameKey);
   const component = useComponentValue(Game, gameKey);
+  console.log("game", component);
   const game = useMemo(() => {
     return component ? new GameClass(component) : null;
   }, [component]);

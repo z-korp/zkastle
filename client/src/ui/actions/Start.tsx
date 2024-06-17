@@ -16,8 +16,7 @@ export const Start = () => {
 
   const { player } = usePlayer({ playerId: account.address });
   const { game } = useGame({
-    gameId: player?.game_id || 0,
-    playerId: account.address,
+    gameId: player?.game_id || "0x0",
   });
 
   const handleClick = useCallback(() => {

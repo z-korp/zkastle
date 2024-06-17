@@ -23,11 +23,6 @@ impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
                         ty: dojo::database::introspect::Introspect::<u32>::ty()
                     },
                     dojo::database::introspect::Member {
-                        name: 'player_id',
-                        attrs: array!['key'].span(),
-                        ty: dojo::database::introspect::Introspect::<felt252>::ty()
-                    },
-                    dojo::database::introspect::Member {
                         name: 'over',
                         attrs: array![].span(),
                         ty: dojo::database::introspect::Introspect::<bool>::ty()
@@ -154,7 +149,6 @@ impl GameModel of dojo::model::Model<Game> {
     fn keys(self: @Game) -> Span<felt252> {
         let mut serialized = core::array::ArrayTrait::new();
         core::serde::Serde::serialize(self.id, ref serialized);
-        core::array::ArrayTrait::append(ref serialized, *self.player_id);
         core::array::ArrayTrait::span(@serialized)
     }
 

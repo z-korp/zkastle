@@ -13,8 +13,7 @@ export function defineContractComponents(world: World) {
         world,
         {
           id: RecsType.Number,
-          player_id: RecsType.BigInt,
-          over: RecsType.Boolean,
+          over: RecsType.Number,
           card_one: RecsType.Number,
           card_two: RecsType.Number,
           card_three: RecsType.Number,
@@ -33,7 +32,6 @@ export function defineContractComponents(world: World) {
             name: "Game",
             types: [
               "u32",
-              "felt252",
               "bool",
               "u8",
               "u8",

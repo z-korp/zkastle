@@ -47,7 +47,7 @@ console.log(
 );
 
 const cairoToRecsType = {
-  bool: "RecsType.Boolean",
+  bool: "RecsType.Number",
   u8: "RecsType.Number",
   u16: "RecsType.Number",
   u32: "RecsType.Number",

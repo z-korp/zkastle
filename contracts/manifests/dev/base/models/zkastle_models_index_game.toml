@@ -1,17 +1,12 @@
 kind = "DojoModel"
-class_hash = "0x4c8f7ba6e969f568fc32b44915c2fa890ebce91ecc12a77452c772d39d51546"
-original_class_hash = "0x4c8f7ba6e969f568fc32b44915c2fa890ebce91ecc12a77452c772d39d51546"
+class_hash = "0x6308886f3055519e49edb15fcf180601b3d11fef4e8d1ad54eb25b54b39b684"
+original_class_hash = "0x6308886f3055519e49edb15fcf180601b3d11fef4e8d1ad54eb25b54b39b684"
 abi = "manifests/dev/abis/base/models/zkastle_models_index_game.json"
 name = "zkastle::models::index::game"
 
 [[members]]
 name = "id"
 type = "u32"
-key = true
-
-[[members]]
-name = "player_id"
-type = "felt252"
 key = true
 
 [[members]]

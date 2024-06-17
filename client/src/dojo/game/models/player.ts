@@ -4,7 +4,7 @@ import { shortString } from "starknet";
 
 export class Player {
   public id: string;
-  public game_id: number;
+  public game_id: string;
   public achievements: number;
   public name: string;
 
@@ -12,7 +12,7 @@ export class Player {
     this.id = player.id;
     this.game_id = player.game_id;
     this.achievements = 0;
-    this.name = shortString.decodeShortString(`0x${player.name.toString(16)}`);
+    this.name = shortString.decodeShortString(player.name);
   }
 
   getShortAddress(): string {

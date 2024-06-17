@@ -13,8 +13,6 @@ struct Player {
 struct Game {
     #[key]
     id: u32,
-    #[key]
-    player_id: felt252,
     over: bool,
     card_one: u8,
     card_two: u8,
