@@ -2,14 +2,11 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/ui/elements/carousel";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -18,11 +15,8 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/ui/elements/pagination";
 import { Button } from "@/ui/elements/button";
 import { Side, SideType } from "@/dojo/game/types/side";
@@ -50,7 +44,7 @@ export const Collection = () => {
           <Carousel
             className="w-full"
             orientation={"horizontal"}
-            opts={{ dragFree: true }}
+            opts={{ dragFree: false }}
           >
             <CarouselContent className="flex">
               {groups.map((group, index) => (
