@@ -5,13 +5,13 @@ import { shortString } from "starknet";
 export class Player {
   public id: string;
   public game_id: string;
-  public achievements: number;
+  public achievements: string;
   public name: string;
 
   constructor(player: ComponentValue) {
     this.id = player.id;
     this.game_id = player.game_id;
-    this.achievements = 0;
+    this.achievements = player.achievements;
     this.name = shortString.decodeShortString(player.name);
   }
 
