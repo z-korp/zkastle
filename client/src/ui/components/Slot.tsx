@@ -13,11 +13,11 @@ export const Slot = ({
   count,
   index,
 }: {
-  data: { card: Card; side: Side };
+  data: { card: Card; side: Side; id: number };
   count: number;
   index: number;
 }) => {
-  const { card, side } = data;
+  const { card, side, id } = data;
 
   const { resources, setResources } = useGameStore();
 
@@ -68,7 +68,7 @@ export const Slot = ({
           <Iron key={i} height={8} width={8} />
         ))}
       </div>
-      {index <= count && <Remove index={index - 1} />}
+      {index <= count && <Remove index={id} />}
     </div>
   );
 };

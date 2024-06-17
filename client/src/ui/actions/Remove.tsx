@@ -37,7 +37,7 @@ export const Remove = ({ index }: { index: number }) => {
   }, [account, master, player, game]);
 
   return (
-    <Button disabled={disabled} onClick={handleClick}>
+    <Button disabled={disabled} onClick={handleClick} className="h-8 w-8">
       <FontAwesomeIcon icon={faTrash} />
     </Button>
   );

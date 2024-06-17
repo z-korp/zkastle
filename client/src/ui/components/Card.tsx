@@ -78,7 +78,7 @@ export const Card = ({
         <div className="flex flex-col gap-2 items-start z-10 ml-2">
           {card.isAllowed(side, new Action(ActionType.Store)) && (
             <div className="flex gap-2 items-center">
-              <Store choice={first} enabled={actionable} />
+              <Store choice={first} enabled={actionable && !stored} />
               <Cost
                 resources={card.getCost(side, new Action(ActionType.Store))}
               />
