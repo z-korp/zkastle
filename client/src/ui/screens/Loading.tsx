@@ -19,7 +19,7 @@
 
 export const Loading = () => {
   return (
-    <div className="w-full h-full bg-theme-medieval flex justify-center items-center z-50">
+    <div className="w-full h-screen bg-theme-medieval flex justify-center items-center z-50">
       <div className="flex justify-center items-center">
         <svg
           width="200px"

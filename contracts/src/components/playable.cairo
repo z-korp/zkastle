@@ -76,18 +76,26 @@ mod PlayableComponent {
 
             // [Check] Player exists
             let caller = get_caller_address();
-            let player = store.player(caller.into());
+            let mut player = store.player(caller.into());
             player.assert_exists();
 
-            // [Check] Game exists
+            // [Check] Game exists and not over
             let mut game = store.game(player.game_id);
             game.assert_exists();
+            game.assert_not_over();
 
             // [Effect] Perform action
             game.perform(action, choice, resources);
 
             // [Effect] Update game
             store.set_game(game);
+
+            // [Effect] Assess over
+            if game.over {
+                // [Effect] Update player
+                player.game_id = 0;
+                store.set_player(player);
+            }
         }
 
         fn _discard(
@@ -101,9 +109,10 @@ mod PlayableComponent {
             let player = store.player(caller.into());
             player.assert_exists();
 
-            // [Check] Game exists
+            // [Check] Game exists and not over
             let mut game = store.game(player.game_id);
             game.assert_exists();
+            game.assert_not_over();
 
             // [Effect] Discard game
             game.unstore(slot_index);
@@ -121,9 +130,10 @@ mod PlayableComponent {
             let mut player = store.player(caller.into());
             player.assert_exists();
 
-            // [Check] Game exists
+            // [Check] Game exists and not over
             let mut game = store.game(player.game_id);
             game.assert_exists();
+            game.assert_not_over();
 
             // [Effect] Update game
             game.over = true;
