@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge } from "../elements/badge";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { Storage } from "./Storage";
 
 export const Info = ({
   count,
@@ -25,6 +26,7 @@ export const Info = ({
           <span className="font-bold">{score}</span>
           <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
         </p>
+        <Storage />
       </Badge>
     </div>
   );

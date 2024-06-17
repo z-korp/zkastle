@@ -16,7 +16,7 @@ export const Cards = () => {
   if (!player || !game) return null;
 
   return (
-    <div className="flex gap-8 flex-row-reverse">
+    <div className="flex gap-8 flex-row-reverse absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/3 scale-[0.77] md:scale-[0.95]">
       <Card
         data={game.card_one}
         first={true}

@@ -5,9 +5,7 @@ import {
 } from "@/ui/elements/carousel";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -24,8 +22,10 @@ import { Card as CardClass } from "@/dojo/game/types/card";
 import { Card } from "../components/Card";
 import { Game } from "@/dojo/game/models/game";
 import { useMemo, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 
 export const Collection = () => {
+  const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
   const groups = useMemo(() => Game.getUniqueCards(), []);
 
   return (
@@ -44,7 +44,7 @@ export const Collection = () => {
           <Carousel
             className="w-full"
             orientation={"horizontal"}
-            opts={{ dragFree: false }}
+            opts={{ dragFree: isMdOrLarger }}
           >
             <CarouselContent className="flex">
               {groups.map((group, index) => (
@@ -54,12 +54,6 @@ export const Collection = () => {
               ))}
             </CarouselContent>
           </Carousel>
-
-          <DrawerFooter>
-            <DrawerClose asChild>
-              <Button variant="outline">Close</Button>
-            </DrawerClose>
-          </DrawerFooter>
         </div>
       </DrawerContent>
     </Drawer>

@@ -1,26 +1,22 @@
-// .loading-page {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   background-color: #f0e6d6; /* Couleur de fond de thème médiéval */
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   z-index: 9999; /* S'assurer que le loader est au-dessus de tout */
-// }
-
-// .loader {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
+import background from "/assets/loading-bg.png";
+import logo from "/assets/logo.png";
 
 export const Loading = () => {
   return (
-    <div className="w-full h-screen bg-theme-medieval flex justify-center items-center z-50">
-      <div className="flex justify-center items-center">
+    <div className="w-full h-screen flex justify-center items-center">
+      {/* Background */}
+      <div
+        className="absolute inset-0 bg-cover bg-center animate-[pulse_30s_ease-in-out_infinite] opacity-50"
+        style={{ backgroundImage: `url('${background}')` }}
+      />
+
+      {/* Logo */}
+      <div className="absolute top-1/4 left-0 flex justify-center items-center w-full h-20">
+        <img src={logo} alt="banner" className="h-32 md:h-40" />
+      </div>
+
+      {/* Loader */}
+      <div className="flex justify-center items-center z-50">
         <svg
           width="200px"
           height="200px"

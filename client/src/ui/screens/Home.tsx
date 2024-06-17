@@ -16,14 +16,7 @@ export const Home = () => {
           <Start />
           <Surrender />
         </div>
-        <div className="flex justify-between w-full">
-          <div className="flex flex-col grow items-center">
-            <Cards />
-          </div>
-          <div className="absolute right-4 top-1/4">
-            <Storage />
-          </div>
-        </div>
+        <Cards />
       </div>
       <Deck />
     </div>
