@@ -18,9 +18,8 @@ export const usePlayer = ({ playerId }: { playerId: string }) => {
     () => getEntityIdFromKeys([BigInt(playerId)]) as Entity,
     [playerId],
   );
-  console.log("playerKey", playerKey);
+
   const component = useComponentValue(Player, playerKey);
-  console.log("player", component);
   const player = useMemo(() => {
     return component ? new PlayerClass(component) : null;
   }, [component]);
