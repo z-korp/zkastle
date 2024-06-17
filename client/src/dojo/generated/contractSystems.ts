@@ -20,7 +20,7 @@ export interface Start extends Signer {}
 
 export interface Play extends Signer {
   action: number;
-  choice: number;
+  choice: boolean;
   resources: number;
 }
 
@@ -101,7 +101,7 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
           account,
           contract_name,
           "play",
-          [provider.getWorldAddress(), action, choice, resources],
+          [provider.getWorldAddress(), action, choice ? 1 : 0, resources],
           details,
         );
       } catch (error) {

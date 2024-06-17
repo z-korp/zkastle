@@ -18,6 +18,10 @@ export class Side {
   }
 
   public static from(index: number): Side {
+    // Special case for when storage is by default 0
+    if (index == 0) {
+      return new Side(SideType.One);
+    }
     const item = Object.values(SideType)[index];
     return new Side(item);
   }

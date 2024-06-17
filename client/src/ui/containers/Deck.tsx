@@ -2,8 +2,9 @@ import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useGame } from "@/hooks/useGame";
 import { Card } from "@/ui/components/Card";
+import { Info } from "../components/Info";
 
-export const Cards = () => {
+export const Deck = () => {
   const {
     account: { account },
   } = useDojo();
@@ -17,9 +18,9 @@ export const Cards = () => {
   if (!player || !game) return null;
 
   return (
-    <div className="flex gap-8 flex-row-reverse">
-      <Card data={game.card_one} first={true} actionable={true} />
-      <Card data={game.card_two} first={false} actionable={true} />
+    <div className="flex gap-8 scale-[0.5]">
+      <Info count={game.move_count} score={game.getScore()} />
+      <Card data={game.card_three} first={false} actionable={false} />
     </div>
   );
 };

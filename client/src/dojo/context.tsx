@@ -9,6 +9,7 @@ interface DojoContextType extends SetupResult {
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
+
 export const DojoProvider = ({
   children,
   value,
@@ -53,6 +54,7 @@ export const DojoProvider = ({
   } = useBurnerManager({
     burnerManager,
   });
+
   return (
     <DojoContext.Provider
       value={{

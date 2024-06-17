@@ -4,7 +4,7 @@ use core::Zeroable;
 use core::NumericLiteral;
 
 mod errors {
-    const PACKER_ELEMENT_IS_MISSING: felt252 = 'Packer: element is msising';
+    const PACKER_ELEMENT_IS_MISSING: felt252 = 'Packer: element is missing';
 }
 
 trait SizedPackerTrait<T, U, V> {
@@ -152,5 +152,28 @@ impl SizedPacker<
             }
         };
         result
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    // Core imports
+
+    use core::debug::PrintTrait;
+
+    // Local imports
+
+    use super::SizedPacker;
+
+    #[test]
+    fn test_packer_replace() {
+        let packed: u64 = 0xab0598c6fe1234d7;
+        let index: u8 = 8;
+        let size: u8 = 16;
+        let len: u8 = 16;
+        let value: u8 = 0xa;
+        let (new_packed, removed_value) = SizedPacker::replace(packed, index, size, value, len);
+        assert_eq!(new_packed, 0xab0598cafe1234d7);
+        assert_eq!(removed_value, 0x6);
     }
 }

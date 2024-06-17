@@ -27,6 +27,7 @@ mod errors {
     const GAME_NOT_OVER: felt252 = 'Game: not over';
     const GAME_NOT_ENOUGH_RESOURCES: felt252 = 'Game: not enough resources';
     const GAME_STORAGE_IS_FULL: felt252 = 'Game: storage is full';
+    const GAME_RESOURCES_NOT_SORTED: felt252 = 'Game: resources not sorted';
 }
 
 #[generate_trait]
@@ -59,14 +60,18 @@ impl GameImpl of GameTrait {
     }
 
     fn resource(self: Game, resources: u16) -> Resource {
-        let mut indexes: Array<u8> = SizedPacker::unpack(
+        let mut shifted_indexes: Array<u8> = SizedPacker::unpack(
             resources, CARD_BIT_SIZE, self.store_count
         );
         let deck: Deck = self.deck.into();
         let mut resource: Resource = core::Zeroable::zero();
         loop {
-            match indexes.pop_front() {
-                Option::Some(index) => {
+            match shifted_indexes.pop_front() {
+                Option::Some(shifted_index) => {
+                    if shifted_index == 0 {
+                        continue;
+                    }
+                    let index = shifted_index - 1;
                     let card_index: u8 = SizedPacker::get(
                         self.stores, index, CARD_BIT_SIZE, self.store_count
                     );
@@ -130,7 +135,7 @@ impl GameImpl of GameTrait {
         // [Info] It reverts if resource not previously stored
         self.unstores(resources);
 
-        // [Check] Store action
+        // [Effect] Store action
         if action == Action::Store {
             self.store(index);
         }
@@ -147,13 +152,16 @@ impl GameImpl of GameTrait {
             true => {
                 self.card_one = self.card_two;
                 self.card_two = self.card_three;
-                self.card_three = self.draw()
+                self.card_three = self.draw();
             },
             false => {
                 self.card_two = self.card_three;
-                self.card_three = self.draw()
+                self.card_three = self.draw();
             }
         };
+
+        // [Effect] Assess game over
+        self.over = self.move_count == 0;
     }
 
     fn draw(ref self: Game) -> u8 {
@@ -171,8 +179,10 @@ impl GameImpl of GameTrait {
         } else {
             // [Effect] Draw a card orderly
             self.move_count -= 1;
-            deck.ordered_draw(self.indexes, self.pointer)
+            let pointer = (self.pointer + 2) % deck.count();
+            deck.ordered_draw(self.indexes, pointer)
         };
+
         // [Check] Card is not stored, otherwise unstore, discard and draw again
         if SizedPacker::contains(self.stores, index, CARD_BIT_SIZE, self.store_count) {
             self.unstore(index);
@@ -190,10 +200,10 @@ impl GameImpl of GameTrait {
         );
         self.indexes = indexes;
         // [Effect] Update pointer
-        self.pointer = if self.pointer < deck.count() {
-            self.pointer + 1
-        } else {
+        self.pointer = if self.pointer + 1 == deck.count() {
             0
+        } else {
+            self.pointer + 1
         };
         // [Return] Discarded Card
         deck.get(index)
@@ -224,12 +234,21 @@ impl GameImpl of GameTrait {
 
     fn unstores(ref self: Game, resources: u16) {
         // [Effect] Remove resources from store
-        let mut indexes: Array<u8> = SizedPacker::unpack(
+        let mut shited_indexes: Array<u8> = SizedPacker::unpack(
             resources, CARD_BIT_SIZE, self.store_count
         );
+        let mut previous = DEFAULT_STORE_SIZE;
         loop {
-            match indexes.pop_front() {
-                Option::Some(index) => self.unstore(index),
+            match shited_indexes.pop_front() {
+                Option::Some(shited_index) => {
+                    if shited_index == 0 {
+                        break;
+                    }
+                    let index = shited_index - 1;
+                    assert(index < previous, errors::GAME_RESOURCES_NOT_SORTED);
+                    self.unstore(index);
+                    previous = index;
+                },
                 Option::None => { break; },
             }
         };
@@ -328,6 +347,7 @@ mod tests {
 
     #[test]
     fn test_game_new() {
+        // Deck: 0xab0598c6fe1234d7
         let game = GameTrait::new(1, 1);
         game.assert_exists();
         game.assert_not_over();
@@ -366,6 +386,99 @@ mod tests {
         // Card 1: Forge = 0xd
         // Card 2: Quarry = 0x3
         // Card 3: Farm = 0x2
-        assert(game.resource(0x0) == ResourceTrait::new(0, 1, 0), 'Game: unexpected resource');
+        assert(game.resource(0x1) == ResourceTrait::new(0, 1, 0), 'Game: unexpected resource');
+    }
+
+    #[test]
+    fn test_game_play_store_twice() {
+        let mut game = GameTrait::new(1, 1);
+        game.start();
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0);
+        game.perform(Action::Store, true, 0);
+        assert(game.stores == 0x34, 'Game: unexpected stores');
+    }
+
+    #[test]
+    fn test_game_play_rotate() {
+        let mut game = GameTrait::new(1, 1);
+        game.start();
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Store, true, 0); // Wheat
+        assert(game.stores == 0x234, 'Game: unexpected stores');
+        game.perform(Action::Rotate, true, 0x3);
+        assert(game.stores == 0x34, 'Game: unexpected stores');
+    }
+
+    #[test]
+    fn test_game_play_flip() {
+        let mut game = GameTrait::new(1, 1);
+        game.start();
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Store, true, 0); // Wheat
+        assert(game.stores == 0x234, 'Game: unexpected stores');
+        game.perform(Action::Flip, true, 0x3);
+        assert(game.stores == 0x34, 'Game: unexpected stores');
+    }
+
+    #[test]
+    fn test_game_play_case_01() {
+        let mut game = GameTrait::new(1, 1);
+        game.start();
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Store, true, 0); // Wheat
+        game.perform(Action::Rotate, true, 0x3); // Wheat
+        game.perform(Action::Discard, true, 0); // Tavern
+        game.perform(Action::Store, true, 0x12); // Citadel
+    }
+
+    #[test]
+    #[should_panic(expected: ('Game: resources not sorted',))]
+    fn test_game_play_case_01_revert_not_sorted() {
+        let mut game = GameTrait::new(1, 1);
+        game.start();
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Store, true, 0); // Wheat
+        game.perform(Action::Rotate, true, 0x3); // Wheat
+        game.perform(Action::Discard, true, 0); // Tavern
+        game.perform(Action::Store, true, 0x21); // Citadel
+    }
+
+    #[test]
+    fn test_game_play_store_multi_ressources() {
+        let mut game = GameTrait::new(1, 1);
+        game.start();
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Store, true, 0); // Stone
+        game.perform(Action::Discard, true, 0); // Stone
+        game.perform(Action::Discard, true, 0); // Wheat
+        game.perform(Action::Discard, true, 0); // Wheat
+        game.perform(Action::Store, true, 0x1); // Tavern
+    }
+
+    #[test]
+    fn test_game_play_until_over() {
+        let mut game = GameTrait::new(1, 1);
+        game.start();
+        loop {
+            if game.over {
+                break;
+            }
+            game.perform(Action::Discard, true, 0);
+        };
     }
 }

@@ -11,4 +11,15 @@ export class Packer {
     }
     return result;
   }
+
+  public static pack(unpacked: number[], size: number) {
+    let packed = 0;
+    let modulo = size;
+    let index = 0;
+    while (index !== unpacked.length) {
+      packed += unpacked[index] * Math.pow(modulo, index);
+      index += 1;
+    }
+    return packed;
+  }
 }

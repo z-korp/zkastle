@@ -5,8 +5,15 @@ import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Action, ActionType } from "@/dojo/game/types/action";
+import { useGameStore } from "@/stores/game";
 
-export const Store = () => {
+export const Store = ({
+  choice,
+  enabled,
+}: {
+  choice: boolean;
+  enabled: boolean;
+}) => {
   const {
     account: { account },
     master,
@@ -14,6 +21,8 @@ export const Store = () => {
       systemCalls: { play },
     },
   } = useDojo();
+
+  const { resources, setResources } = useGameStore();
 
   const { player } = usePlayer({ playerId: account.address });
   const { game } = useGame({
@@ -25,14 +34,17 @@ export const Store = () => {
     play({
       account: account as Account,
       action: new Action(ActionType.Store).into(),
-      choice: 0,
-      resources: 0,
+      choice,
+      resources,
     });
-  }, [account]);
+    setResources(0);
+  }, [account, resources]);
 
   const disabled = useMemo(() => {
-    return !account || !master || account === master || !player || !game;
-  }, [account, master, player, game]);
+    return (
+      !enabled || !account || !master || account === master || !player || !game
+    );
+  }, [enabled, account, master, player, game]);
 
   return (
     <Button disabled={disabled} onClick={handleClick}>

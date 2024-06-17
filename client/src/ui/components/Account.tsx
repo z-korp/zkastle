@@ -51,7 +51,9 @@ export const Account = () => {
               return (
                 <div key={index} className="flex">
                   <SelectItem value={account.address}>
-                    {shortenHex(account.address)}
+                    <p className="tracking-[.3em]">
+                      {shortenHex(account.address)}
+                    </p>
                   </SelectItem>
                 </div>
               );

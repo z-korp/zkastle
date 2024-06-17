@@ -33,7 +33,7 @@ export const Loading = () => {
             cy="50"
             r="45"
             stroke="#654321"
-            stroke-width="5"
+            strokeWidth="5"
             fill="none"
           />
           <g>

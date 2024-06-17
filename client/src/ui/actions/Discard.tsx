@@ -5,8 +5,10 @@ import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Action, ActionType } from "@/dojo/game/types/action";
+import { set } from "mobx";
+import { useGameStore } from "@/stores/game";
 
-export const Discard = () => {
+export const Discard = ({ choice }: { choice: boolean }) => {
   const {
     account: { account },
     master,
@@ -14,6 +16,8 @@ export const Discard = () => {
       systemCalls: { play },
     },
   } = useDojo();
+
+  const { setResources } = useGameStore();
 
   const { player } = usePlayer({ playerId: account.address });
   const { game } = useGame({
@@ -25,9 +29,10 @@ export const Discard = () => {
     play({
       account: account as Account,
       action: new Action(ActionType.Discard).into(),
-      choice: 1,
+      choice,
       resources: 0,
     });
+    setResources(0);
   }, [account]);
 
   const disabled = useMemo(() => {

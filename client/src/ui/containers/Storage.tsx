@@ -1,9 +1,9 @@
 import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useGame } from "@/hooks/useGame";
-import { Card } from "@/ui/components/Card";
+import { Slot } from "../components/Slot";
 
-export const Cards = () => {
+export const Storage = () => {
   const {
     account: { account },
   } = useDojo();
@@ -17,9 +17,16 @@ export const Cards = () => {
   if (!player || !game) return null;
 
   return (
-    <div className="flex gap-8 flex-row-reverse">
-      <Card data={game.card_one} first={true} actionable={true} />
-      <Card data={game.card_two} first={false} actionable={true} />
+    <div className="flex flex-col gap-4 min-w-60 items-center">
+      <h2 className="text-xl">Storage</h2>
+      {game.stores.map((store, index) => (
+        <Slot
+          key={index}
+          data={store}
+          count={game.store_count}
+          index={index + 1}
+        />
+      ))}
     </div>
   );
 };
