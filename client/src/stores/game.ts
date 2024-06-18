@@ -12,9 +12,9 @@ interface GameState {
   setCosts: (costs: Resource[]) => void;
   callback: (resources: number) => void;
   setCallback: (callback: (resources: number) => void) => void;
-  upgradeToShow: { card: Card; side1: Side; side2: Side } | null;
+  upgradeToShow: { card: Card; side: Side } | null;
   resetUpgradeToShow: () => void;
-  setUpgradeToShow: (card: Card, side1: Side, side2: Side) => void;
+  setUpgradeToShow: (card: Card, side: Side) => void;
   reset: () => void;
 }
 
@@ -29,8 +29,7 @@ export const useGameStore = create<GameState>()((set, get) => ({
   setCallback: (callback) => set({ callback }),
   upgradeToShow: null,
   resetUpgradeToShow: () => set({ upgradeToShow: null }),
-  setUpgradeToShow: (card, side1, side2) =>
-    set({ upgradeToShow: { card, side1, side2 } }),
+  setUpgradeToShow: (card, side) => set({ upgradeToShow: { card, side } }),
   reset: () =>
     set({
       resources: 0,

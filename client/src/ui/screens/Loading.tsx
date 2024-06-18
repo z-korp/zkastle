@@ -1,7 +1,6 @@
 import background from "/assets/loading-bg.png";
 import logo from "/assets/logo.png";
 import loader from "/assets/loader.svg";
-import { MusicPlayer } from "../modules/MusicPlayer";
 import { Button } from "@/ui/elements/button";
 
 export const Loading = ({

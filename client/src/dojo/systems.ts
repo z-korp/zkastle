@@ -79,7 +79,7 @@ export function systems({
       });
 
       notify(
-        `Game has been played.`,
+        `Move has been registered.`,
         await account.waitForTransaction(transaction_hash, {
           retryInterval: 100,
         }),

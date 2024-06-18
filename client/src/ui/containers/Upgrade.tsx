@@ -7,19 +7,11 @@ export const Upgrade = () => {
   if (!upgradeToShow) return null;
 
   return (
-    <div className="flex items-center gap-4 absolute bottom-0 left-1/2 transform -translate-x-1/2 p-4 bg-slate-50 border rounded-2xl scale-[0.65]">
+    <div className="flex items-center gap-4 absolute -bottom-10 left-1/2 transform -translate-x-1/2 scale-[0.6] md:scale-[0.7]">
       <Card
         data={{
           card: upgradeToShow.card,
-          side: upgradeToShow.side1,
-          id: 0,
-        }}
-      />
-      <p className="text-3xl text-black">-&gt;</p>
-      <Card
-        data={{
-          card: upgradeToShow.card,
-          side: upgradeToShow.side2,
+          side: upgradeToShow.side,
           id: 0,
         }}
       />

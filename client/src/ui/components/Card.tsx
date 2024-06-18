@@ -12,12 +12,20 @@ import { Cost } from "./Cost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { useGameStore } from "@/stores/game";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@radix-ui/react-tooltip";
 
 export const Card = ({
   data,
   first = false,
+  greyed = false,
   actionable = false,
   noButton = false,
+  noBg = false,
   stored = false,
   height = "h-96",
   width = "w-60",
@@ -25,8 +33,10 @@ export const Card = ({
 }: {
   data: { card: CardClass; side: Side; id: number };
   first?: boolean;
+  greyed?: boolean;
   actionable?: boolean;
   noButton?: boolean;
+  noBg?: boolean;
   stored?: boolean;
   height?: string;
   width?: string;
@@ -46,7 +56,7 @@ export const Card = ({
 
   const onMouseEnter = (action: ActionType) => {
     if (actionable) {
-      setUpgradeToShow(card, side, new Side(side.update(action)));
+      setUpgradeToShow(card, new Side(side.update(action)));
     }
   };
 
@@ -56,12 +66,17 @@ export const Card = ({
     <div
       className={`relative ${height} ${width} ${scale} rounded-2xl overflow-clip border border-slate-900 bg-slate-200`}
     >
-      <div
-        className="absolute h-full w-full bg-cover bg-center opacity-50 z-0"
-        style={{ backgroundImage: `url('${card.getImage()}')` }}
-      />
+      {greyed && (
+        <div className={`absolute h-full w-full bg-black opacity-20 z-50`} />
+      )}
+      {!noBg && (
+        <div
+          className={`absolute h-full w-full bg-cover bg-center opacity-50 z-0`}
+          style={{ backgroundImage: `url('${card.getImage()}')` }}
+        />
+      )}
 
-      <div className="absolute top-0 right-0 text-xl px-3 py-2">
+      <div className="absolute top-0 right-0 text-xl px-6 py-3">
         <p className="text-xl font-bold text-black">{label}</p>
       </div>
 
@@ -72,10 +87,21 @@ export const Card = ({
         </div>
       )}
 
-      <div
-        className={`absolute bottom-1/2 left-1/2 -translate-x-1/2 z-10 ${stored && "opacity-50"}`}
-      >
-        <Resource resource={resource} />
+      <div className={`absolute bottom-1/2 left-1/2 -translate-x-1/2 z-10`}>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <div className={`${stored && "opacity-50"}`}>
+                <Resource resource={resource} />
+              </div>
+            </TooltipTrigger>
+            {stored && (
+              <TooltipContent className="bg-white px-1 rounded text-xs text-black border">
+                Already stored
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       <div className="flex flex-col justify-between h-full pt-8 pb-4">
@@ -83,11 +109,22 @@ export const Card = ({
         <div className="flex flex-col gap-2 items-start z-10 ml-2">
           {card.isAllowed(side, new Action(ActionType.Store)) && (
             <div className="flex gap-2 items-center">
-              <Store
-                choice={first}
-                enabled={actionable && !stored}
-                costs={card.getCost(side, new Action(ActionType.Store))}
-              />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Store
+                      choice={first}
+                      enabled={actionable && !stored}
+                      costs={card.getCost(side, new Action(ActionType.Store))}
+                    />
+                  </TooltipTrigger>
+                  {stored && (
+                    <TooltipContent className="bg-white px-1 rounded text-xs text-black border">
+                      Already stored
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
               <Cost
                 resources={card.getCost(side, new Action(ActionType.Store))}
               />
