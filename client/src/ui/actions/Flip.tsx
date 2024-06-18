@@ -64,7 +64,7 @@ export const Flip = ({
   }, [enabled, account, master, player, game]);
 
   return (
-    <Button disabled={disabled} onClick={handleClick}>
+    <Button className="w-[80px]" disabled={disabled} onClick={handleClick}>
       Upgrade
     </Button>
   );

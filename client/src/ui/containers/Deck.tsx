@@ -18,7 +18,7 @@ export const Deck = () => {
 
   return (
     <div className="relative">
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-8 scale-[0.6] md:scale-[0.7]">
+      <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex gap-8 scale-[0.6] md:scale-[0.7]">
         <Info count={game.move_count} score={game.getScore()} />
         <Card
           data={game.card_three}

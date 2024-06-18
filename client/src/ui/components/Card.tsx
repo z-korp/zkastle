@@ -4,19 +4,20 @@ import { Discard } from "../actions/Discard";
 import { Store } from "../actions/Store";
 import { Flip } from "../actions/Flip";
 import { Rotate } from "../actions/Rotate";
-import { Side, SideType } from "@/dojo/game/types/side";
+import { Side } from "@/dojo/game/types/side";
 import { Action, ActionType } from "@/dojo/game/types/action";
 import { useMemo } from "react";
-import { Wheat } from "lucide-react";
 import { Resource } from "./Resource";
 import { Cost } from "./Cost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { useGameStore } from "@/stores/game";
 
 export const Card = ({
   data,
   first = false,
   actionable = false,
+  noButton = false,
   stored = false,
   height = "h-96",
   width = "w-60",
@@ -25,12 +26,15 @@ export const Card = ({
   data: { card: CardClass; side: Side; id: number };
   first?: boolean;
   actionable?: boolean;
+  noButton?: boolean;
   stored?: boolean;
   height?: string;
   width?: string;
   scale?: string;
 }) => {
   const { card, side } = data;
+
+  const { setUpgradeToShow, resetUpgradeToShow } = useGameStore();
 
   const label = useMemo(() => side.getName(), [side]);
 
@@ -39,6 +43,12 @@ export const Card = ({
   }, [card, side]);
 
   const resource = useMemo(() => card.getResource(side), [card, side]);
+
+  const onMouseEnter = (action: ActionType) => {
+    if (actionable) {
+      setUpgradeToShow(card, side, new Side(side.update(action)));
+    }
+  };
 
   if (!card) return null;
 
@@ -51,7 +61,7 @@ export const Card = ({
         style={{ backgroundImage: `url('${card.getImage()}')` }}
       />
 
-      <div className="absolute top-0 right-0 text-xl p-3">
+      <div className="absolute top-0 right-0 text-xl px-3 py-2">
         <p className="text-xl font-bold text-black">{label}</p>
       </div>
 
@@ -83,33 +93,54 @@ export const Card = ({
               />
             </div>
           )}
-          {card.isAllowed(side, new Action(ActionType.Rotate)) && (
+          {!noButton && card.isAllowed(side, new Action(ActionType.Rotate)) && (
             <div className="flex gap-2 items-center">
-              <Rotate
-                choice={first}
-                enabled={actionable}
-                costs={card.getCost(side, new Action(ActionType.Rotate))}
-              />
+              <div
+                onMouseEnter={() => onMouseEnter(ActionType.Rotate)}
+                onMouseLeave={() => resetUpgradeToShow()}
+              >
+                <Rotate
+                  choice={first}
+                  enabled={actionable}
+                  costs={card.getCost(side, new Action(ActionType.Rotate))}
+                />
+              </div>
+
               <Cost
                 resources={card.getCost(side, new Action(ActionType.Rotate))}
               />
+              {/*<FontAwesomeIcon
+                className="block md:hidden"
+                icon={faEye}
+                onMouseEnter={() =>
+                  onMouseEnter(ActionType.Rotate)
+                }
+                onMouseLeave={() => resetUpgradeToShow()}
+              />*/}
             </div>
           )}
-          {card.isAllowed(side, new Action(ActionType.Flip)) && (
+          {!noButton && card.isAllowed(side, new Action(ActionType.Flip)) && (
             <div className="flex gap-2 items-center">
-              <Flip
-                choice={first}
-                enabled={actionable}
-                costs={card.getCost(side, new Action(ActionType.Flip))}
-              />
+              <div
+                onMouseEnter={() => onMouseEnter(ActionType.Flip)}
+                onMouseLeave={() => resetUpgradeToShow()}
+              >
+                <Flip
+                  choice={first}
+                  enabled={actionable}
+                  costs={card.getCost(side, new Action(ActionType.Flip))}
+                />
+              </div>
               <Cost
                 resources={card.getCost(side, new Action(ActionType.Flip))}
               />
             </div>
           )}
-          {first && card.isAllowed(side, new Action(ActionType.Discard)) && (
-            <Discard choice={first} />
-          )}
+          {!noButton &&
+            first &&
+            card.isAllowed(side, new Action(ActionType.Discard)) && (
+              <Discard choice={first} />
+            )}
         </div>
       </div>
     </div>

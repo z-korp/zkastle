@@ -1,3 +1,5 @@
+import { ActionType } from "./action";
+
 export const SIDE_TYPE_COUNT = 4;
 
 export enum SideType {
@@ -40,6 +42,39 @@ export class Side {
         return "IV";
       default:
         return "";
+    }
+  }
+
+  public update(action: ActionType): SideType {
+    switch (action) {
+      case ActionType.Rotate:
+        switch (this.value) {
+          case SideType.One:
+            return SideType.Two;
+          case SideType.Two:
+            return SideType.One;
+          case SideType.Three:
+            return SideType.Four;
+          case SideType.Four:
+            return SideType.Three;
+          default:
+            return SideType.None;
+        }
+      case ActionType.Flip:
+        switch (this.value) {
+          case SideType.One:
+            return SideType.Three;
+          case SideType.Two:
+            return SideType.Four;
+          case SideType.Three:
+            return SideType.One;
+          case SideType.Four:
+            return SideType.Two;
+          default:
+            return SideType.None;
+        }
+      default:
+        return this.value;
     }
   }
 }

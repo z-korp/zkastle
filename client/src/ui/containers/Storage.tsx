@@ -66,7 +66,7 @@ export const Storage = () => {
         <DialogHeader className="flex flex-col items-center">
           <DialogTitle className="text-2xl">Storage</DialogTitle>
           <DialogDescription>Select the resources to spend</DialogDescription>
-          <Cost resources={costs} />
+          <Cost resources={costs} textColor="text-neutral-300" />
         </DialogHeader>
         <div className="flex flex-col gap-4 min-w-60 items-center">
           {game.stores.map((store, index) => (

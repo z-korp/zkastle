@@ -3,8 +3,8 @@ import { Create } from "../actions/Create";
 import { Start } from "../actions/Start";
 import { Cards } from "../containers/Cards";
 import { Deck } from "../containers/Deck";
-import { Storage } from "../containers/Storage";
 import { Surrender } from "../actions/Surrender";
+import { Upgrade } from "../containers/Upgrade";
 
 export const Home = () => {
   return (
@@ -19,6 +19,7 @@ export const Home = () => {
         <Cards />
       </div>
       <Deck />
+      <Upgrade />
     </div>
   );
 };
