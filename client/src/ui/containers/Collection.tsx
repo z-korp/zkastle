@@ -29,7 +29,7 @@ export const Collection = () => {
   const groups = useMemo(() => Game.getUniqueCards(), []);
 
   return (
-    <Drawer>
+    <Drawer handleOnly={true}>
       <DrawerTrigger asChild>
         <Button variant="outline">Collection</Button>
       </DrawerTrigger>

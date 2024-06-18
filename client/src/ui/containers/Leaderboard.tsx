@@ -1,7 +1,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTrigger,
 } from "@/ui/elements/dialog";
@@ -13,12 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/ui/elements/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/ui/elements/tooltip";
 import { Button } from "@/ui/elements/button";
 import { Game } from "@/dojo/game/models/game";
 import { useGames } from "@/hooks/useGames";
@@ -30,16 +23,7 @@ export const Leaderboard = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline">Leaderboard</Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="select-none">Leaderboard</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Button variant="outline">Leaderboard</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="flex items-center text-2xl">
