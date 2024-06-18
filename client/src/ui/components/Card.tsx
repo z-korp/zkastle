@@ -100,6 +100,7 @@ export const Card = ({
                 onMouseLeave={() => resetUpgradeToShow()}
               >
                 <Rotate
+                  newSide={new Side(side.update(ActionType.Rotate))}
                   choice={first}
                   enabled={actionable}
                   costs={card.getCost(side, new Action(ActionType.Rotate))}
@@ -126,6 +127,7 @@ export const Card = ({
                 onMouseLeave={() => resetUpgradeToShow()}
               >
                 <Flip
+                  newSide={new Side(side.update(ActionType.Flip))}
                   choice={first}
                   enabled={actionable}
                   costs={card.getCost(side, new Action(ActionType.Flip))}

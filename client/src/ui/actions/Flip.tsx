@@ -7,12 +7,15 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { Action, ActionType } from "@/dojo/game/types/action";
 import { useGameStore } from "@/stores/game";
 import { Resource } from "@/dojo/game/types/resource";
+import { Side } from "@/dojo/game/types/side";
 
 export const Flip = ({
+  newSide,
   choice,
   enabled,
   costs,
 }: {
+  newSide: Side;
   choice: boolean;
   enabled: boolean;
   costs: Resource[];
@@ -65,7 +68,7 @@ export const Flip = ({
 
   return (
     <Button className="w-[80px]" disabled={disabled} onClick={handleClick}>
-      Upgrade
+      {`Buy ${newSide.getName()}`}
     </Button>
   );
 };

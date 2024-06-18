@@ -7,12 +7,15 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { Action, ActionType } from "@/dojo/game/types/action";
 import { useGameStore } from "@/stores/game";
 import { Resource } from "@/dojo/game/types/resource";
+import { Side } from "@/dojo/game/types/side";
 
 export const Rotate = ({
+  newSide,
   choice,
   enabled,
   costs,
 }: {
+  newSide: Side;
   choice: boolean;
   enabled: boolean;
   costs: Resource[];
@@ -65,7 +68,9 @@ export const Rotate = ({
 
   return (
     <Button className="w-[80px]" disabled={disabled} onClick={handleClick}>
-      Improve
+      <div className="flex gap-2 items-center">
+        <p>{`Buy ${newSide.getName()}`}</p>
+      </div>
     </Button>
   );
 };
