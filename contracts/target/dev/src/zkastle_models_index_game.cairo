@@ -1,11 +1,11 @@
 impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
     #[inline(always)]
     fn size() -> Option<usize> {
-        Option::Some(9)
+        Option::Some(10)
     }
 
     fn layout() -> dojo::database::introspect::Layout {
-        dojo::database::introspect::Layout::Fixed(array![1, 8, 8, 8, 8, 8, 32, 64, 128].span())
+        dojo::database::introspect::Layout::Fixed(array![1, 8, 8, 8, 8, 8, 32, 64, 128, 251].span())
     }
 
     #[inline(always)]
@@ -64,6 +64,11 @@ impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
                         name: 'cards',
                         attrs: array![].span(),
                         ty: dojo::database::introspect::Introspect::<u128>::ty()
+                    },
+                    dojo::database::introspect::Member {
+                        name: 'player_id',
+                        attrs: array![].span(),
+                        ty: dojo::database::introspect::Introspect::<felt252>::ty()
                     }
                 ]
                     .span()
@@ -142,6 +147,7 @@ impl GameModel of dojo::model::Model<Game> {
         core::serde::Serde::serialize(self.stores, ref serialized);
         core::serde::Serde::serialize(self.sides, ref serialized);
         core::serde::Serde::serialize(self.cards, ref serialized);
+        core::array::ArrayTrait::append(ref serialized, *self.player_id);
         core::array::ArrayTrait::span(@serialized)
     }
 

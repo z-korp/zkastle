@@ -379,6 +379,10 @@
       {
         "name": "cards",
         "type": "core::integer::u128"
+      },
+      {
+        "name": "player_id",
+        "type": "core::felt252"
       }
     ]
   },

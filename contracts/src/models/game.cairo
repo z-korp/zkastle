@@ -35,7 +35,7 @@ mod errors {
 #[generate_trait]
 impl GameImpl of GameTrait {
     #[inline(always)]
-    fn new(id: u32) -> Game {
+    fn new(id: u32, player_id: felt252) -> Game {
         // [Compute] Seed
         let state = PoseidonTrait::new();
         let state = state.update(id.into());
@@ -54,6 +54,7 @@ impl GameImpl of GameTrait {
             stores: 0,
             sides: 0,
             cards: deck.setup(seed),
+            player_id,
         };
         game
     }
@@ -222,12 +223,13 @@ impl ZeroableGame of core::Zeroable<Game> {
             stores: 0,
             sides: 0,
             cards: 0,
+            player_id: 0,
         }
     }
 
     #[inline(always)]
     fn is_zero(self: Game) -> bool {
-        0 == self.deck.into()
+        0 == self.player_id
     }
 
     #[inline(always)]
@@ -293,17 +295,22 @@ mod tests {
 
     use super::{Game, GameTrait, AssertTrait, Action, Resource, ResourceTrait};
 
+    // Constants
+
+    const GAME_ID: u32 = 1;
+    const PLAYER_ID: felt252 = 'PLAYER';
+
     #[test]
     fn test_game_new() {
         // Deck: 0xab0598c6fe1234d7
-        let game = GameTrait::new(1);
+        let game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.assert_exists();
         game.assert_not_over();
     }
 
     #[test]
     fn test_game_start() {
-        let mut game = GameTrait::new(1);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.start();
         assert(game.card_one + game.card_two + game.card_three > 0, 'Game: cards are zero');
         assert(game.cards == 0x57c02b3b9834a882, 'Game: unexpected cards');
@@ -311,7 +318,7 @@ mod tests {
 
     #[test]
     fn test_game_play_quarry() {
-        let mut game = GameTrait::new(1);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.start();
         // Card 1: Quarry = 0x6
         // Card 2: Tower = 0xd
@@ -323,7 +330,7 @@ mod tests {
 
     #[test]
     fn test_game_play_multiple_store() {
-        let mut game = GameTrait::new(1);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.start();
         // Card 1: Quarry = 0x6
         // Card 2: Tower = 0xd
@@ -342,7 +349,7 @@ mod tests {
 
     #[test]
     fn test_game_play_rotate() {
-        let mut game = GameTrait::new(1);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.start();
         // Card 1: Quarry = 0x6
         // Card 2: Tower = 0xd
@@ -360,7 +367,7 @@ mod tests {
 
     #[test]
     fn test_game_play_flip() {
-        let mut game = GameTrait::new(1);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.start();
         // Card 1: Quarry = 0x6
         // Card 2: Tower = 0xd
@@ -384,7 +391,7 @@ mod tests {
 
     #[test]
     fn test_game_play_store_discard_old_storage() {
-        let mut game = GameTrait::new(1);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.start();
         // Card 1: Quarry = 0x6
         game.perform(Action::Store, true, 0);
@@ -409,7 +416,7 @@ mod tests {
     #[test]
     #[should_panic(expected: ('Game: invalid action',))]
     fn test_game_play_store_discard_old_storage_revert_invalid_action() {
-        let mut game = GameTrait::new(1);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.start();
         // Card 1: Quarry = 0x6
         game.perform(Action::Store, true, 0);
@@ -433,7 +440,7 @@ mod tests {
 
     #[test]
     fn test_game_play_until_over() {
-        let mut game = GameTrait::new(1);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
         game.start();
         loop {
             if game.card_one == 0 {

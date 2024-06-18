@@ -22,4 +22,5 @@ struct Game {
     stores: u32,
     sides: u64,
     cards: u128,
+    player_id: felt252,
 }

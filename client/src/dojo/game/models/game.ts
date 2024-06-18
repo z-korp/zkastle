@@ -20,12 +20,14 @@ export class Game {
   public stores: { card: Card; side: Side; id: number }[];
   public sides: Side[];
   public cards: Card[];
+  public player_id: string;
 
   constructor(game: ComponentValue) {
     this.id = game.id;
     this.over = game.over ? true : false;
     this.deck = Deck.from(game.deck);
     this.move_count = game.move_count;
+    this.player_id = game.player_id;
     this.cards = Packer.sized_unpack(
       parseInt(`0x${game.cards.toString(16)}`),
       CARD_BIT_SIZE,

@@ -22,6 +22,7 @@ export function defineContractComponents(world: World) {
           stores: RecsType.Number,
           sides: RecsType.BigInt,
           cards: RecsType.BigInt,
+          player_id: RecsType.BigInt,
         },
         {
           metadata: {
@@ -37,6 +38,7 @@ export function defineContractComponents(world: World) {
               "u32",
               "u64",
               "u128",
+              "felt252",
             ],
             customTypes: [],
           },

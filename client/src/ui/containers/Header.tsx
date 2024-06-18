@@ -7,6 +7,7 @@ import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Collection } from "./Collection";
 import { MusicPlayer } from "../modules/MusicPlayer";
+import { Leaderboard } from "./Leaderboard";
 
 export const Header = () => {
   const {
@@ -31,6 +32,7 @@ export const Header = () => {
           <p className="text-4xl font-bold">zKastle</p>
           <MusicPlayer />
           <Collection />
+          <Leaderboard />
         </div>
         <div className="flex flex-col gap-4 items-center md:flex-row">
           {!!player && <p className="text-2xl">{player.name}</p>}

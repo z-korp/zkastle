@@ -52,7 +52,7 @@ mod PlayableComponent {
 
             // [Effect] Create game
             let game_id: u32 = world.uuid() + 1;
-            let mut game = GameTrait::new(game_id);
+            let mut game = GameTrait::new(game_id, player.id);
             game.start();
             store.set_game(game);
 
