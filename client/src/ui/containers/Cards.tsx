@@ -16,7 +16,7 @@ export const Cards = () => {
   if (!player || !game || game.isOver()) return null;
 
   return (
-    <div className="flex gap-0 flex-row-reverse absolute bottom-1/2 left-1/2 -translate-x-1/3 translate-y-1/3 scale-[0.77] md:scale-[0.95]">
+    <div className="flex gap-0 flex-row-reverse absolute bottom-1/2 left-1/2 -translate-x-[40%] md:-translate-x-1/3 translate-y-1/3 scale-[0.68] md:scale-[0.9]">
       <div className="rotate-0 z-30 -ml-3">
         <Card
           data={game.card_one}

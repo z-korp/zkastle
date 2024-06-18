@@ -22,7 +22,7 @@ import { usePlayer } from "@/hooks/usePlayer";
 export const Leaderboard = () => {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant="outline">Leaderboard</Button>
       </DialogTrigger>
       <DialogContent>

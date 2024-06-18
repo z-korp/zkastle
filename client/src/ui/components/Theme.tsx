@@ -8,11 +8,14 @@ import {
   DropdownMenuTrigger,
 } from "@/ui/elements/dropdown-menu";
 import { useTheme } from "@/ui/elements/theme-provider";
+import { useMediaQuery } from "react-responsive";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
 
-  return (
+  const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
+
+  return isMdOrLarger ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
@@ -33,5 +36,29 @@ export function ModeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  ) : (
+    <div className="flex gap-2 w-full">
+      <Button
+        className="flex-grow"
+        variant="outline"
+        onClick={() => setTheme("light")}
+      >
+        Light
+      </Button>
+      <Button
+        className="flex-grow"
+        variant="outline"
+        onClick={() => setTheme("dark")}
+      >
+        Dark
+      </Button>
+      <Button
+        className="flex-grow"
+        variant="outline"
+        onClick={() => setTheme("system")}
+      >
+        System
+      </Button>
+    </div>
   );
 }

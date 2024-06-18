@@ -24,7 +24,7 @@ export const Account = () => {
   } = useDojo();
 
   return (
-    <div className="flex gap-2 min-w-64">
+    <div className="flex gap-2 min-w-64 w-full">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
