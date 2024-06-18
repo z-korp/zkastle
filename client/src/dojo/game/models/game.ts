@@ -38,17 +38,17 @@ export class Game {
     ).map((side: number) => Side.from(side));
     this.card_one = {
       card: this.deck.reveal(game.card_one),
-      side: this.sides[game.card_one - 1],
+      side: this.sides[game.card_one - 1] || new Side(SideType.None),
       id: game.card_one,
     };
     this.card_two = {
       card: this.deck.reveal(game.card_two),
-      side: this.sides[game.card_two - 1],
+      side: this.sides[game.card_two - 1] || new Side(SideType.None),
       id: game.card_two,
     };
     this.card_three = {
       card: this.deck.reveal(game.card_three),
-      side: this.sides[game.card_three - 1],
+      side: this.sides[game.card_three - 1] || new Side(SideType.None),
       id: game.card_three,
     };
     this.stores = Packer.sized_unpack(
@@ -64,7 +64,7 @@ export class Game {
         };
       return {
         card: this.deck.reveal(card),
-        side: this.sides[card - 1],
+        side: this.sides[card - 1] || new Side(SideType.None),
         id: card,
       };
     });

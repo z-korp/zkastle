@@ -50,7 +50,7 @@ export const Card = ({
     }
   };
 
-  if (!card) return null;
+  if (!card || card.isNone()) return null;
 
   return (
     <div

@@ -49,6 +49,10 @@ export class Card {
     return new Card(item);
   }
 
+  public isNone(): boolean {
+    return this.value === CardType.None;
+  }
+
   public getImage(): string {
     switch (this.value) {
       case CardType.Farm:
