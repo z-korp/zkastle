@@ -1,6 +1,7 @@
 // External imports
 
 use origami::random::deck::{Deck as OrigamiDeck, DeckTrait as OrigamiDeckTrait};
+use alexandria_math::fast_power::fast_power;
 
 // Internal imports
 
@@ -8,6 +9,7 @@ use zkastle::constants::CARD_BIT_SIZE;
 use zkastle::helpers::packer::{Packer, SizedPacker};
 use zkastle::elements::decks;
 use zkastle::types::card::Card;
+use zkastle::types::achievement::{Achievement, AchievementTrait};
 
 #[derive(Copy, Drop, Serde, Introspect)]
 enum Deck {
@@ -26,10 +28,54 @@ impl DeckImpl of DeckTrait {
     }
 
     #[inline(always)]
+    fn base_count(self: Deck) -> u8 {
+        match self {
+            Deck::None => 0,
+            Deck::Base => decks::base::DeckImpl::base_count(),
+        }
+    }
+
+    #[inline(always)]
+    fn achievement_count(self: Deck) -> u8 {
+        match self {
+            Deck::None => 0,
+            Deck::Base => decks::base::DeckImpl::achievement_count(),
+        }
+    }
+
+    #[inline(always)]
+    fn base_sides(self: Deck) -> u128 {
+        match self {
+            Deck::None => 0,
+            Deck::Base => decks::base::DeckImpl::sides(),
+        }
+    }
+
+    #[inline(always)]
+    fn drawables(self: Deck, achievements: u32) -> u128 {
+        let cards = match self {
+            Deck::None => 0,
+            Deck::Base => decks::base::DeckImpl::cards(),
+        };
+        let power: u128 = fast_power(2_u128, self.base_count().into());
+        let achievement_cards: u128 = power * achievements.into();
+        let base_cards: u128 = (power - 1) & cards;
+        cards & (base_cards + achievement_cards)
+    }
+
+    #[inline(always)]
     fn get(self: Deck, index: u8) -> Card {
         match self {
             Deck::None => Card::None,
             Deck::Base => decks::base::DeckImpl::draw(index),
+        }
+    }
+
+    #[inline(always)]
+    fn ids(self: Deck, card: Card) -> Array<u8> {
+        match self {
+            Deck::None => array![],
+            Deck::Base => decks::base::DeckImpl::ids(card),
         }
     }
 
@@ -47,18 +93,49 @@ impl DeckImpl of DeckTrait {
         Packer::pack(card_ids, CARD_BIT_SIZE)
     }
 
-    fn setup(self: Deck, seed: felt252) -> u128 {
+    fn cards(self: Deck, seed: felt252, first: u8, achivements: u32) -> (u8, u128) {
         // [Compute] Draw a cards randomly to design the deck
         let count: u32 = self.count().into();
-        let mut drawer: OrigamiDeck = OrigamiDeckTrait::new(seed, count);
-        let mut cards: Array<u8> = array![];
+        let drawables: u128 = self.drawables(achivements);
+        let mut drawer: OrigamiDeck = OrigamiDeckTrait::from_bitmap(seed, count, ~drawables);
+        let mut cards: Array<u8> = if first == 0 {
+            array![]
+        } else {
+            array![first]
+        };
         loop {
             if drawer.remaining == 0 {
                 break;
             }
-            cards.append(drawer.draw());
+            let card_id = drawer.draw();
+            if card_id == first {
+                continue;
+            }
+            cards.append(card_id);
         };
-        SizedPacker::pack(cards, CARD_BIT_SIZE)
+        (cards.len().try_into().unwrap(), SizedPacker::pack(cards, CARD_BIT_SIZE))
+    }
+
+    fn sides(self: Deck, mut achievements: u32) -> u128 {
+        match self {
+            Deck::None => 0,
+            Deck::Base => {
+                let mut sides: u128 = decks::base::DeckImpl::sides();
+                let mut id: u8 = 1;
+                loop {
+                    if achievements == 0 {
+                        break sides;
+                    }
+                    if achievements % 2 == 1 {
+                        // [Effect] Apply achievement effect to the sides
+                        let achievement: Achievement = id.into();
+                        sides = achievement.sides(self, sides);
+                    }
+                    id += 1;
+                    achievements /= 2;
+                }
+            },
+        }
     }
 }
 

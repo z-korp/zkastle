@@ -66,7 +66,7 @@ impl IntoU8Side of core::Into<u8, Side> {
     fn into(self: u8) -> Side {
         let action: felt252 = self.into();
         match action {
-            0 => Side::One, // Hack to have by default Side One set for cards
+            0 => Side::None,
             1 => Side::One,
             2 => Side::Two,
             3 => Side::Three,

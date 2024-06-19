@@ -1,7 +1,7 @@
 // Game
 
 const DEFAULT_STORE_SIZE: u8 = 4;
-const DEFAULT_ROUND_COUNT: u8 = 8;
+const DEFAULT_ROUND_COUNT: u16 = 8;
 
 // Packing
 

@@ -20,6 +20,7 @@ use zkastle::types::card::{Card, CardTrait};
 use zkastle::types::deck::{Deck, DeckTrait};
 use zkastle::types::side::{Side, SideTrait};
 use zkastle::types::resource::{Resource, ResourceTrait};
+use zkastle::types::achievement::{Achievement, AchievementTrait};
 
 mod errors {
     const GAME_INVALID_HOST: felt252 = 'Game: invalid host';
@@ -30,12 +31,13 @@ mod errors {
     const GAME_NOT_ENOUGH_RESOURCES: felt252 = 'Game: not enough resources';
     const GAME_STORAGE_IS_FULL: felt252 = 'Game: storage is full';
     const GAME_RESOURCE_ALREADY_STORED: felt252 = 'Game: resource already stored';
+    const GAME_CONDITION_NOT_FULFILLED: felt252 = 'Game: condition not fulfilled';
 }
 
 #[generate_trait]
 impl GameImpl of GameTrait {
     #[inline(always)]
-    fn new(id: u32, player_id: felt252) -> Game {
+    fn new(id: u32, player_id: felt252, first_card_id: u8, achievements: u32) -> Game {
         // [Compute] Seed
         let state = PoseidonTrait::new();
         let state = state.update(id.into());
@@ -43,6 +45,8 @@ impl GameImpl of GameTrait {
 
         // [Effect] Create a new game
         let deck: Deck = Deck::Base;
+        let (count, cards) = deck.cards(seed, first_card_id, achievements);
+        let sides = deck.sides(achievements);
         let mut game = Game {
             id,
             over: false,
@@ -50,10 +54,11 @@ impl GameImpl of GameTrait {
             card_two: 0,
             card_three: 0,
             deck: deck.into(),
-            move_count: DEFAULT_ROUND_COUNT * deck.count(),
+            move_count: DEFAULT_ROUND_COUNT * count.into(),
+            achievements,
             stores: 0,
-            sides: 0,
-            cards: deck.setup(seed),
+            sides,
+            cards,
             player_id,
         };
         game
@@ -73,6 +78,24 @@ impl GameImpl of GameTrait {
                 Option::None => { break resource; },
             }
         }
+    }
+
+    fn score(self: Game) -> u8 {
+        let deck: Deck = self.deck.into();
+        let sides: Array<u8> = SizedPacker::unpack(self.sides, SIDE_BIT_SIZE, deck.count());
+        let mut score: u8 = 0;
+        let mut id: u8 = deck.count();
+        loop {
+            if id == 0 {
+                break;
+            }
+            let index = id - 1;
+            let side: Side = (*sides.at(index.into())).into();
+            let card: Card = deck.get(id);
+            score += card.score(side);
+            id -= 1;
+        };
+        score
     }
 
     #[inline(always)]
@@ -105,6 +128,12 @@ impl GameImpl of GameTrait {
         let side: Side = self.side(card_id);
         assert(card.can(side, action), errors::GAME_INVALID_ACTION);
 
+        // [Check] Card condition is filled
+        let deck: Deck = self.deck.into();
+        assert(
+            card.condition(side, action, deck, self.sides), errors::GAME_CONDITION_NOT_FULFILLED
+        );
+
         // [Check] Affordable
         self.assert_is_affordable(resources, card.cost(side, action));
 
@@ -134,7 +163,7 @@ impl GameImpl of GameTrait {
         };
 
         // [Effect] Assess game over
-        self.over = self.move_count == 0 && self.card_one == 0;
+        self.assess_over();
     }
 
     #[inline(always)]
@@ -207,6 +236,37 @@ impl GameImpl of GameTrait {
             }
         };
     }
+
+    #[inline(always)]
+    fn assess_over(ref self: Game) {
+        // [Effect] Over if no move left and card one is zero
+        self.over = self.move_count == 0 && self.card_one == 0;
+    }
+
+    fn assess_achievements(self: Game) -> u32 {
+        // [Check] Game is over
+        self.assert_is_over();
+        // [Compute] Achievements
+        let deck: Deck = self.deck.into();
+        let score = 0;
+        let mut achievements: u32 = 0;
+        let mut id = deck.achievement_count();
+        loop {
+            if id == 0 {
+                break;
+            }
+            // [Check] Achievement already achieved
+            let index = id - 1;
+            if Bitmap::get_bit_at(achievements, index) {
+                continue;
+            }
+            let achievement: Achievement = id.into();
+            if achievement.condition(deck, self.sides, self.stores, score) {
+                achievements = Bitmap::set_bit_at(achievements, index, true);
+            }
+        };
+        achievements
+    }
 }
 
 impl ZeroableGame of core::Zeroable<Game> {
@@ -220,6 +280,7 @@ impl ZeroableGame of core::Zeroable<Game> {
             card_three: 0,
             deck: 0,
             move_count: 0,
+            achievements: 0,
             stores: 0,
             sides: 0,
             cards: 0,
@@ -299,26 +360,48 @@ mod tests {
 
     const GAME_ID: u32 = 1;
     const PLAYER_ID: felt252 = 'PLAYER';
+    const FIRST_CARD_ID: u8 = 1;
+    const ACHIEVEMENTS: u32 = 0;
+    const FULL_ACHIEVEMENTS: u32 = 0x1ff; // b111111111
 
     #[test]
-    fn test_game_new() {
+    fn test_game_new_no_achievements() {
         // Deck: 0xab0598c6fe1234d7
-        let game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.assert_exists();
         game.assert_not_over();
+        // Expecting 16 cards drawn, each packed on a 5 bit map
+        // So cards must be between 17 * 5 = 85 and 15 * 5 = 75
+        assert_eq!(game.cards > 0x8000000000000000000, true);
+        assert_eq!(game.cards < 0x2000000000000000000000, true);
+        // Expecting the 16 cards to be side one at beginning
+        assert_eq!(game.sides, 0x9249249249249249);
+    }
+
+    #[test]
+    fn test_game_new_full_achievements() {
+        // Deck: 0xab0598c6fe1234d7
+        let game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, FULL_ACHIEVEMENTS);
+        game.assert_exists();
+        game.assert_not_over();
+        // Expecting 22 cards, each packed on a 5 bit map
+        // So cards must be between 23 * 5 = 115 and 21 * 5 = 105
+        assert_eq!(game.cards > 0x200000000000000000000000000, true);
+        assert_eq!(game.cards < 0x80000000000000000000000000000, true);
+        // Expecting the 22 cards to be side one at beginning, except
+        assert_eq!(game.sides, 0x924924924924944A);
     }
 
     #[test]
     fn test_game_start() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
         assert(game.card_one + game.card_two + game.card_three > 0, 'Game: cards are zero');
-        assert(game.cards == 0x57c02b3b9834a882, 'Game: unexpected cards');
     }
 
     #[test]
     fn test_game_play_quarry() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
         // Card 1: Quarry = 0x6
         // Card 2: Tower = 0xd
@@ -330,70 +413,96 @@ mod tests {
 
     #[test]
     fn test_game_play_multiple_store() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
-        // Card 1: Quarry = 0x6
-        // Card 2: Tower = 0xd
-        // Card 3: Mine = 0x8
-        // Card 4: Farm = 0x2
-        // Card 5: Quarry = 0x4
-        // Card 6: Monastery = 0xa
+        // Card 1: Farm = 0x1
+        // Card 2: Quarry = 0x6
+        // Card 3: Tower = 0xd
+        // Card 4: Mine = 0x8
+        // Card 5: Farm = 0x2
+        // Card 6: Quarry = 0x4
+        // Card 7: Monastery = 0xa
+        // Card 8: Mine = 0x9
+        // Card 9: Farm = 0x3
+        // Card 10: Tower = 0xc
+        // Card 11: ? = 0xe
+        // Card 12: ? = 0x7
+        // Card 13: ? = 0xb
+        // Card 14: ? = 0x10
+        // Card 15: ? = 0xf
+        // Card 16: ? = 0x5
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Store, true, 0);
         game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
-        assert_eq!(game.stores, 0b00100_00010_00110);
+        assert_eq!(game.stores, 0b00100_00010_00110_00001);
     }
 
     #[test]
     fn test_game_play_rotate() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
-        // Card 1: Quarry = 0x6
-        // Card 2: Tower = 0xd
-        // Card 3: Mine = 0x8
-        // Card 4: Farm = 0x2
-        // Card 5: Quarry = 0x4
-        // Card 6: Monastery = 0xa
+        // Card 1: Farm = 0x1
+        // Card 2: Quarry = 0x6
+        // Card 3: Tower = 0xd
+        // Card 4: Mine = 0x8
+        // Card 5: Farm = 0x2
+        // Card 6: Quarry = 0x4
+        // Card 7: Monastery = 0xa
+        // Card 8: Mine = 0x9
+        // Card 9: Farm = 0x3
+        // Card 10: Tower = 0xc
+        // Card 11: ? = 0xe
+        // Card 12: ? = 0x7
+        // Card 13: ? = 0xb
+        // Card 14: ? = 0x10
+        // Card 15: ? = 0xf
+        // Card 16: ? = 0x5
+        game.perform(Action::Store, true, 0);
         game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Store, false, 0);
         game.perform(Action::Store, false, 0);
         game.perform(Action::Rotate, true, 0b00100_00110);
-        assert(game.stores == 0b00010, 'Game: unexpected stores');
+        assert(game.stores == 0b00010_00001, 'Game: unexpected stores');
     }
 
     #[test]
     fn test_game_play_flip() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
-        // Card 1: Quarry = 0x6
-        // Card 2: Tower = 0xd
-        // Card 3: Mine = 0x8
-        // Card 4: Farm = 0x2
-        // Card 5: Quarry = 0x4
-        // Card 6: Monastery = 0xa
-        // Card 7: Mine = 0x9
-        // Card 8: Farm = 0x3
-        // Card 9: Tower = 0xc
+        // Card 1: Farm = 0x1
+        // Card 2: Quarry = 0x6
+        // Card 3: Tower = 0xd
+        // Card 4: Mine = 0x8
+        // Card 5: Farm = 0x2
+        // Card 6: Quarry = 0x4
+        // Card 7: Monastery = 0xa
+        // Card 8: Mine = 0x9
+        // Card 9: Farm = 0x3
+        // Card 10: Tower = 0xc
+        // Card 11: ? = 0xe
+        // Card 12: ? = 0x7
+        // Card 13: ? = 0xb
+        // Card 14: ? = 0x10
+        // Card 15: ? = 0xf
+        // Card 16: ? = 0x5
+        game.perform(Action::Store, true, 0); // +1 Wheat
         game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, true, 0);
-        game.perform(Action::Store, true, 0);
-        game.perform(Action::Discard, true, 0);
-        game.perform(Action::Store, false, 0);
-        game.perform(Action::Flip, true, 0b00010_00011);
-        assert(game.stores == 0b00100_00110, 'Game: unexpected stores');
+        game.perform(Action::Store, false, 0); // +1 Wheat
+        game.perform(Action::Flip, true, 0b00010_00001);
+        assert(game.stores == 0b00110, 'Game: unexpected stores');
     }
 
     #[test]
     fn test_game_play_store_discard_old_storage() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
-        // Card 1: Quarry = 0x6
+        // Card 1: Farm = 0x1
         game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -416,9 +525,9 @@ mod tests {
     #[test]
     #[should_panic(expected: ('Game: invalid action',))]
     fn test_game_play_store_discard_old_storage_revert_invalid_action() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
-        // Card 1: Quarry = 0x6
+        // Card 1: Farm = 0x1
         game.perform(Action::Store, true, 0);
         game.perform(Action::Discard, true, 0);
         game.perform(Action::Discard, true, 0);
@@ -440,7 +549,7 @@ mod tests {
 
     #[test]
     fn test_game_play_until_over() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
         loop {
             if game.card_one == 0 {

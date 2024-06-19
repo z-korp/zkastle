@@ -7,27 +7,25 @@ use zkastle::elements::cards::interface::{
 impl CardImpl of CardTrait {
     #[inline(always)]
     fn resource(side: Side) -> Resource {
-        ResourceTrait::new(0, 0, 0)
+        match side {
+            Side::Two => ResourceTrait::new(1, 1, 0),
+            Side::Four => ResourceTrait::new(1, 1, 1),
+            _ => ResourceTrait::new(0, 0, 0),
+        }
     }
 
     #[inline(always)]
     fn score(side: Side) -> u8 {
         match side {
-            Side::Two => 3,
-            Side::Three => 10,
-            Side::Four => 6,
+            Side::Two => 1,
+            Side::Four => 2,
             _ => 0,
         }
     }
 
     #[inline(always)]
     fn upgrade(side: Side) -> u8 {
-        match side {
-            Side::Two => 1,
-            Side::Three => 3,
-            Side::Four => 2,
-            _ => 0,
-        }
+        0
     }
 
     #[inline(always)]
@@ -38,13 +36,17 @@ impl CardImpl of CardTrait {
     #[inline(always)]
     fn can(side: Side, action: Action) -> bool {
         match action {
-            Action::Rotate => match side {
-                Side::One => true,
+            Action::Store => match side {
+                Side::Two => true,
                 Side::Four => true,
                 _ => false,
             },
-            Action::Flip => match side {
+            Action::Rotate => match side {
                 Side::Two => true,
+                _ => false,
+            },
+            Action::Flip => match side {
+                Side::One => true,
                 _ => false,
             },
             Action::Discard => true,
@@ -56,12 +58,11 @@ impl CardImpl of CardTrait {
     fn cost(side: Side, action: Action) -> Array<Resource> {
         match action {
             Action::Rotate => match side {
-                Side::One => array![ResourceTrait::new(1, 1, 2)],
-                Side::Four => array![ResourceTrait::new(3, 3, 4)],
+                Side::Two => array![ResourceTrait::new(1, 1, 1)],
                 _ => array![],
             },
             Action::Flip => match side {
-                Side::Two => array![ResourceTrait::new(2, 2, 3)],
+                Side::One => array![ResourceTrait::new(1, 1, 0)],
                 _ => array![],
             },
             _ => array![],

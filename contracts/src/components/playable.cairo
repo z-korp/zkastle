@@ -52,7 +52,7 @@ mod PlayableComponent {
 
             // [Effect] Create game
             let game_id: u32 = world.uuid() + 1;
-            let mut game = GameTrait::new(game_id, player.id);
+            let mut game = GameTrait::new(game_id, player.id, 0, player.achievements);
             game.start();
             store.set_game(game);
 
@@ -92,6 +92,8 @@ mod PlayableComponent {
 
             // [Effect] Assess over
             if game.over {
+                // [Effect] Assess achievements
+                player.achievements = game.assess_achievements();
                 // [Effect] Update player
                 player.game_id = 0;
                 store.set_player(player);

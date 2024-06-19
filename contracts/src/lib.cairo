@@ -10,6 +10,7 @@ mod models {
 
 mod types {
     mod action;
+    mod achievement;
     mod card;
     mod deck;
     mod resource;
@@ -27,10 +28,31 @@ mod elements {
         mod forge;
         mod tavern;
         mod citadel;
+        mod oni_fang;
+        mod shrine_of_valor;
+        mod dragon_heart;
+        mod guardian_kami;
+        mod spiritual_forge;
+        mod samurai_horn;
+        mod oracle_stone;
+        mod monk_staff;
+        mod shogun_axe;
     }
     mod decks {
         mod interface;
         mod base;
+    }
+    mod achievements {
+        mod interface;
+        mod oni_fang;
+        mod shrine_of_valor;
+        mod dragon_heart;
+        mod guardian_kami;
+        mod spiritual_forge;
+        mod samurai_horn;
+        mod oracle_stone;
+        mod monk_staff;
+        mod shogun_axe;
     }
 }
 

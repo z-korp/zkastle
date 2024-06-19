@@ -1,6 +1,8 @@
 // Internal imports
 
-use zkastle::elements::cards::interface::{CardTrait, Action, Side, Resource, ResourceTrait};
+use zkastle::elements::cards::interface::{
+    CardTrait, Action, Side, SideTrait, Resource, ResourceTrait, Deck
+};
 
 impl CardImpl of CardTrait {
     #[inline(always)]
@@ -21,7 +23,17 @@ impl CardImpl of CardTrait {
 
     #[inline(always)]
     fn upgrade(side: Side) -> u8 {
-        0
+        match side {
+            Side::Two => 1,
+            Side::Three => 1,
+            Side::Four => 2,
+            _ => 0,
+        }
+    }
+
+    #[inline(always)]
+    fn update(side: Side, action: Action) -> Side {
+        side.update(action)
     }
 
     #[inline(always)]
@@ -75,5 +87,10 @@ impl CardImpl of CardTrait {
             },
             _ => array![],
         }
+    }
+
+    #[inline(always)]
+    fn condition(side: Side, action: Action, deck: Deck, sides: u128) -> bool {
+        true
     }
 }
