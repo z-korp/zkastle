@@ -90,15 +90,13 @@ export const Card = ({
       <div className={`absolute bottom-1/2 left-1/2 -translate-x-1/2 z-10`}>
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <div className={`${stored && "opacity-50"}`}>
                 <Resource resource={resource} />
               </div>
             </TooltipTrigger>
             {stored && (
-              <TooltipContent className="bg-white px-1 rounded text-xs text-black border">
-                Already stored
-              </TooltipContent>
+              <TooltipContent className="">Already stored</TooltipContent>
             )}
           </Tooltip>
         </TooltipProvider>
@@ -109,22 +107,11 @@ export const Card = ({
         <div className="flex flex-col gap-2 items-start z-10 ml-2">
           {card.isAllowed(side, new Action(ActionType.Store)) && (
             <div className="flex gap-2 items-center">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Store
-                      choice={first}
-                      enabled={actionable && !stored}
-                      costs={card.getCost(side, new Action(ActionType.Store))}
-                    />
-                  </TooltipTrigger>
-                  {stored && (
-                    <TooltipContent className="bg-white px-1 rounded text-xs text-black border">
-                      Already stored
-                    </TooltipContent>
-                  )}
-                </Tooltip>
-              </TooltipProvider>
+              <Store
+                choice={first}
+                enabled={actionable && !stored}
+                costs={card.getCost(side, new Action(ActionType.Store))}
+              />
               <Cost
                 resources={card.getCost(side, new Action(ActionType.Store))}
               />
