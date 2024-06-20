@@ -60,8 +60,8 @@ source = "git+https://github.com/notV4l/cubit.git?branch=cairo_2.7#cadb27aa62509
 
 [[package]]
 name = "dojo"
-version = "0.7.1"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.7.1#c4a1feadf1d5c5ecf9593b50c1a2ca2856ae2313"
+version = "0.7.2"
+source = "git+https://github.com/dojoengine/dojo?tag=v0.7.2#3da5cad9fdd39b81551e0668015d88262e6c5fc4"
 dependencies = [
  "dojo_plugin",
 ]
@@ -73,8 +73,8 @@ source = "git+https://github.com/dojoengine/dojo?tag=v0.3.11#1e651b5d4d3b79b14a7
 
 [[package]]
 name = "origami"
-version = "0.7.1"
-source = "git+https://github.com/dojoengine/origami?rev=v0.7.1#ab4fde3d11cd20b09e1ec48ec80796646b7383aa"
+version = "0.7.2"
+source = "git+https://github.com/Bal7hazar/origami?rev=ca6cdd2#ca6cdd2540b3ed6882a616bd256051ddfd2bc405"
 dependencies = [
  "cubit",
  "dojo",
