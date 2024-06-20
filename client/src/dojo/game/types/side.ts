@@ -1,4 +1,4 @@
-import { ActionType } from "./action";
+import { Action, ActionType } from "./action";
 
 export const SIDE_TYPE_COUNT = 4;
 
@@ -45,8 +45,8 @@ export class Side {
     }
   }
 
-  public update(action: ActionType): SideType {
-    switch (action) {
+  public update(action: Action): SideType {
+    switch (action.value) {
       case ActionType.Rotate:
         switch (this.value) {
           case SideType.One:

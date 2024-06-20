@@ -5,7 +5,7 @@ impl PlayerIntrospect<> of dojo::database::introspect::Introspect<Player<>> {
     }
 
     fn layout() -> dojo::database::introspect::Layout {
-        dojo::database::introspect::Layout::Fixed(array![32, 64, 251].span())
+        dojo::database::introspect::Layout::Fixed(array![32, 32, 251].span())
     }
 
     #[inline(always)]
@@ -28,7 +28,7 @@ impl PlayerIntrospect<> of dojo::database::introspect::Introspect<Player<>> {
                     dojo::database::introspect::Member {
                         name: 'achievements',
                         attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<u64>::ty()
+                        ty: dojo::database::introspect::Introspect::<u32>::ty()
                     },
                     dojo::database::introspect::Member {
                         name: 'name',

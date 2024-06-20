@@ -21,7 +21,7 @@ impl AchievementImpl of AchievementTrait {
                     let index: u8 = id - 1;
                     let raw: u8 = SizedPacker::get(sides, index, SIDE_BIT_SIZE, deck.count());
                     let side: Side = raw.into();
-                    let upgrade: u8 = Card::Farm.upgrade(side);
+                    let upgrade: u8 = Card::Quarry.upgrade(side);
                     if upgrade < 2 {
                         break false;
                     };

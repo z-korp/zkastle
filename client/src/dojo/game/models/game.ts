@@ -1,9 +1,10 @@
 import { ComponentValue } from "@dojoengine/recs";
 import { Packer } from "../helpers/packer";
 import { SIDE_TYPE_COUNT, Side, SideType } from "../types/side";
-import { Card, CardType, CARD_TYPE_COUNT } from "../types/card";
+import { Card, CardType } from "../types/card";
 import { Deck } from "../types/deck";
 import { Resource } from "../types/resource";
+import { Achievement } from "../types/achievement";
 
 export const CARD_BIT_SIZE = 32;
 export const SIDE_BIT_SIZE = 8;
@@ -73,13 +74,16 @@ export class Game {
   }
 
   public static getUniqueCards(): { card: Card; side: Side }[][] {
-    return Array.from({ length: CARD_TYPE_COUNT }, (_, card_index) => {
-      return Array.from({ length: SIDE_TYPE_COUNT }, (_, side_index) => {
-        return {
-          card: Card.from(card_index + 1),
-          side: Side.from(side_index + 1),
-        };
-      });
+    const cards = Card.getBaseCards();
+    return cards.map((card) => {
+      return card.getSides().map((side) => ({ card, side }));
+    });
+  }
+
+  public static getAchievements(): { card: Card; side: Side }[][] {
+    const cards = Card.getAchievementCards();
+    return cards.map((card) => {
+      return card.getSides().map((side) => ({ card, side }));
     });
   }
 

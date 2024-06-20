@@ -18,6 +18,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Leaderboard } from "./Leaderboard";
+import { Achievements } from "../modules/Achievements";
 
 export const Header = () => {
   const {
@@ -44,6 +45,7 @@ export const Header = () => {
           <p className="text-4xl font-bold">zKastle</p>
           <MusicPlayer />
           <Collection />
+          <Achievements />
           <Leaderboard />
         </div>
         <div className="flex flex-col gap-4 items-center md:flex-row">

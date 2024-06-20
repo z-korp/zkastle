@@ -1,8 +1,10 @@
 import { Action, ActionType } from "../../types/action";
+import { Deck } from "../../types/deck";
 import { Resource } from "../../types/resource";
 import { Side, SideType } from "../../types/side";
+import { CardInterface } from "./interface";
 
-export class Quarry {
+export const Quarry: CardInterface = class Quarry {
   public static resource(side: Side): Resource {
     switch (side.value) {
       case SideType.One:
@@ -31,6 +33,10 @@ export class Quarry {
 
   public static upgrade(side: Side): number {
     return 0;
+  }
+
+  public static update(side: Side, action: Action): Side {
+    return new Side(side.update(action));
   }
 
   public static can(side: Side, action: Action): boolean {
@@ -91,4 +97,22 @@ export class Quarry {
         return [];
     }
   }
-}
+
+  public static condition(
+    side: Side,
+    action: Action,
+    deck: Deck,
+    sides: Side[],
+  ): boolean {
+    return true;
+  }
+
+  public static sides(): Side[] {
+    return [
+      new Side(SideType.One),
+      new Side(SideType.Two),
+      new Side(SideType.Three),
+      new Side(SideType.Four),
+    ];
+  }
+};

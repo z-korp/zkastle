@@ -19,6 +19,7 @@ export function defineContractComponents(world: World) {
           card_three: RecsType.Number,
           deck: RecsType.Number,
           move_count: RecsType.Number,
+          achievements: RecsType.Number,
           stores: RecsType.Number,
           sides: RecsType.BigInt,
           cards: RecsType.BigInt,
@@ -34,13 +35,13 @@ export function defineContractComponents(world: World) {
               "u8",
               "u8",
               "u8",
-              "u8",
+              "u16",
               "u32",
-              "u64",
+              "u32",
+              "u128",
               "u128",
               "felt252",
             ],
-            customTypes: [],
           },
         },
       );
@@ -51,14 +52,13 @@ export function defineContractComponents(world: World) {
         {
           id: RecsType.BigInt,
           game_id: RecsType.Number,
-          achievements: RecsType.BigInt,
+          achievements: RecsType.Number,
           name: RecsType.BigInt,
         },
         {
           metadata: {
             name: "Player",
-            types: ["felt252", "u32", "u64", "felt252"],
-            customTypes: [],
+            types: ["felt252", "u32", "u32", "felt252"],
           },
         },
       );

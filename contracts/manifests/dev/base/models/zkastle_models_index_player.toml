@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x51d7aade4568c82305c03389db2499d12da087903e0699d03b484cec9a73dc9"
-original_class_hash = "0x51d7aade4568c82305c03389db2499d12da087903e0699d03b484cec9a73dc9"
+class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
+original_class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
 abi = "manifests/dev/abis/base/models/zkastle_models_index_player.json"
 name = "zkastle::models::index::player"
 
@@ -16,7 +16,7 @@ key = false
 
 [[members]]
 name = "achievements"
-type = "u64"
+type = "u32"
 key = false
 
 [[members]]

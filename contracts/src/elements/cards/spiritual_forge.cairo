@@ -16,7 +16,7 @@ impl CardImpl of CardTrait {
     #[inline(always)]
     fn score(side: Side) -> u8 {
         match side {
-            Side::Two => 1,
+            Side::Three => 1,
             Side::Four => 5,
             _ => 0,
         }
@@ -36,7 +36,7 @@ impl CardImpl of CardTrait {
     fn can(side: Side, action: Action) -> bool {
         match action {
             Action::Rotate => match side {
-                Side::Two => true,
+                Side::Three => true,
                 _ => false,
             },
             Action::Flip => match side {
@@ -52,7 +52,7 @@ impl CardImpl of CardTrait {
     fn cost(side: Side, action: Action) -> Array<Resource> {
         match action {
             Action::Rotate => match side {
-                Side::Two => array![ResourceTrait::new(3, 3, 3)],
+                Side::Three => array![ResourceTrait::new(3, 3, 3)],
                 _ => array![],
             },
             _ => array![],

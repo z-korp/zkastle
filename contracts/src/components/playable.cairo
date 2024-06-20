@@ -2,6 +2,10 @@
 
 #[starknet::component]
 mod PlayableComponent {
+    // Core imports
+
+    use core::debug::PrintTrait;
+
     // Starknet imports
 
     use zkastle::models::game::AssertTrait;

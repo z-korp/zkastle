@@ -203,7 +203,8 @@ impl GameImpl of GameTrait {
         let deck: Deck = self.deck.into();
         let index = card_id - 1;
         let side: Side = self.side(card_id);
-        let value: u8 = side.update(action).into();
+        let card: Card = deck.get(card_id);
+        let value: u8 = card.update(side, action).into();
         self.sides = SizedPacker::replace(self.sides, index, SIDE_BIT_SIZE, value, deck.count());
     }
 
@@ -264,6 +265,7 @@ impl GameImpl of GameTrait {
             if achievement.condition(deck, self.sides, self.stores, score) {
                 achievements = Bitmap::set_bit_at(achievements, index, true);
             }
+            id = index;
         };
         achievements
     }
@@ -557,6 +559,15 @@ mod tests {
             }
             game.perform(Action::Discard, true, 0);
         };
+        assert_eq!(game.over, true);
+    }
+
+    #[test]
+    fn test_game_assess_achievements() {
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        game.start();
+        game.over = true;
+        game.assess_achievements();
         assert_eq!(game.over, true);
     }
 }

@@ -4,19 +4,24 @@ import { Resource } from "../../types/resource";
 import { Side, SideType } from "../../types/side";
 import { CardInterface } from "./interface";
 
-export const Monastery: CardInterface = class Monastery {
+export const SamuraiHorn: CardInterface = class SamuraiHorn {
   public static resource(side: Side): Resource {
-    return new Resource(0, 0, 0);
+    switch (side.value) {
+      case SideType.Three:
+        return new Resource(2, 2, 0);
+      case SideType.Four:
+        return new Resource(0, 0, 4);
+      default:
+        return new Resource(0, 0, 0);
+    }
   }
 
   public static score(side: Side): number {
     switch (side.value) {
-      case SideType.Two:
-        return 3;
       case SideType.Three:
-        return 10;
+        return 1;
       case SideType.Four:
-        return 6;
+        return 1;
       default:
         return 0;
     }
@@ -32,9 +37,18 @@ export const Monastery: CardInterface = class Monastery {
 
   public static can(side: Side, action: Action): boolean {
     switch (action.value) {
+      case ActionType.Store:
+        switch (side.value) {
+          case SideType.Three:
+            return true;
+          case SideType.Four:
+            return true;
+          default:
+            return false;
+        }
       case ActionType.Rotate:
         switch (side.value) {
-          case SideType.One:
+          case SideType.Three:
             return true;
           case SideType.Four:
             return true;
@@ -43,7 +57,7 @@ export const Monastery: CardInterface = class Monastery {
         }
       case ActionType.Flip:
         switch (side.value) {
-          case SideType.Two:
+          case SideType.One:
             return true;
           default:
             return false;
@@ -57,19 +71,19 @@ export const Monastery: CardInterface = class Monastery {
 
   public static cost(side: Side, action: Action): Resource[] {
     switch (action.value) {
-      case ActionType.Rotate:
+      case ActionType.Store:
         switch (side.value) {
-          case SideType.One:
-            return [new Resource(1, 1, 2)];
+          case SideType.Three:
+            return [new Resource(0, 0, 3)];
           case SideType.Four:
-            return [new Resource(3, 3, 4)];
+            return [new Resource(1, 2, 0)];
           default:
             return [];
         }
       case ActionType.Flip:
         switch (side.value) {
-          case SideType.Two:
-            return [new Resource(2, 2, 3)];
+          case SideType.One:
+            return [new Resource(1, 1, 0)];
           default:
             return [];
         }
@@ -90,7 +104,6 @@ export const Monastery: CardInterface = class Monastery {
   public static sides(): Side[] {
     return [
       new Side(SideType.One),
-      new Side(SideType.Two),
       new Side(SideType.Three),
       new Side(SideType.Four),
     ];

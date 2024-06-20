@@ -1,11 +1,13 @@
 impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
     #[inline(always)]
     fn size() -> Option<usize> {
-        Option::Some(10)
+        Option::Some(11)
     }
 
     fn layout() -> dojo::database::introspect::Layout {
-        dojo::database::introspect::Layout::Fixed(array![1, 8, 8, 8, 8, 8, 32, 64, 128, 251].span())
+        dojo::database::introspect::Layout::Fixed(
+            array![1, 8, 8, 8, 8, 16, 32, 32, 128, 128, 251].span()
+        )
     }
 
     #[inline(always)]
@@ -48,7 +50,12 @@ impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
                     dojo::database::introspect::Member {
                         name: 'move_count',
                         attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<u8>::ty()
+                        ty: dojo::database::introspect::Introspect::<u16>::ty()
+                    },
+                    dojo::database::introspect::Member {
+                        name: 'achievements',
+                        attrs: array![].span(),
+                        ty: dojo::database::introspect::Introspect::<u32>::ty()
                     },
                     dojo::database::introspect::Member {
                         name: 'stores',
@@ -58,7 +65,7 @@ impl GameIntrospect<> of dojo::database::introspect::Introspect<Game<>> {
                     dojo::database::introspect::Member {
                         name: 'sides',
                         attrs: array![].span(),
-                        ty: dojo::database::introspect::Introspect::<u64>::ty()
+                        ty: dojo::database::introspect::Introspect::<u128>::ty()
                     },
                     dojo::database::introspect::Member {
                         name: 'cards',
@@ -144,6 +151,7 @@ impl GameModel of dojo::model::Model<Game> {
         core::serde::Serde::serialize(self.card_three, ref serialized);
         core::serde::Serde::serialize(self.deck, ref serialized);
         core::serde::Serde::serialize(self.move_count, ref serialized);
+        core::serde::Serde::serialize(self.achievements, ref serialized);
         core::serde::Serde::serialize(self.stores, ref serialized);
         core::serde::Serde::serialize(self.sides, ref serialized);
         core::serde::Serde::serialize(self.cards, ref serialized);

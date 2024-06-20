@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x3b83b21ab47663de8cbc824d9d66f075092f534d61502acd98f967364b75661"
-original_class_hash = "0x3b83b21ab47663de8cbc824d9d66f075092f534d61502acd98f967364b75661"
+class_hash = "0x642c81d7b3e188880a7e078f3d1a3d110fa9c906e258fef17dc624241152ae0"
+original_class_hash = "0x642c81d7b3e188880a7e078f3d1a3d110fa9c906e258fef17dc624241152ae0"
 abi = "manifests/dev/abis/base/models/zkastle_models_index_game.json"
 name = "zkastle::models::index::game"
 
@@ -36,7 +36,12 @@ key = false
 
 [[members]]
 name = "move_count"
-type = "u8"
+type = "u16"
+key = false
+
+[[members]]
+name = "achievements"
+type = "u32"
 key = false
 
 [[members]]
@@ -46,7 +51,7 @@ key = false
 
 [[members]]
 name = "sides"
-type = "u64"
+type = "u128"
 key = false
 
 [[members]]

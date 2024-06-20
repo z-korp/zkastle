@@ -31,12 +31,39 @@ export class Deck {
     }
   }
 
+  public baseCount(): number {
+    switch (this.value) {
+      case DeckType.Base:
+        return Base.count();
+      default:
+        return 0;
+    }
+  }
+
+  public achievementCount(): number {
+    switch (this.value) {
+      case DeckType.Base:
+        return Base.achievementCount();
+      default:
+        return 0;
+    }
+  }
+
   public reveal(id: number): Card {
     switch (this.value) {
       case DeckType.Base:
         return new Card(Base.reveal(id));
       default:
         return new Card(CardType.None);
+    }
+  }
+
+  public ids(card: CardType): number[] {
+    switch (this.value) {
+      case DeckType.Base:
+        return Base.ids(card);
+      default:
+        return [];
     }
   }
 }

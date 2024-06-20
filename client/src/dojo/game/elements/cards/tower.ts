@@ -1,67 +1,10 @@
-// // Internal imports
-
-// use zkastle::elements::cards::interface::{CardTrait, Action, Side, Resource, ResourceTrait};
-
-// impl CardImpl of CardTrait {
-//     #[inline(always)]
-//     fn resource(side: Side) -> Resource {
-//         ResourceTrait::new(0, 0, 0)
-//     }
-
-//     #[inline(always)]
-//     fn score(side: Side) -> u8 {
-//         match side {
-//             Side::Two => 1,
-//             Side::Three => 6,
-//             Side::Four => 3,
-//             _ => 0,
-//         }
-//     }
-
-//     #[inline(always)]
-//     fn upgrade(side: Side) -> u8 {
-//         0
-//     }
-
-//     #[inline(always)]
-//     fn can(side: Side, action: Action) -> bool {
-//         match action {
-//             Action::Rotate => match side {
-//                 Side::One => true,
-//                 Side::Four => true,
-//                 _ => false,
-//             },
-//             Action::Flip => match side {
-//                 Side::Two => true,
-//                 _ => false,
-//             },
-//             Action::Discard => true,
-//             _ => false,
-//         }
-//     }
-
-//     #[inline(always)]
-//     fn cost(side: Side, action: Action) -> Array<Resource> {
-//         match action {
-//             Action::Rotate => match side {
-//                 Side::One => array![ResourceTrait::new(1, 1, 0)],
-//                 Side::Four => array![ResourceTrait::new(2, 2, 2)],
-//                 _ => array![],
-//             },
-//             Action::Flip => match side {
-//                 Side::Two => array![ResourceTrait::new(1, 1, 1)],
-//                 _ => array![],
-//             },
-//             _ => array![],
-//         }
-//     }
-// }
-
 import { Action, ActionType } from "../../types/action";
+import { Deck } from "../../types/deck";
 import { Resource } from "../../types/resource";
 import { Side, SideType } from "../../types/side";
+import { CardInterface } from "./interface";
 
-export class Tower {
+export const Tower: CardInterface = class Tower {
   public static resource(side: Side): Resource {
     return new Resource(0, 0, 0);
   }
@@ -81,6 +24,10 @@ export class Tower {
 
   public static upgrade(side: Side): number {
     return 0;
+  }
+
+  public static update(side: Side, action: Action): Side {
+    return new Side(side.update(action));
   }
 
   public static can(side: Side, action: Action): boolean {
@@ -130,4 +77,22 @@ export class Tower {
         return [];
     }
   }
-}
+
+  public static condition(
+    side: Side,
+    action: Action,
+    deck: Deck,
+    sides: Side[],
+  ): boolean {
+    return true;
+  }
+
+  public static sides(): Side[] {
+    return [
+      new Side(SideType.One),
+      new Side(SideType.Two),
+      new Side(SideType.Three),
+      new Side(SideType.Four),
+    ];
+  }
+};

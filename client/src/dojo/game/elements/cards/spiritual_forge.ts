@@ -1,22 +1,22 @@
 import { Action, ActionType } from "../../types/action";
+import { CardType } from "../../types/card";
 import { Deck } from "../../types/deck";
 import { Resource } from "../../types/resource";
 import { Side, SideType } from "../../types/side";
 import { CardInterface } from "./interface";
+import { Tower } from "./tower";
 
-export const Monastery: CardInterface = class Monastery {
+export const SpiritualForge: CardInterface = class SpiritualForge {
   public static resource(side: Side): Resource {
     return new Resource(0, 0, 0);
   }
 
   public static score(side: Side): number {
     switch (side.value) {
-      case SideType.Two:
-        return 3;
       case SideType.Three:
-        return 10;
+        return 1;
       case SideType.Four:
-        return 6;
+        return 5;
       default:
         return 0;
     }
@@ -34,16 +34,14 @@ export const Monastery: CardInterface = class Monastery {
     switch (action.value) {
       case ActionType.Rotate:
         switch (side.value) {
-          case SideType.One:
-            return true;
-          case SideType.Four:
+          case SideType.Three:
             return true;
           default:
             return false;
         }
       case ActionType.Flip:
         switch (side.value) {
-          case SideType.Two:
+          case SideType.One:
             return true;
           default:
             return false;
@@ -59,17 +57,8 @@ export const Monastery: CardInterface = class Monastery {
     switch (action.value) {
       case ActionType.Rotate:
         switch (side.value) {
-          case SideType.One:
-            return [new Resource(1, 1, 2)];
-          case SideType.Four:
-            return [new Resource(3, 3, 4)];
-          default:
-            return [];
-        }
-      case ActionType.Flip:
-        switch (side.value) {
-          case SideType.Two:
-            return [new Resource(2, 2, 3)];
+          case SideType.Three:
+            return [new Resource(3, 3, 3)];
           default:
             return [];
         }
@@ -84,13 +73,30 @@ export const Monastery: CardInterface = class Monastery {
     deck: Deck,
     sides: Side[],
   ): boolean {
-    return true;
+    switch (action.value) {
+      case ActionType.Flip:
+        switch (side.value) {
+          case SideType.One:
+            let ids: number[] = deck.ids(CardType.Tower);
+            for (let id of ids) {
+              let index: number = id - 1;
+              let side: Side = sides[index];
+              if (Tower.upgrade(side) < 3) {
+                return false;
+              }
+            }
+            return true;
+          default:
+            return true;
+        }
+      default:
+        return true;
+    }
   }
 
   public static sides(): Side[] {
     return [
       new Side(SideType.One),
-      new Side(SideType.Two),
       new Side(SideType.Three),
       new Side(SideType.Four),
     ];

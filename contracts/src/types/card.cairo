@@ -104,6 +104,30 @@ impl CardImpl of CardTrait {
     }
 
     #[inline(always)]
+    fn update(self: Card, side: Side, action: Action) -> Side {
+        match self {
+            Card::Farm => cards::farm::CardImpl::update(side, action),
+            Card::Mine => cards::mine::CardImpl::update(side, action),
+            Card::Quarry => cards::quarry::CardImpl::update(side, action),
+            Card::Monastery => cards::monastery::CardImpl::update(side, action),
+            Card::Tower => cards::tower::CardImpl::update(side, action),
+            Card::Forge => cards::forge::CardImpl::update(side, action),
+            Card::Tavern => cards::tavern::CardImpl::update(side, action),
+            Card::Citadel => cards::citadel::CardImpl::update(side, action),
+            Card::OniFang => cards::oni_fang::CardImpl::update(side, action),
+            Card::ShrineOfValor => cards::shrine_of_valor::CardImpl::update(side, action),
+            Card::DragonHeart => cards::dragon_heart::CardImpl::update(side, action),
+            Card::GuardianKami => cards::guardian_kami::CardImpl::update(side, action),
+            Card::SpiritualForge => cards::spiritual_forge::CardImpl::update(side, action),
+            Card::SamuraiHorn => cards::samurai_horn::CardImpl::update(side, action),
+            Card::OracleStone => cards::oracle_stone::CardImpl::update(side, action),
+            Card::MonkStaff => cards::monk_staff::CardImpl::update(side, action),
+            Card::ShogunAxe => cards::shogun_axe::CardImpl::update(side, action),
+            _ => side,
+        }
+    }
+
+    #[inline(always)]
     fn can(self: Card, side: Side, action: Action) -> bool {
         match self {
             Card::Farm => cards::farm::CardImpl::can(side, action),
