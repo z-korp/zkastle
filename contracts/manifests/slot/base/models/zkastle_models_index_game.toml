@@ -1,0 +1,65 @@
+kind = "DojoModel"
+class_hash = "0x642c81d7b3e188880a7e078f3d1a3d110fa9c906e258fef17dc624241152ae0"
+original_class_hash = "0x642c81d7b3e188880a7e078f3d1a3d110fa9c906e258fef17dc624241152ae0"
+abi = "manifests/slot/abis/base/models/zkastle_models_index_game.json"
+name = "zkastle::models::index::game"
+
+[[members]]
+name = "id"
+type = "u32"
+key = true
+
+[[members]]
+name = "over"
+type = "bool"
+key = false
+
+[[members]]
+name = "card_one"
+type = "u8"
+key = false
+
+[[members]]
+name = "card_two"
+type = "u8"
+key = false
+
+[[members]]
+name = "card_three"
+type = "u8"
+key = false
+
+[[members]]
+name = "deck"
+type = "u8"
+key = false
+
+[[members]]
+name = "move_count"
+type = "u16"
+key = false
+
+[[members]]
+name = "achievements"
+type = "u32"
+key = false
+
+[[members]]
+name = "stores"
+type = "u32"
+key = false
+
+[[members]]
+name = "sides"
+type = "u128"
+key = false
+
+[[members]]
+name = "cards"
+type = "u128"
+key = false
+
+[[members]]
+name = "player_id"
+type = "felt252"
+key = false

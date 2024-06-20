@@ -7,7 +7,10 @@ edition = "2023_10"
 sierra-replace-ids = true
 
 [scripts]
-deploy = "sozo clean && sozo build && sozo migrate plan && sozo migrate apply"
+deploy-dev = "sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan --name v0 && sozo --profile dev migrate apply --name v0"
+deploy-slot = "sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name v0 && sozo --profile slot migrate apply --name v0"
+deploy-sepolia = "sozo --profile sepolia clean && sozo --profile sepolia clean && sozo --profile sepolia build && sozo --profile sepolia migrate plan --name zklash-v01 && sozo --profile sepolia migrate apply --fee-estimate-multiplier 10 --name zklash-v01 && ./scripts/authorize.sh sepolia"
+
 
 [dependencies]
 alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria", rev = "78b0d51" }
@@ -26,8 +29,8 @@ private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a
 
 [profile.slot.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/zkastle/katana"
-account_address = "0x643ee26c8024dd6772e8b70a507a3cba79e64e96ef63e0d11b0842d914268c0"
-private_key = "0x788eec0cb57a076de8529c23697ae456e70ae1a6a9810cd5e7ab01313007134"
+account_address = "0x7f72521e15721c6e0ea834aee0ca964147b6de30351ba761b3548f7d1a8beb8"
+private_key = "0x31f6f3f619373d03d9a7dcf219f863925f470ee577577f7731d510ce81cbed6"
 
 [tool.dojo.world]
 name = "zKastle"

@@ -1,0 +1,25 @@
+kind = "DojoModel"
+class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
+original_class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
+abi = "manifests/slot/abis/base/models/zkastle_models_index_player.json"
+name = "zkastle::models::index::player"
+
+[[members]]
+name = "id"
+type = "felt252"
+key = true
+
+[[members]]
+name = "game_id"
+type = "u32"
+key = false
+
+[[members]]
+name = "achievements"
+type = "u32"
+key = false
+
+[[members]]
+name = "name"
+type = "felt252"
+key = false
