@@ -26,7 +26,7 @@ export interface Start extends Signer {}
 export interface Play extends Signer {
   action: number;
   choice: boolean;
-  resources: number;
+  resources: bigint;
 }
 
 export interface Discard extends Signer {

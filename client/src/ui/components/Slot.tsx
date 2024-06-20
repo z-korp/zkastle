@@ -25,7 +25,7 @@ export const Slot = ({
   }, [card, side]);
 
   const selected = useMemo(() => {
-    return Packer.unpack(resources, CARD_BIT_SIZE).includes(id);
+    return Packer.unpack(BigInt(resources), CARD_BIT_SIZE).includes(id);
   }, [id, resources]);
 
   const { height, width } = useMemo(() => {
@@ -35,7 +35,7 @@ export const Slot = ({
   const handleClick = useCallback(() => {
     if (id == 0) return;
     // Unpack resources
-    const ids = Packer.unpack(resources, CARD_BIT_SIZE);
+    const ids = Packer.unpack(BigInt(resources), CARD_BIT_SIZE);
     // If the id is already in the array
     if (ids.includes(id)) {
       // Remove the id from the array

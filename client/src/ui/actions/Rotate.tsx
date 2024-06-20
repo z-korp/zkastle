@@ -43,14 +43,14 @@ export const Rotate = ({
         account: account as Account,
         action: new Action(ActionType.Store).into(),
         choice,
-        resources: 0,
+        resources: 0n,
       });
       return;
     }
     // Otherwise, open the storage modal and set the costs
     setStorage(true);
     setCosts(costs);
-    setCallback((resources: number) => {
+    setCallback((resources: bigint) => {
       play({
         account: account as Account,
         action: new Action(ActionType.Rotate).into(),
@@ -67,7 +67,12 @@ export const Rotate = ({
   }, [enabled, account, master, player, game]);
 
   return (
-    <Button className="w-[80px]" disabled={disabled} onClick={handleClick}>
+    <Button
+      className="w-[55px] h-[28px]"
+      size="sm"
+      disabled={disabled}
+      onClick={handleClick}
+    >
       <div className="flex gap-2 items-center">
         <p>{`Buy ${newSide.getName()}`}</p>
       </div>

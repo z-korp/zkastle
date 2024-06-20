@@ -29,7 +29,7 @@ export const Remove = ({ index }: { index: number }) => {
       account: account as Account,
       slot_index: index,
     });
-    setResources(0);
+    setResources(0n);
   }, [account]);
 
   const disabled = useMemo(() => {
