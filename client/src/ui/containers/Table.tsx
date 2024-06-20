@@ -205,8 +205,6 @@ const Table: React.FC = () => {
               }}
             >
               <FlipCard
-                zIndex={card.zIndex}
-                index={index}
                 isFlipped={
                   // Show the card flipped if in Deck pile
                   // If it's the first card in the deck, show it flipped only if hovering

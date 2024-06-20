@@ -39,8 +39,6 @@ export const ShowUprade: React.FC<ShowUpradeProps> = ({ coords }) => {
               id: 0,
             }}
             isFlipped={false}
-            index={0}
-            zIndex={0}
           />
         </motion.div>
       )}

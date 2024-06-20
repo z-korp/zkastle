@@ -1,6 +1,5 @@
 import { useDojo } from "@/dojo/useDojo";
 import { useCallback, useMemo } from "react";
-import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
@@ -25,7 +24,7 @@ export const Discard = ({ choice }: { choice: boolean }) => {
 
   const handleClick = useCallback(() => {
     play({
-      account: account as Account,
+      account: account,
       action: new Action(ActionType.Discard).into(),
       choice,
       resources: 0n,
