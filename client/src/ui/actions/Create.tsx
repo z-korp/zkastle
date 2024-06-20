@@ -34,10 +34,12 @@ export const Create = () => {
     return !account || !master || account === master || !!player;
   }, [account, master, player]);
 
+  if (disabled) return null;
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={disabled}>Create</Button>
+        <Button disabled={disabled}>Create my Profile</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -57,7 +59,7 @@ export const Create = () => {
 
         <DialogClose asChild>
           <Button disabled={!playerName} onClick={handleClick}>
-            Create
+            Create my Profile
           </Button>
         </DialogClose>
       </DialogContent>

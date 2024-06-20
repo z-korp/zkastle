@@ -58,9 +58,7 @@ export const Storage = () => {
   return (
     <Dialog open={storage} onOpenChange={handleChange}>
       <DialogTrigger asChild>
-        <Button variant="default" className="text-2xl">
-          Storage
-        </Button>
+        <Button variant="default">Storage</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="flex flex-col items-center">

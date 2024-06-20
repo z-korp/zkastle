@@ -56,7 +56,7 @@ export const Header = () => {
           </div>
         </div>
       </div>
-      <Separator className="mb-8" />
+      <Separator />
     </div>
   ) : (
     <div>
@@ -94,7 +94,7 @@ export const Header = () => {
           {!!player && <p className="text-2xl">{player.name}</p>}
         </div>
       </div>
-      <Separator className="mb-8" />
+      <Separator />
     </div>
   );
 };

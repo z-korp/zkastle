@@ -28,9 +28,9 @@ export const Discard = ({ choice }: { choice: boolean }) => {
       account: account as Account,
       action: new Action(ActionType.Discard).into(),
       choice,
-      resources: 0,
+      resources: 0n,
     });
-    setResources(0);
+    setResources(0n);
   }, [account]);
 
   const disabled = useMemo(() => {
@@ -38,7 +38,12 @@ export const Discard = ({ choice }: { choice: boolean }) => {
   }, [account, master, player, game]);
 
   return (
-    <Button className="w-[80px]" disabled={disabled} onClick={handleClick}>
+    <Button
+      className="w-[55px] h-[28px]"
+      size="sm"
+      disabled={disabled}
+      onClick={handleClick}
+    >
       Discard
     </Button>
   );

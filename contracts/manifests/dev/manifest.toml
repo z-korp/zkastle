@@ -5,7 +5,7 @@ original_class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf080
 abi = "manifests/dev/abis/deployments/dojo_world_world.json"
 address = "0x63abf335f66aeaefe2b35c329d944e0e33e8cc225f9dcb21fb82759a774f300"
 transaction_hash = "0x1c30388c969662b393b2ff55b7ce4bada609ada9289adf13c0a9e521fa286c2"
-block_number = 5
+block_number = 3
 seed = "zkastle"
 name = "dojo::world::world"
 
@@ -22,8 +22,8 @@ name = "dojo::base::base"
 [[contracts]]
 kind = "DojoContract"
 address = "0x51ec0524b87b30b3309fab1da22400d2d119d447eee7d32297a9933baa6505e"
-class_hash = "0x646b07c04db6354ae415873aa89e4afbadd1dec8211707542a19c43e885df88"
-original_class_hash = "0x646b07c04db6354ae415873aa89e4afbadd1dec8211707542a19c43e885df88"
+class_hash = "0x77a98646e3a0f0604d040ff4aeb84899d0cec43850f26beb523dfd24e236dd6"
+original_class_hash = "0x77a98646e3a0f0604d040ff4aeb84899d0cec43850f26beb523dfd24e236dd6"
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
 abi = "manifests/dev/abis/deployments/contracts/zkastle_systems_actions_actions.json"
 reads = []
@@ -37,8 +37,8 @@ name = "zkastle::systems::actions::actions"
 
 [[models]]
 kind = "DojoModel"
-class_hash = "0x6308886f3055519e49edb15fcf180601b3d11fef4e8d1ad54eb25b54b39b684"
-original_class_hash = "0x6308886f3055519e49edb15fcf180601b3d11fef4e8d1ad54eb25b54b39b684"
+class_hash = "0x642c81d7b3e188880a7e078f3d1a3d110fa9c906e258fef17dc624241152ae0"
+original_class_hash = "0x642c81d7b3e188880a7e078f3d1a3d110fa9c906e258fef17dc624241152ae0"
 abi = "manifests/dev/abis/deployments/models/zkastle_models_index_game.json"
 name = "zkastle::models::index::game"
 
@@ -74,48 +74,38 @@ key = false
 
 [[models.members]]
 name = "move_count"
-type = "u8"
-key = false
-
-[[models.members]]
-name = "pointer"
-type = "u8"
-key = false
-
-[[models.members]]
-name = "store_count"
-type = "u8"
-key = false
-
-[[models.members]]
-name = "stores"
 type = "u16"
 key = false
 
 [[models.members]]
-name = "cards"
-type = "u64"
+name = "achievements"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "stores"
+type = "u32"
 key = false
 
 [[models.members]]
 name = "sides"
-type = "u64"
+type = "u128"
 key = false
 
 [[models.members]]
-name = "indexes"
-type = "u64"
+name = "cards"
+type = "u128"
 key = false
 
 [[models.members]]
-name = "seed"
+name = "player_id"
 type = "felt252"
 key = false
 
 [[models]]
 kind = "DojoModel"
-class_hash = "0x51d7aade4568c82305c03389db2499d12da087903e0699d03b484cec9a73dc9"
-original_class_hash = "0x51d7aade4568c82305c03389db2499d12da087903e0699d03b484cec9a73dc9"
+class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
+original_class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
 abi = "manifests/dev/abis/deployments/models/zkastle_models_index_player.json"
 name = "zkastle::models::index::player"
 
@@ -131,7 +121,7 @@ key = false
 
 [[models.members]]
 name = "achievements"
-type = "u64"
+type = "u32"
 key = false
 
 [[models.members]]

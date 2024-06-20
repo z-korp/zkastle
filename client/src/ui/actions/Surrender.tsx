@@ -27,6 +27,8 @@ export const Surrender = () => {
     return !account || !master || account === master || !player || !game;
   }, [account, master, player, game]);
 
+  if (disabled) return null;
+
   return (
     <Button disabled={disabled} onClick={handleClick}>
       Surrender
