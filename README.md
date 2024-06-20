@@ -1,23 +1,24 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/mark-dark.svg">
-  <img alt="Dojo logo" align="right" width="120" src=".github/mark-light.svg">
-</picture>
-
-<a href="https://twitter.com/dojostarknet">
-<img src="https://img.shields.io/twitter/follow/dojostarknet?style=social"/>
-</a>
-<a href="https://github.com/dojoengine/dojo">
-<img src="https://img.shields.io/github/stars/dojoengine/dojo?style=social"/>
-</a>
-
-[![discord](https://img.shields.io/badge/join-dojo-green?logo=discord&logoColor=white)](https://discord.gg/PwDa2mKhR4)
-[![Telegram Chat][tg-badge]][tg-url]
-
-[tg-badge]: https://img.shields.io/endpoint?color=neon&logo=telegram&label=chat&style=flat-square&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Fdojoengine
-[tg-url]: https://t.me/dojoengine
-
 # zKastle
 
-The official Dojo Starter guide, the quickest and most streamlined way to get your Dojo provable game up and running. This guide will assist you with the initial setup, from cloning the repository to deploying your world.
+<p align="center">
+  <img src="client/public/assets/logo.png" height="256">
+</p>
 
-Read the full tutorial [here](https://book.dojoengine.org/tutorial/dojo-starter#hello-dojo)
+A fully on-chain game, with Dojo on Starknet.
+
+## Overview
+
+zKastle is a solo strategy card game inspired by Palm Island. In this game, you take control of a village and help it grow and flourish by strategically managing resources, and upgrading your infrastructure. Your goal is to maximize your points through tactical decisions and efficient resource management.
+
+## Gameplay
+
+### Turn Structure
+At each turn, the player draws two cards from a deck and interacts with them.
+
+### Card Interactions
+- Storing Resources: Cards that represent resources (iron, wheat, stone) can be stored for future use.
+- Upgrading Cards: Cards can be upgraded using the stored resources. Each card has 4 upgrade versions, progressively enhancing their effects and benefits to the village.
+- Discarding Cards: If a card is not needed for immediate use or storage, it can be discarded.
+
+### Card Management
+When a card is used, whether for storing resources or upgrading, it is placed at the end of the deck. This recycling of cards ensures a continuous flow of options and strategic choices for the player.
