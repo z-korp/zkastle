@@ -10,4 +10,5 @@ export interface AchievementInterface {
     score: number,
   ): boolean;
   sides(deck: Deck, sides: Side[]): Side[];
+  description(): string;
 }

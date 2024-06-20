@@ -26,4 +26,8 @@ export const MonkStaff: AchievementInterface = class MonkStaff {
   public static sides(deck: Deck, sides: Side[]): Side[] {
     return sides;
   }
+
+  public static description(): string {
+    return "Have 2 upgrades on all cards in the deck.";
+  }
 };

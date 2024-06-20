@@ -48,7 +48,7 @@ export enum CardType {
   Forge = "Forge",
   Tavern = "Tavern",
   Citadel = "Citadel",
-  OniFang = "OniFang",
+  OniFang = "Oni Fang",
   ShrineOfValor = "Shrine Of Valor",
   DragonHeart = "Dragon Heart",
   GuardianKami = "Guardian Kami",
@@ -90,6 +90,28 @@ export class Card {
 
   public static getAchievementCards(): Card[] {
     return [
+      new Card(CardType.OniFang),
+      new Card(CardType.ShrineOfValor),
+      new Card(CardType.DragonHeart),
+      new Card(CardType.GuardianKami),
+      new Card(CardType.SpiritualForge),
+      new Card(CardType.SamuraiHorn),
+      new Card(CardType.OracleStone),
+      new Card(CardType.MonkStaff),
+      new Card(CardType.ShogunAxe),
+    ];
+  }
+
+  public static getCards(): Card[] {
+    return [
+      new Card(CardType.Farm),
+      new Card(CardType.Mine),
+      new Card(CardType.Quarry),
+      new Card(CardType.Monastery),
+      new Card(CardType.Tower),
+      new Card(CardType.Forge),
+      new Card(CardType.Tavern),
+      new Card(CardType.Citadel),
       new Card(CardType.OniFang),
       new Card(CardType.ShrineOfValor),
       new Card(CardType.DragonHeart),

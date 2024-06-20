@@ -36,4 +36,8 @@ export const OniFang: AchievementInterface = class OniFang {
     }
     return updated_sides;
   }
+
+  public static description(): string {
+    return "Have 30 points or more and 2 upgrades on all farms in the deck.";
+  }
 };

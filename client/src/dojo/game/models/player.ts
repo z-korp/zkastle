@@ -4,21 +4,28 @@ import { shortString } from "starknet";
 import { Packer } from "../helpers/packer";
 import { Achievement } from "../types/achievement";
 
+export interface AchivementDetail {
+  id: number;
+  achievement: Achievement;
+}
+
 export class Player {
   public id: string;
   public game_id: string;
-  public achievements: Achievement[];
+  public achievements: AchivementDetail[];
   public name: string;
 
   constructor(player: ComponentValue) {
     this.id = player.id;
     this.game_id = player.game_id;
-    this.achievements = Packer.unpack(player.achievements, 2).map((index) => {
-      let id = index + 1;
-      return Achievement.from(id);
-    });
-    // this.name = shortString.decodeShortString(player.name);
-    this.name = shortString.decodeShortString(`0x${player.name.toString(16)}`);
+    this.achievements = Packer.unpack(player.achievements, 2n)
+      .map((value, index) => {
+        if (value === 0) return null;
+        let id = index + 1;
+        return { id, achievement: Achievement.from(id) };
+      })
+      .filter((detail) => detail !== null) as AchivementDetail[];
+    this.name = shortString.decodeShortString(player.name);
   }
 
   getShortAddress(): string {
@@ -27,5 +34,11 @@ export class Player {
 
   getShortName(): string {
     return this.name.length > 16 ? `${this.name.slice(0, 13)}...` : this.name;
+  }
+
+  has(achivement: Achievement): boolean {
+    return this.achievements.some(
+      (detail) => detail.achievement.value === achivement.value,
+    );
   }
 }

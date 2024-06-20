@@ -10,7 +10,7 @@ export const Cards = () => {
 
   const { player } = usePlayer({ playerId: account.address });
   const { game } = useGame({
-    gameId: player?.game_id || "0x0",
+    gameId: player?.game_id || "0x1",
   });
 
   if (!player || !game || game.isOver()) return null;

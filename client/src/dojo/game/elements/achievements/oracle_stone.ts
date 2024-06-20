@@ -16,4 +16,8 @@ export const OracleStone: AchievementInterface = class OracleStone {
   public static sides(deck: Deck, sides: Side[]): Side[] {
     return sides;
   }
+
+  public static description(): string {
+    return "Have 40 points or more at the end of the game.";
+  }
 };

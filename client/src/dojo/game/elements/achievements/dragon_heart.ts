@@ -23,4 +23,8 @@ export const DragonHeart: AchievementInterface = class DragonHeart {
   public static sides(deck: Deck, sides: Side[]): Side[] {
     return sides;
   }
+
+  public static description(): string {
+    return "Have 25 points or more and 9 iron in storage at the end of the game.";
+  }
 };

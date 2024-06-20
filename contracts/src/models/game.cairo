@@ -249,7 +249,7 @@ impl GameImpl of GameTrait {
         self.assert_is_over();
         // [Compute] Achievements
         let deck: Deck = self.deck.into();
-        let score = 0;
+        let score = self.score();
         let mut achievements: u32 = 0;
         let mut id = deck.achievement_count();
         loop {
@@ -356,7 +356,7 @@ mod tests {
 
     // Local imports
 
-    use super::{Game, GameTrait, AssertTrait, Action, Resource, ResourceTrait};
+    use super::{Game, GameTrait, AssertTrait, Action, Resource, ResourceTrait, Packer};
 
     // Constants
 
@@ -563,11 +563,22 @@ mod tests {
     }
 
     #[test]
-    fn test_game_assess_achievements() {
+    fn test_game_assess_no_achievements() {
         let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
         game.start();
         game.over = true;
         game.assess_achievements();
         assert_eq!(game.over, true);
+    }
+
+    #[test]
+    fn test_game_assess_high_score_achievements() {
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        game.start();
+        game.sides = 0x92492492D924B649; // All sides to 1 except 2 Quarries and 2 Monsateries to 3
+        game.over = true;
+        let achievements = game.assess_achievements();
+        assert_eq!(game.over, true);
+        assert_eq!(achievements, 0xa);
     }
 }

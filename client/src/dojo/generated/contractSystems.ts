@@ -49,7 +49,7 @@ export const getContractByName = (manifest: any, name: string) => {
 };
 
 export async function setupWorld(provider: DojoProvider, config: Config) {
-  const details: UniversalDetails = { maxFee: 1e15 };
+  const details: UniversalDetails | undefined = undefined; // { maxFee: 1e15 };
 
   function actions() {
     const contract_name = "actions";
@@ -64,14 +64,14 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       try {
         return await provider.execute(
           account,
-          // {
-          //   contractName: contract_name,
-          //   entrypoint: "initialize",
-          //   calldata: [world],
-          // },
-          contract_name,
-          "initialize",
-          [world],
+          {
+            contractName: contract_name,
+            entrypoint: "initialize",
+            calldata: [world],
+          },
+          // contract_name,
+          // "initialize",
+          // [world],
           details,
         );
       } catch (error) {
@@ -85,14 +85,14 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
         const encoded_name = shortString.encodeShortString(name);
         return await provider.execute(
           account,
-          // {
-          //   contractName: contract_name,
-          //   entrypoint: "create",
-          //   calldata: [provider.getWorldAddress(), encoded_name],
-          // },
-          contract_name,
-          "create",
-          [provider.getWorldAddress(), encoded_name],
+          {
+            contractName: contract_name,
+            entrypoint: "create",
+            calldata: [provider.getWorldAddress(), encoded_name],
+          },
+          // contract_name,
+          // "create",
+          // [provider.getWorldAddress(), encoded_name],
           details,
         );
       } catch (error) {
@@ -105,14 +105,14 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       try {
         return await provider.execute(
           account,
-          // {
-          //   contractName: contract_name,
-          //   entrypoint: "start",
-          //   calldata: [provider.getWorldAddress()],
-          // },
-          contract_name,
-          "start",
-          [provider.getWorldAddress()],
+          {
+            contractName: contract_name,
+            entrypoint: "start",
+            calldata: [provider.getWorldAddress()],
+          },
+          // contract_name,
+          // "start",
+          // [provider.getWorldAddress()],
           details,
         );
       } catch (error) {
@@ -125,19 +125,19 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       try {
         return await provider.execute(
           account,
-          // {
-          //   contractName: contract_name,
-          //   entrypoint: "play",
-          //   calldata: [
-          //     provider.getWorldAddress(),
-          //     action,
-          //     choice ? 1 : 0,
-          //     resources,
-          //   ],
-          // },
-          contract_name,
-          "play",
-          [provider.getWorldAddress(), action, choice ? 1 : 0, resources],
+          {
+            contractName: contract_name,
+            entrypoint: "play",
+            calldata: [
+              provider.getWorldAddress(),
+              action,
+              choice ? 1 : 0,
+              resources,
+            ],
+          },
+          // contract_name,
+          // "play",
+          // [provider.getWorldAddress(), action, choice ? 1 : 0, resources],
           details,
         );
       } catch (error) {
@@ -150,14 +150,14 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       try {
         return await provider.execute(
           account,
-          // {
-          //   contractName: contract_name,
-          //   entrypoint: "discard",
-          //   calldata: [provider.getWorldAddress(), slot_index],
-          // },
-          contract_name,
-          "discard",
-          [provider.getWorldAddress(), slot_index],
+          {
+            contractName: contract_name,
+            entrypoint: "discard",
+            calldata: [provider.getWorldAddress(), slot_index],
+          },
+          // contract_name,
+          // "discard",
+          // [provider.getWorldAddress(), slot_index],
           details,
         );
       } catch (error) {
@@ -170,14 +170,14 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       try {
         return await provider.execute(
           account,
-          // {
-          //   contractName: contract_name,
-          //   entrypoint: "surrender",
-          //   calldata: [provider.getWorldAddress()],
-          // },
-          contract_name,
-          "surrender",
-          [provider.getWorldAddress()],
+          {
+            contractName: contract_name,
+            entrypoint: "surrender",
+            calldata: [provider.getWorldAddress()],
+          },
+          // contract_name,
+          // "surrender",
+          // [provider.getWorldAddress()],
           details,
         );
       } catch (error) {

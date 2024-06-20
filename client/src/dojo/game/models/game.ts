@@ -1,24 +1,30 @@
 import { ComponentValue } from "@dojoengine/recs";
 import { Packer } from "../helpers/packer";
-import { SIDE_TYPE_COUNT, Side, SideType } from "../types/side";
+import { Side, SideType } from "../types/side";
 import { Card, CardType } from "../types/card";
 import { Deck } from "../types/deck";
 import { Resource } from "../types/resource";
 import { Achievement } from "../types/achievement";
 
-export const CARD_BIT_SIZE = 32;
-export const SIDE_BIT_SIZE = 8;
+export const CARD_BIT_SIZE = 5n;
+export const SIDE_BIT_SIZE = 3n;
 export const STORE_SLOT_COUNT = 4;
+
+export interface CardDetail {
+  id: number;
+  card: Card;
+  side: Side;
+}
 
 export class Game {
   public id: string;
   public over: boolean;
-  public card_one: { card: Card; side: Side; id: number };
-  public card_two: { card: Card; side: Side; id: number };
-  public card_three: { card: Card; side: Side; id: number };
+  public card_one: CardDetail;
+  public card_two: CardDetail;
+  public card_three: CardDetail;
   public deck: Deck;
   public move_count: number;
-  public stores: { card: Card; side: Side; id: number }[];
+  public stores: CardDetail[];
   public sides: Side[];
   public cards: Card[];
   public player_id: string;
@@ -29,16 +35,12 @@ export class Game {
     this.deck = Deck.from(game.deck);
     this.move_count = game.move_count;
     this.player_id = game.player_id;
-    this.cards = Packer.sized_unpack(
-      parseInt(`0x${game.cards.toString(16)}`),
-      CARD_BIT_SIZE,
-      this.deck.count(),
-    ).map((card: number) => Card.from(card));
-    this.sides = Packer.sized_unpack(
-      parseInt(`0x${game.sides.toString(16)}`),
-      SIDE_BIT_SIZE,
-      this.deck.count(),
-    ).map((side: number) => Side.from(side));
+    this.cards = Packer.unpack(BigInt(game.cards), CARD_BIT_SIZE).map(
+      (card: number) => Card.from(card),
+    );
+    this.sides = Packer.unpack(BigInt(game.sides), SIDE_BIT_SIZE).map(
+      (side: number) => Side.from(side),
+    );
     this.card_one = {
       card: this.deck.reveal(game.card_one),
       side: this.sides[game.card_one - 1] || new Side(SideType.None),
@@ -55,7 +57,7 @@ export class Game {
       id: game.card_three,
     };
     this.stores = Packer.sized_unpack(
-      parseInt(`0x${game.stores.toString(16)}`),
+      BigInt(game.stores),
       CARD_BIT_SIZE,
       STORE_SLOT_COUNT,
     ).map((card: number) => {
@@ -80,10 +82,15 @@ export class Game {
     });
   }
 
-  public static getAchievements(): { card: Card; side: Side }[][] {
-    const cards = Card.getAchievementCards();
-    return cards.map((card) => {
-      return card.getSides().map((side) => ({ card, side }));
+  public static getAchievements(): {
+    achievement: Achievement;
+    card: Card;
+    side: Side;
+  }[][] {
+    const achievements = Achievement.getAchievements();
+    return achievements.map((achievement) => {
+      const card = achievement.getCard();
+      return card.getSides().map((side) => ({ achievement, card, side }));
     });
   }
 
@@ -98,13 +105,14 @@ export class Game {
   public getScore(): number {
     let score = 0;
     this.sides.forEach((side: Side, index: number) => {
-      const card = this.deck.reveal(index);
+      const id = index + 1;
+      const card = this.deck.reveal(id);
       score += card.getScore(side);
     });
     return score;
   }
 
-  public isAffordable(resources: number, costs: Resource[]): boolean {
+  public isAffordable(resources: bigint, costs: Resource[]): boolean {
     let resource = new Resource(0, 0, 0);
     Packer.unpack(resources, CARD_BIT_SIZE)
       .map((card: number) => {

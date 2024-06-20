@@ -4,14 +4,14 @@ import { Side } from "@/dojo/game/types/side";
 import { create } from "zustand";
 
 interface GameState {
-  resources: number;
-  setResources: (resources: number) => void;
+  resources: bigint;
+  setResources: (resources: bigint) => void;
   storage: boolean;
   setStorage: (storageModal: boolean) => void;
   costs: Resource[];
   setCosts: (costs: Resource[]) => void;
-  callback: (resources: number) => void;
-  setCallback: (callback: (resources: number) => void) => void;
+  callback: (resources: bigint) => void;
+  setCallback: (callback: (resources: bigint) => void) => void;
   upgradeToShow: { card: Card; side: Side } | null;
   resetUpgradeToShow: () => void;
   setUpgradeToShow: (card: Card, side: Side) => void;
@@ -19,7 +19,7 @@ interface GameState {
 }
 
 export const useGameStore = create<GameState>()((set, get) => ({
-  resources: 0,
+  resources: 0n,
   setResources: (resources) => set({ resources }),
   storage: false,
   setStorage: (storage) => set({ storage }),
@@ -32,7 +32,7 @@ export const useGameStore = create<GameState>()((set, get) => ({
   setUpgradeToShow: (card, side) => set({ upgradeToShow: { card, side } }),
   reset: () =>
     set({
-      resources: 0,
+      resources: 0n,
       storage: false,
       costs: [],
       callback: () => {},

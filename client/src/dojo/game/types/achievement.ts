@@ -1,92 +1,4 @@
-// use zkastle::elements::achievements;
-// use zkastle::types::deck::Deck;
-
-// #[derive(Copy, Drop, Serde, Introspect)]
-// enum Achievement {
-//     None,
-//     OniFang,
-//     ShrineOfValor,
-//     DragonHeart,
-//     GuardianKami,
-//     SpiritualForge,
-//     SamuraiHorn,
-//     OracleStone,
-//     MonkStaff,
-//     ShogunAxe,
-// }
-
-// #[generate_trait]
-// impl AchievementImpl of AchievementTrait {
-//     #[inline(always)]
-//     fn condition(self: Achievement, deck: Deck, sides: u128, stores: u32, score: u8) -> bool {
-//         match self {
-//             Achievement::OniFang => achievements::oni_fang::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             Achievement::ShrineOfValor => achievements::shrine_of_valor::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             Achievement::DragonHeart => achievements::dragon_heart::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             Achievement::GuardianKami => achievements::guardian_kami::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             Achievement::SpiritualForge => achievements::spiritual_forge::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             Achievement::SamuraiHorn => achievements::samurai_horn::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             Achievement::OracleStone => achievements::oracle_stone::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             Achievement::MonkStaff => achievements::monk_staff::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             Achievement::ShogunAxe => achievements::shogun_axe::AchievementImpl::condition(
-//                 deck, sides, stores, score
-//             ),
-//             _ => false,
-//         }
-//     }
-
-//     #[inline(always)]
-//     fn index(self: Achievement) -> u8 {
-//         let id: u8 = self.into();
-//         return id - 1;
-//     }
-
-//     #[inline(always)]
-//     fn sides(self: Achievement, deck: Deck, sides: u128) -> u128 {
-//         match self {
-//             Achievement::OniFang => achievements::oni_fang::AchievementImpl::sides(deck, sides),
-//             Achievement::ShrineOfValor => achievements::shrine_of_valor::AchievementImpl::sides(
-//                 deck, sides
-//             ),
-//             Achievement::DragonHeart => achievements::dragon_heart::AchievementImpl::sides(
-//                 deck, sides
-//             ),
-//             Achievement::GuardianKami => achievements::guardian_kami::AchievementImpl::sides(
-//                 deck, sides
-//             ),
-//             Achievement::SpiritualForge => achievements::spiritual_forge::AchievementImpl::sides(
-//                 deck, sides
-//             ),
-//             Achievement::SamuraiHorn => achievements::samurai_horn::AchievementImpl::sides(
-//                 deck, sides
-//             ),
-//             Achievement::OracleStone => achievements::oracle_stone::AchievementImpl::sides(
-//                 deck, sides
-//             ),
-//             Achievement::MonkStaff => achievements::monk_staff::AchievementImpl::sides(deck, sides),
-//             Achievement::ShogunAxe => achievements::shogun_axe::AchievementImpl::sides(deck, sides),
-//             _ => sides,
-//         }
-//     }
-// }
-
-import { Card } from "./card";
+import { Card, CardType } from "./card";
 import { Deck } from "./deck";
 import { Side } from "./side";
 import { OniFang } from "../elements/achievements/oni_fang";
@@ -98,18 +10,19 @@ import { SamuraiHorn } from "../elements/achievements/samurai_horn";
 import { OracleStone } from "../elements/achievements/oracle_stone";
 import { MonkStaff } from "../elements/achievements/monk_staff";
 import { ShogunAxe } from "../elements/achievements/shogun_axe";
+import { CardDetail } from "../models/game";
 
 export enum AchievementType {
   None = "None",
-  OniFang = "OniFang",
-  ShrineOfValor = "ShrineOfValor",
-  DragonHeart = "DragonHeart",
-  GuardianKami = "GuardianKami",
-  SpiritualForge = "SpiritualForge",
-  SamuraiHorn = "SamuraiHorn",
-  OracleStone = "OracleStone",
-  MonkStaff = "MonkStaff",
-  ShogunAxe = "ShogunAxe",
+  OniFang = "Oni Fang",
+  ShrineOfValor = "Shrine Of Valor",
+  DragonHeart = "Dragon Heart",
+  GuardianKami = "Guardian Kami",
+  SpiritualForge = "Spiritual Forge",
+  SamuraiHorn = "Samurai Horn",
+  OracleStone = "Oracle Stone",
+  MonkStaff = "Monk Staff",
+  ShogunAxe = "Shogun Axe",
 }
 
 export class Achievement {
@@ -128,10 +41,31 @@ export class Achievement {
     return new Achievement(item);
   }
 
+  public static getAchievements(): Achievement[] {
+    return [
+      new Achievement(AchievementType.OniFang),
+      new Achievement(AchievementType.ShrineOfValor),
+      new Achievement(AchievementType.DragonHeart),
+      new Achievement(AchievementType.GuardianKami),
+      new Achievement(AchievementType.SpiritualForge),
+      new Achievement(AchievementType.SamuraiHorn),
+      new Achievement(AchievementType.OracleStone),
+      new Achievement(AchievementType.MonkStaff),
+      new Achievement(AchievementType.ShogunAxe),
+    ];
+  }
+
+  public getCard(): Card {
+    const card = Card.getCards().find(
+      (card) => card.value.toString() === this.value.toString(),
+    );
+    return card || new Card(CardType.None);
+  }
+
   public condition(
     deck: Deck,
     sides: Side[],
-    stores: { card: Card; side: Side; id: number }[],
+    stores: CardDetail[],
     score: number,
   ): boolean {
     switch (this.value) {
@@ -180,6 +114,31 @@ export class Achievement {
         return ShogunAxe.sides(deck, sides);
       default:
         return sides;
+    }
+  }
+
+  public description(): string {
+    switch (this.value) {
+      case AchievementType.OniFang:
+        return OniFang.description();
+      case AchievementType.ShrineOfValor:
+        return ShrineOfValor.description();
+      case AchievementType.DragonHeart:
+        return DragonHeart.description();
+      case AchievementType.GuardianKami:
+        return GuardianKami.description();
+      case AchievementType.SpiritualForge:
+        return SpiritualForge.description();
+      case AchievementType.SamuraiHorn:
+        return SamuraiHorn.description();
+      case AchievementType.OracleStone:
+        return OracleStone.description();
+      case AchievementType.MonkStaff:
+        return MonkStaff.description();
+      case AchievementType.ShogunAxe:
+        return ShogunAxe.description();
+      default:
+        return "";
     }
   }
 }

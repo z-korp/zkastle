@@ -48,8 +48,8 @@ export function systems({
           retryInterval: 100,
         }),
       );
-    } catch (error) {
-      console.error("Error creating game:", error);
+    } catch (error: any) {
+      toast.error(extractedMessage(error.message));
     }
   };
 
@@ -66,8 +66,8 @@ export function systems({
           retryInterval: 100,
         }),
       );
-    } catch (error) {
-      console.error("Error starting game:", error);
+    } catch (error: any) {
+      toast.error(extractedMessage(error.message));
     }
   };
 
@@ -84,8 +84,8 @@ export function systems({
           retryInterval: 100,
         }),
       );
-    } catch (error) {
-      console.error("Error playing game:", error);
+    } catch (error: any) {
+      toast.error(extractedMessage(error.message));
     }
   };
 
@@ -102,8 +102,8 @@ export function systems({
           retryInterval: 100,
         }),
       );
-    } catch (error) {
-      console.error("Error discarding game:", error);
+    } catch (error: any) {
+      toast.error(extractedMessage(error.message));
     }
   };
 
@@ -120,8 +120,8 @@ export function systems({
           retryInterval: 100,
         }),
       );
-    } catch (error) {
-      console.error("Error surrendering game:", error);
+    } catch (error: any) {
+      toast.error(extractedMessage(error.message));
     }
   };
 

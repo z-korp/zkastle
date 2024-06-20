@@ -41,4 +41,8 @@ export const SamuraiHorn: AchievementInterface = class SamuraiHorn {
   public static sides(deck: Deck, sides: Side[]): Side[] {
     return sides;
   }
+
+  public static description(): string {
+    return "Have 32 points or more and 2 upgrades on all taverns and citadels in the deck.";
+  }
 };

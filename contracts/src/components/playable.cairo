@@ -96,8 +96,9 @@ mod PlayableComponent {
 
             // [Effect] Assess over
             if game.over {
-                // [Effect] Assess achievements
-                player.achievements = game.assess_achievements();
+                // [Effect] Assess achievements, ensure to not erase any previous achievements with
+                // bit or
+                player.achievements = player.achievements | game.assess_achievements();
                 // [Effect] Update player
                 player.game_id = 0;
                 store.set_player(player);
