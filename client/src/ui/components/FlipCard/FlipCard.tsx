@@ -24,8 +24,6 @@ import { CARD_WIDTH, CARD_HEIGHT } from "@/ui/constants";
 interface FlipCardProps {
   data: { card: Card; side: Side; id: number };
   isFlipped: boolean;
-  index: number;
-  zIndex: number;
   first?: boolean;
   greyed?: boolean;
   actionable?: boolean;
@@ -35,19 +33,19 @@ interface FlipCardProps {
   height?: string;
   width?: string;
   scale?: string;
+  bgDescription?: string;
 }
 
 const FlipCard: React.FC<FlipCardProps> = ({
   data,
   isFlipped,
-  index,
-  zIndex,
   first = false,
   greyed = false,
   actionable = false,
   noButton = false,
   noBg = false,
   stored = false,
+  bgDescription = "",
 }) => {
   const { card, side } = data;
 
@@ -111,7 +109,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
             </TooltipProvider>
           </div>
           <div className="flex flex-col justify-between h-full pt-8 pb-4">
-            <Badge className="flex mx-auto text-lg z-10">{card.value}</Badge>
+            <Badge className="flex mx-auto text z-10">{card.value}</Badge>
             <div className="flex flex-col gap-2 items-start z-10 ml-2">
               {card.isAllowed(side, new Action(ActionType.Store)) && (
                 <div className="flex gap-2 items-center">
@@ -199,7 +197,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
           }}
           className="bg-cover bg-center flip-card-back absolute flex flex-col justify-center w-full h-full shadow-md  text-white border border-coral rounded-xl backface-hidden"
         >
-          {/*<h1 className="title text-2xl font-black m-0">{`BACK [${index}]`}</h1>*/}
+          <p className="text-2xl text-white z-10">{bgDescription}</p>
         </div>
       </div>
     </div>

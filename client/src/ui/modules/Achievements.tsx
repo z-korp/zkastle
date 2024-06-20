@@ -19,16 +19,15 @@ import {
 import { Button } from "@/ui/elements/button";
 import { Side, SideType } from "@/dojo/game/types/side";
 import { Card as CardClass } from "@/dojo/game/types/card";
-import { Card } from "../components/Card";
 import { Game } from "@/dojo/game/models/game";
 import { useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Achievement } from "@/dojo/game/types/achievement";
-import { Description } from "@/ui/components/Description";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import FlipCard from "../components/FlipCard/FlipCard";
 
 export const Achievements = () => {
   const {
@@ -99,7 +98,7 @@ export const Canvas = ({
     const card = items[0].card;
     const side = items[0].side;
     return (
-      <>
+      <div className="flex flex-col gap-2 pb-2">
         <div className="flex justify-center items-center">
           <FontAwesomeIcon
             icon={has ? faLockOpen : faLock}
@@ -107,19 +106,22 @@ export const Canvas = ({
           />
         </div>
         <div
-          className={`flex flex-col justify-center items-center scale-[0.9]`}
+          className={`flex flex-col justify-center items-center`}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          {!hover && <Card data={{ card, side, id: 0 }} />}
-          {hover && <Description description={achievement.description()} />}
+          <FlipCard
+            data={{ card, side, id: 0 }}
+            isFlipped={hover}
+            bgDescription={achievement.description()}
+          />
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center gap-2 pb-2">
       <Pagination>
         <PaginationContent>
           {items.map(({ side }, index) => (
@@ -135,7 +137,7 @@ export const Canvas = ({
           ))}
         </PaginationContent>
       </Pagination>
-      <div className="flex justify-center items-center mt-4">
+      <div className="flex justify-center items-center">
         <FontAwesomeIcon icon={has ? faLockOpen : faLock} className="h-8 w-8" />
       </div>
       <div
@@ -143,18 +145,11 @@ export const Canvas = ({
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        {!hover && (
-          <Card
-            data={{ card: item.card, side: item.side, id: 0 }}
-            scale="scale-[0.9]"
-          />
-        )}
-        {hover && (
-          <Description
-            description={item.achievement.description()}
-            scale="scale-[0.9]"
-          />
-        )}
+        <FlipCard
+          data={{ card: item.card, side: item.side, id: 0 }}
+          isFlipped={hover}
+          bgDescription={item.achievement.description()}
+        />
       </div>
     </div>
   );

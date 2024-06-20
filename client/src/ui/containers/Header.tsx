@@ -71,6 +71,7 @@ export const Header = () => {
             </DrawerHeader>
             <div className="flex flex-col gap-4 p-4">
               <Collection />
+              <Achievements />
               <Leaderboard />
             </div>
             <div className="flex flex-col gap-5 p-4">

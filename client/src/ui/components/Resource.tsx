@@ -6,7 +6,7 @@ import { useMemo } from "react";
 
 export const Resource = ({ resource }: { resource: ResourceClass }) => {
   const { height, width } = useMemo(
-    () => ({ height: "h-16", width: "w-16" }),
+    () => ({ height: "h-12", width: "w-12" }),
     [],
   );
   return (
