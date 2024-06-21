@@ -81,10 +81,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "stark_vrf"
+version = "0.1.0"
+source = "git+https://github.com/Bal7hazar/stark-vrf?rev=07fa95f#07fa95f6a2f8a4944828811a74d113f99e3b73b1"
+
+[[package]]
 name = "zkastle"
 version = "0.0.0"
 dependencies = [
  "alexandria_math",
  "dojo",
  "origami",
+ "stark_vrf",
 ]

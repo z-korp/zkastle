@@ -18,6 +18,10 @@ mod PlayableComponent {
     use dojo::world::IWorldDispatcher;
     use dojo::world::IWorldDispatcherTrait;
 
+    // External imports
+
+    use stark_vrf::ecvrf::{Proof, Point, ECVRFTrait};
+
     // Internal imports
 
     use zkastle::constants;
@@ -26,10 +30,20 @@ mod PlayableComponent {
     use zkastle::models::player::{Player, PlayerTrait, PlayerAssert};
     use zkastle::types::action::Action;
 
+    // Errors
+
+    mod errors {
+        const PLAYABLE_INVALID_PROOF: felt252 = 'Playable:: invalid proof';
+        const PLAYABLE_INVALID_BETA: felt252 = 'Playable:: invalid beta';
+        const PLAYABLE_INVALID_SEED: felt252 = 'Playable:: invalid seed';
+    }
+
     // Storage
 
     #[storage]
-    struct Storage {}
+    struct Storage {
+        seeds: LegacyMap::<felt252, bool>,
+    }
 
     // Events
 
@@ -41,9 +55,29 @@ mod PlayableComponent {
     impl InternalImpl<
         TContractState, +HasComponent<TContractState>
     > of InternalTrait<TContractState> {
-        fn _start(self: @ComponentState<TContractState>, world: IWorldDispatcher) -> u32 {
+        fn _start(
+            self: @ComponentState<TContractState>,
+            world: IWorldDispatcher,
+            proof: Proof,
+            seed: felt252,
+            beta: felt252
+        ) -> u32 {
             // [Setup] Datastore
             let store: Store = StoreImpl::new(world);
+
+            // [Check] Verify new seed
+            assert(!self.seeds.read(beta), errors::PLAYABLE_INVALID_SEED);
+
+            // [Check] Verify seed
+            let public_key = Point {
+                x: 1173415989117130929327570255074235160147948257071299476886506896372006087277,
+                y: 2678963217040729019448869120760864799670267652070964164868211652985974476023,
+            };
+            let ecvrf = ECVRFTrait::new(public_key);
+            let computed = ecvrf
+                .verify(proof, array![seed].span())
+                .expect(errors::PLAYABLE_INVALID_PROOF);
+            assert(computed == beta, errors::PLAYABLE_INVALID_BETA);
 
             // [Check] Player exists
             let caller = get_caller_address();
@@ -56,7 +90,7 @@ mod PlayableComponent {
 
             // [Effect] Create game
             let game_id: u32 = world.uuid() + 1;
-            let mut game = GameTrait::new(game_id, player.id, 0, player.achievements);
+            let mut game = GameTrait::new(game_id, player.id, 0, player.achievements, beta);
             game.start();
             store.set_game(game);
 

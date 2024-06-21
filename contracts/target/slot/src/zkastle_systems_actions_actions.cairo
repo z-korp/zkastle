@@ -6,6 +6,10 @@ use starknet::ContractAddress;
 
 use dojo::world::IWorldDispatcher;
 
+// External imports
+
+use stark_vrf::ecvrf::Proof;
+
 // Internal imports
 
 use zkastle::types::action::Action;
@@ -15,7 +19,9 @@ use zkastle::types::action::Action;
 #[starknet::interface]
 trait IActions<TContractState> {
     fn create(self: @TContractState, world: IWorldDispatcher, name: felt252);
-    fn start(self: @TContractState, world: IWorldDispatcher) -> u32;
+    fn start(
+        self: @TContractState, world: IWorldDispatcher, proof: Proof, seed: felt252, beta: felt252
+    ) -> u32;
     fn play(
         self: @TContractState, world: IWorldDispatcher, action: Action, choice: bool, resources: u32
     );
@@ -43,7 +49,7 @@ mod actions {
 
     // Local imports
 
-    use super::{IActions, Action};
+    use super::{IActions, Action, Proof};
 
     // Components
 
@@ -98,8 +104,14 @@ mod actions {
             self.manageable._create(world, name);
         }
 
-        fn start(self: @ContractState, world: IWorldDispatcher) -> u32 {
-            self.playable._start(world)
+        fn start(
+            self: @ContractState,
+            world: IWorldDispatcher,
+            proof: Proof,
+            seed: felt252,
+            beta: felt252
+        ) -> u32 {
+            self.playable._start(world, proof, seed, beta)
         }
 
         fn play(

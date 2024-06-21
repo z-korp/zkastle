@@ -7,14 +7,15 @@ edition = "2023_10"
 sierra-replace-ids = true
 
 [scripts]
-deploy-dev = "sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan --name $NAME && sozo --profile dev migrate apply --name $NAME"
-deploy-slot = "NAME=v3 && sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name $NAME && sozo --profile slot migrate apply --name $NAME"
-deploy-sepolia = "NAME=v3 && sozo --profile sepolia clean && sozo --profile sepolia build && sozo --profile sepolia migrate plan --name $NAME && sozo --profile sepolia migrate apply --name $NAME"
+deploy-dev = "NAME=v0 && sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan --name $NAME && sozo --profile dev migrate apply --name $NAME"
+deploy-slot = "NAME=v4 && sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name $NAME && sozo --profile slot migrate apply --name $NAME"
+deploy-sepolia = "NAME=v0 && sozo --profile sepolia clean && sozo --profile sepolia build && sozo --profile sepolia migrate plan --name $NAME && sozo --profile sepolia migrate apply --name $NAME"
 
 [dependencies]
 alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria", rev = "78b0d51" }
 origami = { git = "https://github.com/dojoengine/origami", tag = "v0.7.2" }
 dojo = { git = "https://github.com/dojoengine/dojo", tag = "v0.7.2" }
+stark_vrf = { git = "https://github.com/Bal7hazar/stark-vrf", rev = "07fa95f" }
 
 [[target.dojo]]
 

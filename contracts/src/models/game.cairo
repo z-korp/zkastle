@@ -37,12 +37,9 @@ mod errors {
 #[generate_trait]
 impl GameImpl of GameTrait {
     #[inline(always)]
-    fn new(id: u32, player_id: felt252, first_card_id: u8, achievements: u32) -> Game {
-        // [Compute] Seed
-        let state = PoseidonTrait::new();
-        let state = state.update(id.into());
-        let seed = state.finalize();
-
+    fn new(
+        id: u32, player_id: felt252, first_card_id: u8, achievements: u32, seed: felt252
+    ) -> Game {
         // [Effect] Create a new game
         let deck: Deck = Deck::Base;
         let (count, cards) = deck.cards(seed, first_card_id, achievements);
@@ -365,11 +362,12 @@ mod tests {
     const FIRST_CARD_ID: u8 = 1;
     const ACHIEVEMENTS: u32 = 0;
     const FULL_ACHIEVEMENTS: u32 = 0x1ff; // b111111111
+    const SEED: felt252 = 0x579e8877c7755365d5ec1ec7d3a94a457eff5d1f40482bbe9729c064cdead2;
 
     #[test]
     fn test_game_new_no_achievements() {
         // Deck: 0xab0598c6fe1234d7
-        let game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.assert_exists();
         game.assert_not_over();
         // Expecting 16 cards drawn, each packed on a 5 bit map
@@ -383,7 +381,7 @@ mod tests {
     #[test]
     fn test_game_new_full_achievements() {
         // Deck: 0xab0598c6fe1234d7
-        let game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, FULL_ACHIEVEMENTS);
+        let game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, FULL_ACHIEVEMENTS, SEED);
         game.assert_exists();
         game.assert_not_over();
         // Expecting 22 cards, each packed on a 5 bit map
@@ -396,14 +394,14 @@ mod tests {
 
     #[test]
     fn test_game_start() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         assert(game.card_one + game.card_two + game.card_three > 0, 'Game: cards are zero');
     }
 
     #[test]
     fn test_game_play_quarry() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         // Card 1: Quarry = 0x6
         // Card 2: Tower = 0xd
@@ -415,7 +413,7 @@ mod tests {
 
     #[test]
     fn test_game_play_multiple_store() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         // Card 1: Farm = 0x1
         // Card 2: Quarry = 0x6
@@ -445,7 +443,7 @@ mod tests {
 
     #[test]
     fn test_game_play_rotate() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         // Card 1: Farm = 0x1
         // Card 2: Quarry = 0x6
@@ -474,7 +472,7 @@ mod tests {
 
     #[test]
     fn test_game_play_flip() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         // Card 1: Farm = 0x1
         // Card 2: Quarry = 0x6
@@ -502,7 +500,7 @@ mod tests {
 
     #[test]
     fn test_game_play_store_discard_old_storage() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         // Card 1: Farm = 0x1
         game.perform(Action::Store, true, 0);
@@ -527,7 +525,7 @@ mod tests {
     #[test]
     #[should_panic(expected: ('Game: invalid action',))]
     fn test_game_play_store_discard_old_storage_revert_invalid_action() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         // Card 1: Farm = 0x1
         game.perform(Action::Store, true, 0);
@@ -551,7 +549,7 @@ mod tests {
 
     #[test]
     fn test_game_play_until_over() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         loop {
             if game.card_one == 0 {
@@ -564,7 +562,7 @@ mod tests {
 
     #[test]
     fn test_game_assess_no_achievements() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         game.over = true;
         game.assess_achievements();
@@ -573,7 +571,7 @@ mod tests {
 
     #[test]
     fn test_game_assess_high_score_achievements() {
-        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, FIRST_CARD_ID, ACHIEVEMENTS, SEED);
         game.start();
         game.sides = 0x92492492D924B649; // All sides to 1 except 2 Quarries and 2 Monsateries to 3
         game.over = true;

@@ -69,8 +69,10 @@ mod components {
 mod systems {
     mod actions;
 }
-// mod tests {
-//     mod test_world;
-// }
 
+#[cfg(test)]
+mod tests {
+    mod setup;
+    mod test_start;
+}
 
