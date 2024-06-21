@@ -55,12 +55,14 @@ export const Create = () => {
         </DialogHeader>
 
         <Input
-          className="w-20"
+          className="w-full"
           placeholder="Player Name"
           type="text"
           value={playerName}
           onChange={(e) => {
-            setPlayerName(e.target.value);
+            if (e.target.value.length <= 19) {
+              setPlayerName(e.target.value);
+            }
           }}
         />
 
