@@ -1,11 +1,3 @@
-use ark_ec::{short_weierstrass::SWCurveConfig, CurveGroup};
-use ark_ff::BigInteger256;
-use serde::Serialize;
-use std::env;
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Arc;
-use warp::Filter;
-
 mod curve;
 mod ecvrf;
 pub mod error;
@@ -15,6 +7,14 @@ pub use curve::*;
 pub use ecvrf::*;
 
 pub type StarkVRF = ECVRF<StarkCurve, hash::PoseidonHash>;
+
+use ark_ec::{short_weierstrass::SWCurveConfig, CurveGroup};
+use ark_ff::BigInteger256;
+use serde::Serialize;
+use std::env;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::Arc;
+use warp::Filter;
 
 #[derive(Serialize)]
 struct VrfResponse {
@@ -35,7 +35,6 @@ fn vrf_filter(
     warp::path!("api" / "vrf").map(move || {
         let public_key = (curve::StarkCurve::GENERATOR * secret_key).into_affine();
 
-        // Increment the seed
         let seed_value = seed_counter.fetch_add(1, Ordering::SeqCst) as u64;
         let seed_bigint = BigInteger256::from(seed_value);
         let seed = BaseField::new(seed_bigint);
@@ -62,24 +61,14 @@ fn vrf_filter(
 
 #[tokio::main]
 async fn main() {
-    if env::var("VERCEL").is_err() {
-        dotenv::dotenv().ok();
-    }
+    dotenv::dotenv().ok();
 
     let secret_key_value = env::var("VITE_SECRET_KEY").expect("VITE_SECRET_KEY must be set");
     let secret_key = ScalarField::from(secret_key_value.parse::<u64>().unwrap());
 
     let seed_counter = Arc::new(AtomicUsize::new(42));
 
-    // Define the VRF endpoint
     let vrf = vrf_filter(seed_counter, secret_key);
 
-    // Check if the code is running in a Vercel environment
-    if env::var("VERCEL").is_ok() {
-        // In Vercel, export a handler function
-        warp::serve(vrf).run(([0, 0, 0, 0], 3000)).await;
-    } else {
-        // Local development
-        warp::serve(vrf).run(([127, 0, 0, 1], 3001)).await;
-    }
+    warp::serve(vrf).run(([0, 0, 0, 0], 3000)).await;
 }

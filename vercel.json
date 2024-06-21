@@ -7,12 +7,13 @@
       "config": { "distDir": "client/dist" }
     },
     {
-      "src": "api/**/Cargo.toml",
-      "use": "@vercel/rust"
+      "src": "api/src/main.rs",
+      "use": "@vercel/rust",
+      "config": { "functions": { "api/*": { "runtime": "@vercel/rust" } } }
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/main.rs" },
+    { "src": "/api/(.*)", "dest": "/api/src/main.rs" },
     { "src": "/(.*)", "dest": "/client/index.html" }
   ]
 }
