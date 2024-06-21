@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Card } from "@/dojo/game/types/card";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faKhanda, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Side } from "@/dojo/game/types/side";
 import {
@@ -57,7 +57,9 @@ const FlipCard: React.FC<FlipCardProps> = ({
   const score = useMemo(() => {
     return card.getScore(side);
   }, [card, side]);
+  const upgrade = useMemo(() => card.getUpgrade(side), [card, side]);
   const resource = useMemo(() => card.getResource(side), [card, side]);
+  console.log("upgrade", upgrade);
 
   const onMouseEnter = (action: ActionType) => {
     if (actionable) {
@@ -89,10 +91,24 @@ const FlipCard: React.FC<FlipCardProps> = ({
             <p className="font-bold text-black">{label}</p>
           </div>
 
+          {/* Score */}
           {!!score && (
             <div className="absolute top-0 left-0 p-3 flex gap-1 items-center">
               <p className="font-bold text-black">{score}</p>
               <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
+            </div>
+          )}
+
+          {/* Upgrade */}
+          {!!upgrade && (
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 p-3 flex gap-1 justify-center items-center">
+              {Array.from({ length: upgrade }).map((_, index) => (
+                <FontAwesomeIcon
+                  key={index}
+                  icon={faKhanda}
+                  className="text-slate-900 h-3"
+                />
+              ))}
             </div>
           )}
 

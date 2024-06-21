@@ -28,7 +28,16 @@ export const Mine: CardInterface = class Mine {
   }
 
   public static upgrade(side: Side): number {
-    return 0;
+    switch (side.value) {
+      case SideType.Two:
+        return 1;
+      case SideType.Three:
+        return 1;
+      case SideType.Four:
+        return 2;
+      default:
+        return 0;
+    }
   }
 
   public static update(side: Side, action: Action): Side {
