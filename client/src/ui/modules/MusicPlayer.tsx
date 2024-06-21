@@ -1,4 +1,3 @@
-import { Play, Pause } from "lucide-react";
 import { Button } from "@/ui/elements/button";
 import { Slider } from "@/ui/elements/slider";
 import { useMusicPlayer } from "@/contexts/music";
@@ -6,6 +5,8 @@ import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useDojo } from "@/dojo/useDojo";
 import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faVolumeHigh, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
 
 export const MusicPlayer = () => {
   const {
@@ -68,9 +69,9 @@ export const MusicPlayer = () => {
           size={"sm"}
         >
           {isPlaying ? (
-            <Pause className="fill-transparen" />
+            <FontAwesomeIcon className="h-6 w-6" icon={faVolumeMute} />
           ) : (
-            <Play className="fill-transparent" />
+            <FontAwesomeIcon className="h-6 w-6" icon={faVolumeHigh} />
           )}
         </Button>
 
