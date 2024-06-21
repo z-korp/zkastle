@@ -18,10 +18,10 @@ export class Player {
   constructor(player: ComponentValue) {
     this.id = player.id;
     this.game_id = player.game_id;
-    this.achievements = Packer.unpack(player.achievements, 2n)
+    this.achievements = Packer.unpack(BigInt(player.achievements), 1n)
       .map((value, index) => {
         if (value === 0) return null;
-        let id = index + 1;
+        const id = index + 1;
         return { id, achievement: Achievement.from(id) };
       })
       .filter((detail) => detail !== null) as AchivementDetail[];
