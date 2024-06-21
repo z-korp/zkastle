@@ -7,10 +7,9 @@ edition = "2023_10"
 sierra-replace-ids = true
 
 [scripts]
-deploy-dev = "sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan --name v2 && sozo --profile dev migrate apply --name v2"
-deploy-slot = "sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name v2 && sozo --profile slot migrate apply --name v2"
-deploy-sepolia = "sozo --profile sepolia clean && sozo --profile sepolia clean && sozo --profile sepolia build && sozo --profile sepolia migrate plan --name zklash-v01 && sozo --profile sepolia migrate apply --fee-estimate-multiplier 10 --name zklash-v01 && ./scripts/authorize.sh sepolia"
-
+deploy-dev = "sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan --name $NAME && sozo --profile dev migrate apply --name $NAME"
+deploy-slot = "NAME=v3 && sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name $NAME && sozo --profile slot migrate apply --name $NAME"
+deploy-sepolia = "NAME=v3 && sozo --profile sepolia clean && sozo --profile sepolia build && sozo --profile sepolia migrate plan --name $NAME && sozo --profile sepolia migrate apply --name $NAME"
 
 [dependencies]
 alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria", rev = "78b0d51" }
@@ -32,12 +31,21 @@ rpc_url = "https://api.cartridge.gg/x/zkastle/katana"
 account_address = "0x7f72521e15721c6e0ea834aee0ca964147b6de30351ba761b3548f7d1a8beb8"
 private_key = "0x31f6f3f619373d03d9a7dcf219f863925f470ee577577f7731d510ce81cbed6"
 
+# Sepolia
+[profile.sepolia.tool.dojo.env]
+rpc_url = "https://starknet-mainnet.public.blastapi.io/rpc/v0_7"
+#rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_6"
+#rpc_url = "https://free-rpc.nethermind.io/sepolia-juno/v0_6"
+#rpc_url = "https://rpc.nethermind.io/sepolia-juno/v0_6?apiKey=supVUiu9olj34NdcUsq6T5dAFsp0ZpjMHyWlGJ1Zd6GtRiVr"
+account_address = ""
+private_key = ""
+
 [tool.dojo.world]
 name = "zKastle"
-description = "Deck builder game."
+description = "Solo strategy card game."
 cover_uri = "file://assets/cover.png"
 icon_uri = "file://assets/icon.png"
-website = "https://github.com/dojoengine/dojo-starter"
+website = "https://app.zkastle.xyz"
 
 [tool.dojo.world.socials]
 x = "https://x.com/ohayo_dojo"
