@@ -223,9 +223,9 @@ const FlipCard: React.FC<FlipCardProps> = ({
           style={{
             backgroundImage: `url('/assets/backside-bg.png')`,
           }}
-          className="bg-cover bg-center flip-card-back absolute flex flex-col justify-center w-full h-full shadow-md  text-white border border-coral rounded-xl backface-hidden"
+          className="bg-cover bg-center flip-card-back absolute flex items-center p-4 w-full h-full shadow-md text-white border border-coral rounded-xl backface-hidden"
         >
-          <p className="text-2xl text-white z-10">{bgDescription}</p>
+          <p className="text-xl text-white z-10">{bgDescription}</p>
         </div>
       </div>
     </div>

@@ -24,7 +24,13 @@ export const Start = () => {
   }, [account]);
 
   const disabled = useMemo(() => {
-    return !account || !master || account === master || !player || !!game;
+    return (
+      !account ||
+      !master ||
+      account === master ||
+      !player ||
+      (!!game && !game.isOver())
+    );
   }, [account, master, player, game]);
 
   if (disabled) return null;

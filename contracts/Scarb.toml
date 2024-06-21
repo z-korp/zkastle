@@ -7,8 +7,8 @@ edition = "2023_10"
 sierra-replace-ids = true
 
 [scripts]
-deploy-dev = "sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan --name v0 && sozo --profile dev migrate apply --name v0"
-deploy-slot = "sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name v1 && sozo --profile slot migrate apply --name v1"
+deploy-dev = "sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan --name v2 && sozo --profile dev migrate apply --name v2"
+deploy-slot = "sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name v2 && sozo --profile slot migrate apply --name v2"
 deploy-sepolia = "sozo --profile sepolia clean && sozo --profile sepolia clean && sozo --profile sepolia build && sozo --profile sepolia migrate plan --name zklash-v01 && sozo --profile sepolia migrate apply --fee-estimate-multiplier 10 --name zklash-v01 && ./scripts/authorize.sh sepolia"
 
 

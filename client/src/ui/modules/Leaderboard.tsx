@@ -7,6 +7,7 @@ import {
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -18,6 +19,7 @@ import { useGames } from "@/hooks/useGames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKhanda, faStar } from "@fortawesome/free-solid-svg-icons";
 import { usePlayer } from "@/hooks/usePlayer";
+import { useMemo } from "react";
 
 export const Leaderboard = () => {
   return (
@@ -39,8 +41,15 @@ export const Leaderboard = () => {
 
 export const Content = () => {
   const { games } = useGames();
+  const disabled = useMemo(
+    () => !games.filter((game) => !!game.getScore()),
+    [games],
+  );
   return (
     <Table className="text-md">
+      <TableCaption className={`${disabled && "hidden"}`}>
+        Leaderbord is waiting for its best players to make history
+      </TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="text-left">Rank</TableHead>

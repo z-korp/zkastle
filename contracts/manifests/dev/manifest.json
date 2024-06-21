@@ -999,10 +999,10 @@
         ]
       }
     ],
-    "address": "0x63abf335f66aeaefe2b35c329d944e0e33e8cc225f9dcb21fb82759a774f300",
-    "transaction_hash": "0x1c30388c969662b393b2ff55b7ce4bada609ada9289adf13c0a9e521fa286c2",
-    "block_number": 3,
-    "seed": "zkastle",
+    "address": "0x46036e917c1f2f1562df9d0cbdbaab518f1b550710af1911b301e89be809354",
+    "transaction_hash": "0x118f63874b44597cc88875bc9ba55ffd463d1ec541d8348ceff3426e87d50a5",
+    "block_number": 19,
+    "seed": "v2",
     "metadata": {
       "profile_name": "dev",
       "rpc_url": "http://localhost:5050/"
@@ -1019,9 +1019,9 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": "0x51ec0524b87b30b3309fab1da22400d2d119d447eee7d32297a9933baa6505e",
-      "class_hash": "0x77a98646e3a0f0604d040ff4aeb84899d0cec43850f26beb523dfd24e236dd6",
-      "original_class_hash": "0x77a98646e3a0f0604d040ff4aeb84899d0cec43850f26beb523dfd24e236dd6",
+      "address": "0x7f792e8be82a1926202815bfeb50a1a0d4d82e99ac0e172e692a765ac887127",
+      "class_hash": "0x531d88a9a1637f61e7842d5e291b90b714d26ad215b853d945434c2ef871552",
+      "original_class_hash": "0x531d88a9a1637f61e7842d5e291b90b714d26ad215b853d945434c2ef871552",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
