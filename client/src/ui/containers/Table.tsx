@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Card from "../components/Card/Card";
-import { Card as CardClass } from "@/dojo/game/types/card";
-import { Side } from "@/dojo/game/types/side";
 import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useDojo } from "@/dojo/useDojo";
 import { ShowUprade } from "../containers/ShowUpgrade";
+import { CardDetail } from "@/dojo/game/models/game";
 import { CARD_WIDTH, CARD_HEIGHT } from "../constants";
 
 enum PositionType {
@@ -47,7 +46,7 @@ const Table: React.FC = () => {
 
   const [cards, setCards] = useState<
     {
-      data: { card: CardClass; side: Side; id: number };
+      data: CardDetail;
       zIndex: number;
       position: PositionType;
     }[]
@@ -88,9 +87,9 @@ const Table: React.FC = () => {
   };
 
   useEffect(() => {
-    if (firstRender.current && game?.cardsFull && game?.getCardInHand()) {
-      const updatedCards = game.cardsFull.map((cardData, index: number) => ({
-        zIndex: game.cardsFull.length - index,
+    if (firstRender.current && game?.cards && game?.getCardInHand()) {
+      const updatedCards = game.cards.map((cardData, index: number) => ({
+        zIndex: game.cards.length - index,
         data: {
           card: cardData.card,
           side: cardData.side,
@@ -109,32 +108,40 @@ const Table: React.FC = () => {
 
     // Update the positions of the cards based on game state
     setCards((prevCards) => {
-      const updatedCards = game.cardsFull.map((cardData, index: number) => ({
-        id: cardData.id,
-        position: getPositions(index, game.getCardInHand()),
-      }));
+      const updatedCards = game.cards.map(
+        (cardData: CardDetail, index: number) => ({
+          id: cardData.id,
+          position: getPositions(index, game.getCardInHand()),
+          card: cardData.card,
+          side: cardData.side,
+        }),
+      );
 
-      return prevCards.map((card) => {
-        const updatedCard = updatedCards.find((c) => c.id === card.data.id);
+      return prevCards.map((cardData) => {
+        const updatedCard = updatedCards.find((c) => c.id === cardData.data.id);
 
         // if the card is moved from hand to deck, update the zIndex
         // to be the lowest of all cards
-        let zIndex = card.zIndex;
+        let zIndex = cardData.zIndex;
         if (
           updatedCard?.position === PositionType.Deck &&
-          (card.position === PositionType.First ||
-            card.position === PositionType.Second)
+          (cardData.position === PositionType.First ||
+            cardData.position === PositionType.Second)
         ) {
           zIndex = Math.min(...prevCards.map((card) => card.zIndex)) - 1;
         }
 
         return updatedCard
           ? {
-              ...card,
+              data: {
+                card: updatedCard.card,
+                side: updatedCard.side,
+                id: updatedCard.id,
+              },
               position: updatedCard.position,
               zIndex: zIndex,
             }
-          : card;
+          : cardData;
       });
     });
   }, [game]);
@@ -144,7 +151,7 @@ const Table: React.FC = () => {
   };
 
   const isFirstCardInDeck = (card: {
-    data: { card: CardClass; side: Side; id: number };
+    data: CardDetail;
     zIndex: number;
     position: PositionType;
   }) => {

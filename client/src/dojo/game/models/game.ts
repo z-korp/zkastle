@@ -26,8 +26,7 @@ export class Game {
   public move_count: number;
   public stores: CardDetail[];
   public sides: Side[];
-  public cards: Card[];
-  public cardsFull: { card: Card; side: Side; id: number }[];
+  public cards: CardDetail[];
   public player_id: string;
 
   constructor(game: ComponentValue) {
@@ -36,9 +35,6 @@ export class Game {
     this.deck = Deck.from(game.deck);
     this.move_count = game.move_count;
     this.player_id = game.player_id;
-    this.cards = Packer.unpack(BigInt(game.cards), CARD_BIT_SIZE).map(
-      (card: number) => Card.from(card),
-    );
     this.sides = Packer.unpack(BigInt(game.sides), SIDE_BIT_SIZE).map(
       (side: number) => Side.from(side),
     );
@@ -74,7 +70,7 @@ export class Game {
         id: card,
       };
     });
-    this.cardsFull = Packer.unpack(BigInt(game.cards), CARD_BIT_SIZE).map(
+    this.cards = Packer.unpack(BigInt(game.cards), CARD_BIT_SIZE).map(
       (card: number) => {
         if (card == 0)
           return {
@@ -89,12 +85,7 @@ export class Game {
         };
       },
     );
-    this.cardsFull = [
-      this.card_one,
-      this.card_two,
-      this.card_three,
-      ...this.cardsFull,
-    ];
+    this.cards = [this.card_one, this.card_two, this.card_three, ...this.cards];
   }
 
   public static getUniqueCards(): { card: Card; side: Side }[][] {
