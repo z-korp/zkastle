@@ -125,6 +125,23 @@ export class Game {
     return score;
   }
 
+  public getUpgrade(): number {
+    let upgrade = 0;
+    this.sides.forEach((side: Side, index: number) => {
+      const id = index + 1;
+      const card = this.deck.reveal(id);
+      upgrade += card.getUpgrade(side);
+    });
+    return upgrade;
+  }
+
+  public getRemaining(): number {
+    if (!!this.card_three.id) return this.move_count + 3;
+    if (!!this.card_two.id) return this.move_count + 2;
+    if (!!this.card_one.id) return this.move_count + 1;
+    return this.move_count;
+  }
+
   public isAffordable(resources: bigint, costs: Resource[]): boolean {
     let resource = new Resource(0, 0, 0);
     Packer.unpack(resources, CARD_BIT_SIZE)

@@ -34,7 +34,7 @@ export const Collection = () => {
         <Button variant="outline">Collection</Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="w-full max-w-sm md:max-w-full">
+        <div className="w-full max-w-sm md:max-w-full m-auto">
           <DrawerHeader>
             <DrawerTitle className="text-center text-2xl">
               Card collection
@@ -48,7 +48,10 @@ export const Collection = () => {
           >
             <CarouselContent className="flex">
               {groups.map((group, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/5">
+                <CarouselItem
+                  key={index}
+                  className="sm:basis-1/2 md:basis-1/3 lg:basis-1/5 xl:basis-1/6"
+                >
                   <Canvas items={group} />
                 </CarouselItem>
               ))}
@@ -75,6 +78,7 @@ export const Canvas = ({
 
   return (
     <div className="flex flex-col justify-center items-center gap-2 pb-2">
+      <Card data={{ ...item, id: 0 }} isFlipped={false} />
       <Pagination>
         <PaginationContent>
           {items.map(({ side }, index) => (
@@ -90,7 +94,6 @@ export const Canvas = ({
           ))}
         </PaginationContent>
       </Pagination>
-      <Card data={{ ...item, id: 0 }} isFlipped={false} />
     </div>
   );
 };

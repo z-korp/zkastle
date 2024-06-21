@@ -44,7 +44,7 @@ export const Achievements = () => {
         <Button variant="outline">Achievements</Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="w-full max-w-sm md:max-w-full">
+        <div className="w-full max-w-sm md:max-w-full m-auto">
           <DrawerHeader>
             <DrawerTitle className="text-center text-2xl">
               Achievements
@@ -56,9 +56,12 @@ export const Achievements = () => {
             orientation={"horizontal"}
             opts={{ dragFree: isMdOrLarger }}
           >
-            <CarouselContent className="flex items-end">
+            <CarouselContent className="flex items-start">
               {groups.map((group, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/5">
+                <CarouselItem
+                  key={index}
+                  className="sm:basis-1/2 md:basis-1/3 lg:basis-1/5 xl:basis-1/6"
+                >
                   <Canvas
                     items={group}
                     has={
@@ -123,6 +126,20 @@ export const Canvas = ({
 
   return (
     <div className="flex flex-col justify-center items-center gap-2 pb-2">
+      <div className="flex justify-center items-center">
+        <FontAwesomeIcon icon={has ? faLockOpen : faLock} className="h-8 w-8" />
+      </div>
+      <div
+        className={``}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+      >
+        <Card
+          data={{ card: item.card, side: item.side, id: 0 }}
+          isFlipped={hover}
+          bgDescription={item.achievement.description()}
+        />
+      </div>
       <Pagination>
         <PaginationContent>
           {items.map(({ side }, index) => (
@@ -138,20 +155,6 @@ export const Canvas = ({
           ))}
         </PaginationContent>
       </Pagination>
-      <div className="flex justify-center items-center">
-        <FontAwesomeIcon icon={has ? faLockOpen : faLock} className="h-8 w-8" />
-      </div>
-      <div
-        className={``}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
-        <Card
-          data={{ card: item.card, side: item.side, id: 0 }}
-          isFlipped={hover}
-          bgDescription={item.achievement.description()}
-        />
-      </div>
     </div>
   );
 };

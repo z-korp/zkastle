@@ -6,6 +6,7 @@ import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useGame } from "@/hooks/useGame";
 import { Surrender } from "../actions/Surrender";
+import { useMemo } from "react";
 
 export const Info = ({
   count,
@@ -26,11 +27,18 @@ export const Info = ({
     gameId: player?.game_id || "0x0",
   });
 
+  const remaining = useMemo(() => {
+    return game?.getRemaining() || 0;
+  }, [game]);
+
   if (!player || !game || game.isOver()) return null;
 
   return (
     <div className="h-full w-full flex justify-between items-start">
-      <p className="text-6xl">{count}</p>
+      <div className="flex flex-col gap-2 items-center">
+        <span className="text-lg">Remaining</span>
+        <p className="text-6xl">{remaining}</p>
+      </div>
 
       <div className="flex flex-col justify-center items-center gap-2">
         <div className="flex items-center gap-2">
@@ -54,7 +62,7 @@ export const Info = ({
         <Storage />
         <Cost
           resources={[game.getStorageResource()]}
-          textColor="text-white"
+          textColor=""
           col
           gap={2}
         />

@@ -59,7 +59,6 @@ const FlipCard: React.FC<FlipCardProps> = ({
   }, [card, side]);
   const upgrade = useMemo(() => card.getUpgrade(side), [card, side]);
   const resource = useMemo(() => card.getResource(side), [card, side]);
-  console.log("upgrade", upgrade);
 
   const onMouseEnter = (action: ActionType) => {
     if (actionable) {

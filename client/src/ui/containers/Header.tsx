@@ -17,7 +17,7 @@ import {
 } from "@/ui/elements/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Leaderboard } from "./Leaderboard";
+import { Leaderboard } from "../modules/Leaderboard";
 import { Achievements } from "../modules/Achievements";
 
 export const Header = () => {
