@@ -3,5 +3,6 @@
     "api/**/*.rs": {
       "runtime": "vercel-rust@4.0.7"
     }
-  }
+  },
+  "routes": [{ "src": "/api/(.*)", "dest": "/api/src/main.rs" }]
 }
