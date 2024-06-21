@@ -1,23 +1,12 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "client/vite.config.js",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "client/dist" }
-    },
-    {
-      "src": "api/src/main.rs",
-      "use": "@vercel/rust"
-    }
-  ],
   "functions": {
     "api/src/main.rs": {
-      "runtime": "vercel-rust@1.0.0"
+      "runtime": "vercel-rust"
     }
   },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/src/main.rs" },
-    { "src": "/(.*)", "dest": "/client/dist/$1" }
+    { "src": "/(.*)", "dest": "/client/dist/index.html" }
   ]
 }
