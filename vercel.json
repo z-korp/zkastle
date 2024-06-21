@@ -8,12 +8,16 @@
     },
     {
       "src": "api/src/main.rs",
-      "use": "@vercel/rust",
-      "config": { "functions": { "api/*": { "runtime": "@vercel/rust" } } }
+      "use": "@vercel/rust"
     }
   ],
+  "functions": {
+    "api/src/main.rs": {
+      "runtime": "vercel-rust@1.0.0"
+    }
+  },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/src/main.rs" },
-    { "src": "/(.*)", "dest": "/client/index.html" }
+    { "src": "/(.*)", "dest": "/client/dist/$1" }
   ]
 }
