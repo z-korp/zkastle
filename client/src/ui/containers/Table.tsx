@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import FlipCard from "../components/FlipCard/FlipCard";
-import { Card } from "@/dojo/game/types/card";
+import Card from "../components/Card/Card";
+import { Card as CardClass } from "@/dojo/game/types/card";
 import { Side } from "@/dojo/game/types/side";
 import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
@@ -11,7 +11,6 @@ import { CARD_WIDTH, CARD_HEIGHT } from "../constants";
 
 enum PositionType {
   Deck,
-  Discard,
   Second,
   First,
 }
@@ -20,11 +19,7 @@ const getPositionCoordinates = (width: number, height: number) => {
   const widthBetweenCards = Math.max(width / 30, 15);
   return {
     [PositionType.Deck]: {
-      x: -CARD_WIDTH / 2, // -CARD_WIDTH - widthBetweenCards / 2,
-      y: height / 8,
-    },
-    [PositionType.Discard]: {
-      x: -CARD_WIDTH / 2, // widthBetweenCards,
+      x: -CARD_WIDTH / 2,
       y: height / 8,
     },
     [PositionType.Second]: {
@@ -50,11 +45,9 @@ const Table: React.FC = () => {
     gameId: player?.game_id || "0x0",
   });
 
-  const [firstDeckHover, setFirstDeckHover] = useState(true);
-
   const [cards, setCards] = useState<
     {
-      data: { card: Card; side: Side; id: number };
+      data: { card: CardClass; side: Side; id: number };
       zIndex: number;
       position: PositionType;
     }[]
@@ -63,9 +56,9 @@ const Table: React.FC = () => {
     getPositionCoordinates(window.innerWidth, window.innerHeight),
   );
 
-  const [discardCoordinates, setDiscardCoordinates] = useState(
+  const [deckCoordinates, setDeckCoordinates] = useState(
     getPositionCoordinates(window.innerWidth, window.innerHeight)[
-      PositionType.Discard
+      PositionType.Deck
     ],
   );
 
@@ -76,7 +69,7 @@ const Table: React.FC = () => {
         window.innerHeight,
       );
       setCoordinates(newCoordinates);
-      setDiscardCoordinates(newCoordinates[PositionType.Discard]);
+      setDeckCoordinates(newCoordinates[PositionType.Deck]);
     };
 
     window.addEventListener("resize", handleResize);
@@ -151,7 +144,7 @@ const Table: React.FC = () => {
   };
 
   const isFirstCardInDeck = (card: {
-    data: { card: Card; side: Side; id: number };
+    data: { card: CardClass; side: Side; id: number };
     zIndex: number;
     position: PositionType;
   }) => {
@@ -171,7 +164,7 @@ const Table: React.FC = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="relative">
-        <ShowUprade coords={discardCoordinates} />
+        <ShowUprade coords={deckCoordinates} />
         {cards.map((card, index) => {
           // Get deck cards and sort them by zIndex in descending order
           const deckCards = cards
@@ -197,20 +190,12 @@ const Table: React.FC = () => {
               style={{
                 zIndex: card.zIndex,
               }}
-              onMouseEnter={() => {
-                if (isFirstCardInDeck(card)) setFirstDeckHover(true);
-              }}
-              onMouseLeave={() => {
-                if (isFirstCardInDeck(card)) setFirstDeckHover(false);
-              }}
             >
-              <FlipCard
+              <Card
                 isFlipped={
-                  // Show the card flipped if in Deck pile
-                  // If it's the first card in the deck, show it flipped only if hovering
+                  // Show the card flipped if in Deck pile except for the first card
                   card.position === PositionType.Deck &&
-                  (!isFirstCardInDeck(card) ||
-                    (isFirstCardInDeck(card) && !firstDeckHover))
+                  !isFirstCardInDeck(card)
                 }
                 data={{
                   card: card.data.card,

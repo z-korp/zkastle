@@ -30,10 +30,7 @@ export const Info = ({
 
   return (
     <div className="h-full w-full flex justify-between items-start">
-      <div>
-        <p>{`Round ${8 - Math.floor(count / 16)} / 8`}</p>
-        <p className="text-6xl">{count}</p>
-      </div>
+      <p className="text-6xl">{count}</p>
 
       <div className="flex flex-col justify-center items-center gap-2">
         <div className="flex items-center gap-2">

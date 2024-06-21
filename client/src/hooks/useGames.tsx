@@ -1,8 +1,7 @@
 import { useDojo } from "@/dojo/useDojo";
-import { useEffect, useMemo, useState } from "react";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { useComponentValue, useEntityQuery } from "@dojoengine/react";
-import { Entity, Has, getComponentValue } from "@dojoengine/recs";
+import { useEffect, useState } from "react";
+import { useEntityQuery } from "@dojoengine/react";
+import { Has, getComponentValue } from "@dojoengine/recs";
 import { Game } from "@/dojo/game/models/game";
 
 export const useGames = (): { games: Game[] } => {

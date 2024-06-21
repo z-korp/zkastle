@@ -19,11 +19,10 @@ import {
 import { Button } from "@/ui/elements/button";
 import { Side, SideType } from "@/dojo/game/types/side";
 import { Card as CardClass } from "@/dojo/game/types/card";
-import { Card } from "../components/Card";
 import { Game } from "@/dojo/game/models/game";
 import { useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import FlipCard from "../components/FlipCard/FlipCard";
+import Card from "../components/Card/Card";
 
 export const Collection = () => {
   const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
@@ -91,7 +90,7 @@ export const Canvas = ({
           ))}
         </PaginationContent>
       </Pagination>
-      <FlipCard data={{ ...item, id: 0 }} isFlipped={false} />
+      <Card data={{ ...item, id: 0 }} isFlipped={false} />
     </div>
   );
 };

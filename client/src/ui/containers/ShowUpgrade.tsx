@@ -1,6 +1,6 @@
 import { useGameStore } from "@/stores/game";
 import { motion, AnimatePresence } from "framer-motion";
-import FlipCard from "../components/FlipCard/FlipCard";
+import Card from "../components/Card/Card";
 
 interface ShowUpradeProps {
   coords: { x: number; y: number };
@@ -32,7 +32,7 @@ export const ShowUprade: React.FC<ShowUpradeProps> = ({ coords }) => {
           transition={{ type: "spring", stiffness: 80 }}
           className="absolute z-50"
         >
-          <FlipCard
+          <Card
             data={{
               card: upgradeToShow.card,
               side: upgradeToShow.side,

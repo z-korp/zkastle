@@ -27,7 +27,7 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { Achievement } from "@/dojo/game/types/achievement";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
-import FlipCard from "../components/FlipCard/FlipCard";
+import Card from "../components/Card/Card";
 
 export const Achievements = () => {
   const {
@@ -110,7 +110,7 @@ export const Canvas = ({
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          <FlipCard
+          <Card
             data={{ card, side, id: 0 }}
             isFlipped={hover}
             fgDescription={achievement.effect()}
@@ -146,7 +146,7 @@ export const Canvas = ({
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        <FlipCard
+        <Card
           data={{ card: item.card, side: item.side, id: 0 }}
           isFlipped={hover}
           bgDescription={item.achievement.description()}

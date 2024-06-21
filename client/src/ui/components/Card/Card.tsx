@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import "./FlipCard.css";
 import { Card } from "@/dojo/game/types/card";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,6 +19,7 @@ import { Action, ActionType } from "@/dojo/game/types/action";
 import { Cost } from "../Cost";
 import { useGameStore } from "@/stores/game";
 import { CARD_WIDTH, CARD_HEIGHT } from "@/ui/constants";
+import "./Card.css";
 
 interface FlipCardProps {
   data: { card: Card; side: Side; id: number };
