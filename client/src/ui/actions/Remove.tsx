@@ -1,5 +1,5 @@
 import { useDojo } from "@/dojo/useDojo";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
@@ -24,12 +24,19 @@ export const Remove = ({ index }: { index: number }) => {
     gameId: player?.game_id || "0x0",
   });
 
-  const handleClick = useCallback(() => {
-    remove({
-      account: account as Account,
-      slot_index: index,
-    });
-    setResources(0n);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await remove({
+        account: account as Account,
+        slot_index: index,
+      });
+      setResources(0n);
+    } finally {
+      setIsLoading(false);
+    }
   }, [account]);
 
   const disabled = useMemo(() => {
@@ -37,7 +44,12 @@ export const Remove = ({ index }: { index: number }) => {
   }, [account, master, player, game]);
 
   return (
-    <Button disabled={disabled} onClick={handleClick} className="h-8 w-8">
+    <Button
+      disabled={disabled || isLoading}
+      isLoading={isLoading}
+      onClick={handleClick}
+      className="h-8 w-8"
+    >
       <FontAwesomeIcon icon={faTrash} />
     </Button>
   );

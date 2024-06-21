@@ -1,6 +1,5 @@
 import { useDojo } from "@/dojo/useDojo";
 import { useCallback, useMemo, useState } from "react";
-import { Account } from "starknet";
 import {
   Dialog,
   DialogContent,
@@ -13,9 +12,12 @@ import {
 import { Button } from "@/ui/elements/button";
 import { Input } from "@/ui/elements/input";
 import { usePlayer } from "@/hooks/usePlayer";
+import { Account } from "starknet";
 
 export const Create = () => {
   const [playerName, setPlayerName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     account: { account },
     master,
@@ -26,8 +28,13 @@ export const Create = () => {
 
   const { player } = usePlayer({ playerId: account.address });
 
-  const handleClick = useCallback(() => {
-    create({ account: account as Account, name: playerName });
+  const handleClick = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await create({ account: account as Account, name: playerName });
+    } finally {
+      setIsLoading(false);
+    }
   }, [account, playerName]);
 
   const disabled = useMemo(() => {
@@ -48,7 +55,7 @@ export const Create = () => {
         </DialogHeader>
 
         <Input
-          className="`w-20"
+          className="w-20"
           placeholder="Player Name"
           type="text"
           value={playerName}
@@ -58,7 +65,11 @@ export const Create = () => {
         />
 
         <DialogClose asChild>
-          <Button disabled={!playerName} onClick={handleClick}>
+          <Button
+            disabled={!playerName || isLoading}
+            isLoading={isLoading}
+            onClick={handleClick}
+          >
             Create my Profile
           </Button>
         </DialogClose>

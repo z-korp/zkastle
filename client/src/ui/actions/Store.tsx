@@ -1,5 +1,5 @@
 import { useDojo } from "@/dojo/useDojo";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
@@ -32,29 +32,37 @@ export const Store = ({
     gameId: player?.game_id || "0x0",
   });
 
-  const handleClick = useCallback(() => {
-    const paid = costs.filter((cost) => !cost.isNull()).length > 0;
-    // If free, then send the store action
-    if (!paid) {
-      play({
-        account: account as Account,
-        action: new Action(ActionType.Store).into(),
-        choice,
-        resources: 0n,
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const paid = costs.filter((cost) => !cost.isNull()).length > 0;
+      // If free, then send the store action
+      if (!paid) {
+        await play({
+          account: account as Account,
+          action: new Action(ActionType.Store).into(),
+          choice,
+          resources: 0n,
+        });
+        return;
+      }
+      // Otherwise, open the storage modal and set the costs
+      setStorage(true);
+      setCosts(costs);
+      setCallback(async (resources: bigint) => {
+        await play({
+          account: account as Account,
+          action: new Action(ActionType.Store).into(),
+          choice,
+          resources,
+        });
+        setIsLoading(false);
       });
-      return;
+    } finally {
+      setIsLoading(false);
     }
-    // Otherwise, open the storage modal and set the costs
-    setStorage(true);
-    setCosts(costs);
-    setCallback((resources: bigint) => {
-      play({
-        account: account as Account,
-        action: new Action(ActionType.Store).into(),
-        choice,
-        resources,
-      });
-    });
   }, [account, costs]);
 
   const disabled = useMemo(() => {
@@ -67,7 +75,8 @@ export const Store = ({
     <Button
       className="w-[55px] h-[28px]"
       size="sm"
-      disabled={disabled}
+      disabled={disabled || isLoading}
+      isLoading={isLoading}
       onClick={handleClick}
     >
       Store

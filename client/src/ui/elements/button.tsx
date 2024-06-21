@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import useSound from "use-sound";
 import hover from "/sounds/effects/hover.wav";
@@ -7,6 +7,7 @@ import click from "/sounds/effects/click.wav";
 
 import { cn } from "@/ui/utils";
 import { useMusicPlayer } from "@/contexts/music";
+import { LucideLoader } from "lucide-react";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
@@ -42,10 +43,22 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  isLoading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  (
+    {
+      isLoading = false,
+      className,
+      variant,
+      size,
+      asChild = false,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
     const { volume } = useMusicPlayer();
     const Comp = asChild ? Slot : "button";
     const [playHover] = useSound(hover, { volume });
@@ -57,7 +70,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onMouseEnter={() => playHover()}
         onMouseDown={() => playClick()}
         {...props}
-      />
+      >
+        {isLoading ? (
+          <div className="flex gap-2 items-center">
+            {children}
+            <LucideLoader className="animate-spin-slow" size={15} />
+          </div>
+        ) : (
+          children
+        )}
+      </Comp>
     );
   },
 );

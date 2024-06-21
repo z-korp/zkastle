@@ -1,5 +1,5 @@
 import { useDojo } from "@/dojo/useDojo";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
@@ -19,8 +19,15 @@ export const Surrender = () => {
     gameId: player?.game_id || "0x0",
   });
 
-  const handleClick = useCallback(() => {
-    surrender({ account: account as Account });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await surrender({ account: account as Account });
+    } finally {
+      setIsLoading(false);
+    }
   }, [account]);
 
   const disabled = useMemo(() => {
@@ -30,7 +37,11 @@ export const Surrender = () => {
   if (disabled) return null;
 
   return (
-    <Button disabled={disabled} onClick={handleClick}>
+    <Button
+      disabled={disabled || isLoading}
+      isLoading={isLoading}
+      onClick={handleClick}
+    >
       Surrender
     </Button>
   );

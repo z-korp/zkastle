@@ -1,5 +1,5 @@
 import { useDojo } from "@/dojo/useDojo";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
@@ -23,14 +23,21 @@ export const Discard = ({ choice }: { choice: boolean }) => {
     gameId: player?.game_id || "0x0",
   });
 
-  const handleClick = useCallback(() => {
-    play({
-      account: account as Account,
-      action: new Action(ActionType.Discard).into(),
-      choice,
-      resources: 0n,
-    });
-    setResources(0n);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await play({
+        account: account as Account,
+        action: new Action(ActionType.Discard).into(),
+        choice,
+        resources: 0n,
+      });
+      setResources(0n);
+    } finally {
+      setIsLoading(false);
+    }
   }, [account]);
 
   const disabled = useMemo(() => {
@@ -41,7 +48,8 @@ export const Discard = ({ choice }: { choice: boolean }) => {
     <Button
       className="w-[55px] h-[28px]"
       size="sm"
-      disabled={disabled}
+      disabled={disabled || isLoading}
+      isLoading={isLoading}
       onClick={handleClick}
     >
       Discard
