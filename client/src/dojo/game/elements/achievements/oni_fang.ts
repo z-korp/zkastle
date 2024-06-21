@@ -38,6 +38,10 @@ export const OniFang: AchievementInterface = class OniFang {
   }
 
   public static description(): string {
-    return "Have 30 points or more and 2 upgrades on all farms in the deck.";
+    return "Have 30+ points and all Farms at III at the end of the game.";
+  }
+
+  public static effect(): string {
+    return "Start the game with one Farm at II";
   }
 };

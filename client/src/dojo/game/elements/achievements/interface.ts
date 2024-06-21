@@ -11,4 +11,5 @@ export interface AchievementInterface {
   ): boolean;
   sides(deck: Deck, sides: Side[]): Side[];
   description(): string;
+  effect(): string;
 }

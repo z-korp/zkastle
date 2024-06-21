@@ -6,6 +6,8 @@ import { Side, SideType } from "../../types/side";
 import { CardInterface } from "./interface";
 import { Tower } from "./tower";
 
+const MESSAGE = "Towers at III";
+
 export const SpiritualForge: CardInterface = class SpiritualForge {
   public static resource(side: Side): Resource {
     return new Resource(0, 0, 0);
@@ -55,6 +57,13 @@ export const SpiritualForge: CardInterface = class SpiritualForge {
 
   public static cost(side: Side, action: Action): Resource[] {
     switch (action.value) {
+      case ActionType.Flip:
+        switch (side.value) {
+          case SideType.One:
+            return [new Resource(0, 0, 0, MESSAGE)];
+          default:
+            return [];
+        }
       case ActionType.Rotate:
         switch (side.value) {
           case SideType.Three:

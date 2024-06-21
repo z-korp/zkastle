@@ -34,4 +34,8 @@ export const SpiritualForge: AchievementInterface = class SpiritualForge {
   public static description(): string {
     return "Have 30 points or more and all monasteries are unupgraded.";
   }
+
+  public static effect(): string {
+    return "";
+  }
 };

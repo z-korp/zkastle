@@ -44,6 +44,11 @@ export const Cost = ({
               <Iron height={height} width={width} />
             </div>
           )}
+          {!!resource.message && (
+            <div className={`flex items-center gap-${gap}`}>
+              <p className="font-bold text-sm">{resource.message}</p>
+            </div>
+          )}
         </div>
       ))}
     </div>

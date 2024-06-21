@@ -34,6 +34,7 @@ interface FlipCardProps {
   width?: string;
   scale?: string;
   bgDescription?: string;
+  fgDescription?: string;
 }
 
 const FlipCard: React.FC<FlipCardProps> = ({
@@ -46,6 +47,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
   noBg = false,
   stored = false,
   bgDescription = "",
+  fgDescription = "",
 }) => {
   const { card, side } = data;
 
@@ -94,6 +96,14 @@ const FlipCard: React.FC<FlipCardProps> = ({
             </div>
           )}
 
+          {/* Foreground Description */}
+          <div
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10`}
+          >
+            <p className="text-lg z-10 text-black">{fgDescription}</p>
+          </div>
+
+          {/* Resources */}
           <div className={`absolute bottom-1/2 left-1/2 -translate-x-1/2 z-10`}>
             <TooltipProvider>
               <Tooltip>
@@ -108,9 +118,12 @@ const FlipCard: React.FC<FlipCardProps> = ({
               </Tooltip>
             </TooltipProvider>
           </div>
+
+          {/* Actions */}
           <div className="flex flex-col justify-between h-full pt-8 pb-4">
             <Badge className="flex mx-auto text z-10">{card.value}</Badge>
             <div className="flex flex-col gap-2 items-start z-10 ml-2">
+              {/* Store */}
               {card.isAllowed(side, new Action(ActionType.Store)) && (
                 <div className="flex gap-2 items-center">
                   <Store
@@ -123,6 +136,8 @@ const FlipCard: React.FC<FlipCardProps> = ({
                   />
                 </div>
               )}
+
+              {/* Rotate */}
               {!noButton &&
                 card.isAllowed(side, new Action(ActionType.Rotate)) && (
                   <div className="flex gap-2 items-center">
@@ -149,16 +164,10 @@ const FlipCard: React.FC<FlipCardProps> = ({
                         new Action(ActionType.Rotate),
                       )}
                     />
-                    {/*<FontAwesomeIcon
-                className="block md:hidden"
-                icon={faEye}
-                onMouseEnter={() =>
-                  onMouseEnter(ActionType.Rotate)
-                }
-                onMouseLeave={() => resetUpgradeToShow()}
-              />*/}
                   </div>
                 )}
+
+              {/* Flip */}
               {!noButton &&
                 card.isAllowed(side, new Action(ActionType.Flip)) && (
                   <div className="flex gap-2 items-center">
@@ -183,6 +192,8 @@ const FlipCard: React.FC<FlipCardProps> = ({
                     />
                   </div>
                 )}
+
+              {/* Discard */}
               {!noButton &&
                 first &&
                 card.isAllowed(side, new Action(ActionType.Discard)) && (
@@ -191,6 +202,8 @@ const FlipCard: React.FC<FlipCardProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Background description */}
         <div
           style={{
             backgroundImage: `url('/assets/backside-bg.png')`,

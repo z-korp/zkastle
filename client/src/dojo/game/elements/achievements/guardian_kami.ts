@@ -20,4 +20,8 @@ export const GuardianKami: AchievementInterface = class GuardianKami {
   public static description(): string {
     return "Have 30 points or more at the end of the game.";
   }
+
+  public static effect(): string {
+    return "";
+  }
 };

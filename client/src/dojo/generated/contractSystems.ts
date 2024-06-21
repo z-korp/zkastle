@@ -2,7 +2,12 @@
 
 import { DojoProvider } from "@dojoengine/core";
 import { Config } from "../../../dojo.config.ts";
-import { Account, UniversalDetails, shortString } from "starknet";
+import {
+  Account,
+  InvocationsDetails,
+  UniversalDetails,
+  shortString,
+} from "starknet";
 
 export interface Signer {
   account: Account;

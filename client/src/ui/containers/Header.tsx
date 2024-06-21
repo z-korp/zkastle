@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "@/ui/components/Theme";
 import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
-import { Collection } from "./Collection";
+import { Collection } from "../modules/Collection";
 import { MusicPlayer } from "../modules/MusicPlayer";
 import { useMediaQuery } from "react-responsive";
 import {

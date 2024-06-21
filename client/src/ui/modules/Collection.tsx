@@ -19,6 +19,7 @@ import {
 import { Button } from "@/ui/elements/button";
 import { Side, SideType } from "@/dojo/game/types/side";
 import { Card as CardClass } from "@/dojo/game/types/card";
+import { Card } from "../components/Card";
 import { Game } from "@/dojo/game/models/game";
 import { useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";

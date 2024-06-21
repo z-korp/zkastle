@@ -141,4 +141,29 @@ export class Achievement {
         return "";
     }
   }
+
+  public effect(): string {
+    switch (this.value) {
+      case AchievementType.OniFang:
+        return OniFang.effect();
+      case AchievementType.ShrineOfValor:
+        return ShrineOfValor.effect();
+      case AchievementType.DragonHeart:
+        return DragonHeart.effect();
+      case AchievementType.GuardianKami:
+        return GuardianKami.effect();
+      case AchievementType.SpiritualForge:
+        return SpiritualForge.effect();
+      case AchievementType.SamuraiHorn:
+        return SamuraiHorn.effect();
+      case AchievementType.OracleStone:
+        return OracleStone.effect();
+      case AchievementType.MonkStaff:
+        return MonkStaff.effect();
+      case AchievementType.ShogunAxe:
+        return ShogunAxe.effect();
+      default:
+        return "";
+    }
+  }
 }

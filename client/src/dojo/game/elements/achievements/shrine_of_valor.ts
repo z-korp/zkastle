@@ -34,4 +34,8 @@ export const ShrineOfValor: AchievementInterface = class ShrineOfValor {
   public static description(): string {
     return "Have 30 points or more and 3 upgrades on all monasteries in the deck.";
   }
+
+  public static effect(): string {
+    return "";
+  }
 };

@@ -113,6 +113,7 @@ export const Canvas = ({
           <FlipCard
             data={{ card, side, id: 0 }}
             isFlipped={hover}
+            fgDescription={achievement.effect()}
             bgDescription={achievement.description()}
           />
         </div>
