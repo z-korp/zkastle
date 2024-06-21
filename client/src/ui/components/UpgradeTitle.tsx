@@ -10,7 +10,7 @@ export const UpgradeTitle = ({ score }: { score: number }) => {
           size="2xs"
           className="text-slate-500"
         />
-        <p className="text-base">Upgrade</p>
+        <p className="text-base">Upgrades</p>
         <FontAwesomeIcon
           size="2xs"
           icon={faKhanda}

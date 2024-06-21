@@ -42,9 +42,12 @@ export const Leaderboard = () => {
 export const Content = () => {
   const { games } = useGames();
   const disabled = useMemo(
-    () => !games.filter((game) => !!game.getScore()),
+    () =>
+      games.filter((game) => !!game.getScore() || !!game.getUpgrade()).length >
+      0,
     [games],
   );
+
   return (
     <Table className="text-md">
       <TableCaption className={`${disabled && "hidden"}`}>
@@ -68,7 +71,7 @@ export const Content = () => {
           .sort((a, b) => b.getUpgrade() - a.getUpgrade())
           .sort((a, b) => b.getScore() - a.getScore())
           .slice(0, 10)
-          .filter((game) => !!game.getScore())
+          .filter((game) => !!game.getScore() || !!game.getUpgrade())
           .map((game, index) => (
             <Row key={index} rank={index + 1} game={game} />
           ))}
