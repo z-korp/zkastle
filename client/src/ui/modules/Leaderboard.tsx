@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/ui/elements/table";
 import { Button } from "@/ui/elements/button";
-import { Game } from "@/dojo/game/models/game";
+import { AchievementDetail, Game } from "@/dojo/game/models/game";
 import { useGames } from "@/hooks/useGames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKhanda, faStar } from "@fortawesome/free-solid-svg-icons";
@@ -43,9 +43,14 @@ export const Content = () => {
     <Table className="text-md">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Rank</TableHead>
-          <TableHead className="w-[100px] text-center">Score</TableHead>
-          <TableHead className="w-[100px] text-center">Upgrades</TableHead>
+          <TableHead className="text-left">Rank</TableHead>
+          <TableHead className="text-center">
+            <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
+          </TableHead>
+          <TableHead className="text-center">
+            <FontAwesomeIcon icon={faKhanda} className="text-slate-500" />
+          </TableHead>
+          <TableHead className="text-center">Achievements</TableHead>
           <TableHead>Name</TableHead>
         </TableRow>
       </TableHeader>
@@ -71,16 +76,33 @@ export const Row = ({ rank, game }: { rank: number; game: Game }) => {
       <TableCell className="text-right">
         <p className="flex gap-1 justify-center items-center">
           <span className="font-bold">{game.getScore()}</span>
-          <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
         </p>
       </TableCell>
       <TableCell className="text-right">
         <p className="flex gap-1 justify-center items-center">
           <span className="font-bold">{game.getUpgrade()}</span>
-          <FontAwesomeIcon icon={faKhanda} className="text-slate-500" />
         </p>
       </TableCell>
-      <TableCell className="text-left">{player?.name || "-"}</TableCell>
+      <TableCell className="flex justify-center">
+        <Achievements details={game.achievements} />
+      </TableCell>
+      <TableCell className="text-left">
+        {player?.getShortName() || "-"}
+      </TableCell>
     </TableRow>
+  );
+};
+
+export const Achievements = ({ details }: { details: AchievementDetail[] }) => {
+  return (
+    <div className="flex gap-1 justify-center">
+      {details.map(({ achievement, has }, index) => (
+        <div
+          key={index}
+          className={`h-5 w-5 bg-cover bg-center ${!has && "grayscale"} z-0`}
+          style={{ backgroundImage: `url('${achievement.getIcon()}')` }}
+        />
+      ))}
+    </div>
   );
 };

@@ -16,6 +16,11 @@ export interface CardDetail {
   side: Side;
 }
 
+export interface AchievementDetail {
+  achievement: Achievement;
+  has: boolean;
+}
+
 export class Game {
   public id: string;
   public over: boolean;
@@ -24,6 +29,7 @@ export class Game {
   public card_three: CardDetail;
   public deck: Deck;
   public move_count: number;
+  public achievements: AchievementDetail[];
   public stores: CardDetail[];
   public sides: Side[];
   public cards: CardDetail[];
@@ -53,6 +59,19 @@ export class Game {
       side: this.sides[game.card_three - 1] || new Side(SideType.None),
       id: game.card_three,
     };
+
+    this.achievements = Packer.sized_unpack(
+      BigInt(game.achievements),
+      1n,
+      Achievement.getAchievements().length,
+    ).map((achievement: number, index: number) => {
+      const id = index + 1;
+      return {
+        achievement: Achievement.from(id),
+        has: achievement === 1,
+      };
+    });
+
     this.stores = Packer.sized_unpack(
       BigInt(game.stores),
       CARD_BIT_SIZE,

@@ -12,6 +12,16 @@ import { MonkStaff } from "../elements/achievements/monk_staff";
 import { ShogunAxe } from "../elements/achievements/shogun_axe";
 import { CardDetail } from "../models/game";
 
+import oni from "/assets/oni-icon.png";
+import shrine from "/assets/shrine-icon.png";
+import dragon from "/assets/dragon-icon.png";
+import guardian from "/assets/guardian-icon.png";
+import forge from "/assets/forge-icon.png";
+import horn from "/assets/horn-icon.png";
+import oracle from "/assets/oracle-icon.png";
+import monk from "/assets/monk-icon.png";
+import axe from "/assets/axe-icon.png";
+
 export enum AchievementType {
   None = "None",
   OniFang = "Oni Fang",
@@ -53,6 +63,31 @@ export class Achievement {
       new Achievement(AchievementType.MonkStaff),
       new Achievement(AchievementType.ShogunAxe),
     ];
+  }
+
+  public getIcon(): string {
+    switch (this.value) {
+      case AchievementType.OniFang:
+        return oni;
+      case AchievementType.ShrineOfValor:
+        return shrine;
+      case AchievementType.DragonHeart:
+        return dragon;
+      case AchievementType.GuardianKami:
+        return guardian;
+      case AchievementType.SpiritualForge:
+        return forge;
+      case AchievementType.SamuraiHorn:
+        return horn;
+      case AchievementType.OracleStone:
+        return oracle;
+      case AchievementType.MonkStaff:
+        return monk;
+      case AchievementType.ShogunAxe:
+        return axe;
+      default:
+        return "";
+    }
   }
 
   public getCard(): Card {
