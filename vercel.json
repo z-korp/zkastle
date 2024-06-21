@@ -2,9 +2,9 @@
   "version": 2,
   "builds": [
     {
-      "src": "vite.config.js",
+      "src": "client/vite.config.js",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "config": { "distDir": "client/dist" }
     },
     {
       "src": "api/**/Cargo.toml",
@@ -12,7 +12,7 @@
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/vrf/$1" },
-    { "src": "/(.*)", "dest": "/" }
+    { "src": "/api/(.*)", "dest": "/api/main.rs" },
+    { "src": "/(.*)", "dest": "/client/index.html" }
   ]
 }
