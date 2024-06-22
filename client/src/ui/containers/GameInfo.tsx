@@ -32,16 +32,17 @@ export const GameInfo = () => {
   if (!player || !game || game.isOver()) return null;
 
   return (
-    <div className="h-full w-full flex justify-between items-start">
+    <div className="grid grid-cols-3 w-full">
+      <div className="flex flex-col items-start">
+        <ScoreTitle score={score} />
+        <UpgradeTitle score={upgrade} />
+      </div>
       <div className="flex flex-col gap-2 items-center">
         <span className="text-lg">Remaining</span>
         <p className="text-6xl">{remaining}</p>
       </div>
 
-      <ScoreTitle score={score} />
-      <UpgradeTitle score={upgrade} />
-
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 w-full items-end">
         <Surrender />
         <Storage />
         <Cost

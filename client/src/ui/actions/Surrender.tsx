@@ -4,6 +4,8 @@ import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFontAwesome } from "@fortawesome/free-solid-svg-icons";
 
 export const Surrender = () => {
   const {
@@ -37,12 +39,16 @@ export const Surrender = () => {
   if (disabled) return null;
 
   return (
-    <Button
-      disabled={disabled || isLoading}
-      isLoading={isLoading}
-      onClick={handleClick}
-    >
-      Surrender
-    </Button>
+    <div className="flex items-center gap-4">
+      <p className="text-2xl hidden md:block">Surrender</p>
+      <Button
+        size={"icon"}
+        disabled={disabled || isLoading}
+        isLoading={isLoading}
+        onClick={handleClick}
+      >
+        <FontAwesomeIcon icon={faFontAwesome} className="h-6 w-6" />
+      </Button>
+    </div>
   );
 };

@@ -16,6 +16,8 @@ import {
 import { useCallback, useMemo } from "react";
 import { useGameStore } from "@/stores/game";
 import { Cost } from "../components/Cost";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStore } from "@fortawesome/free-solid-svg-icons";
 
 export const Storage = () => {
   const {
@@ -58,7 +60,12 @@ export const Storage = () => {
   return (
     <Dialog open={storage} onOpenChange={handleChange}>
       <DialogTrigger asChild>
-        <Button variant="default">Storage</Button>
+        <div className="flex items-center gap-4">
+          <p className="text-2xl hidden md:block">Storage</p>
+          <Button variant="default" size={"icon"}>
+            <FontAwesomeIcon icon={faStore} className="h-6 w-6" />
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="flex flex-col items-center">
