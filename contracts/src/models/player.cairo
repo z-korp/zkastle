@@ -1,10 +1,19 @@
+// External imports
+
+use alexandria_math::bitmap::Bitmap;
+
 // Inernal imports
 
 use zkastle::models::index::Player;
+use zkastle::types::card::Card;
+use zkastle::types::deck::{Deck, DeckTrait};
+use zkastle::types::achievement::{Achievement, AchievementTrait};
 
 mod errors {
     const PLAYER_NOT_EXIST: felt252 = 'Player: Does not exist';
     const PLAYER_ALREADY_EXIST: felt252 = 'Player: Already exist';
+    const PLAYER_INVALID_CARD: felt252 = 'Player: Invalid card';
+    const PLAYER_ACHIEVEMENT_LOCKED: felt252 = 'Player: Achievement locked';
     const INVALID_NAME: felt252 = 'Player: Invalid name';
     const INVALID_MASTER: felt252 = 'Player: Invalid master';
     const INVALID_ORDER: felt252 = 'Player: Invalid order';
@@ -18,9 +27,8 @@ impl PlayerImpl of PlayerTrait {
     fn new(id: felt252, name: felt252) -> Player {
         // [Check] Name is valid
         assert(name != 0, errors::INVALID_NAME);
-
         // [Return] Player
-        Player { id, game_id: 0, achievements: 0, name, }
+        Player { id, game_id: 0, card_id: 0, achievements: 0, name, }
     }
 
     #[inline(always)]
@@ -29,6 +37,14 @@ impl PlayerImpl of PlayerTrait {
         assert(name != 0, errors::INVALID_NAME);
         // [Effect] Change the name
         self.name = name;
+    }
+
+    #[inline(always)]
+    fn select(ref self: Player, card_id: u8) {
+        // [Check] Card is selectable
+        self.assert_is_selectable(card_id);
+        // [Effect] Change the card
+        self.card_id = card_id;
     }
 }
 
@@ -43,12 +59,21 @@ impl PlayerAssert of AssertTrait {
     fn assert_not_exists(self: Player) {
         assert(self.is_zero(), errors::PLAYER_ALREADY_EXIST);
     }
+
+    #[inline(always)]
+    fn assert_is_selectable(self: Player, card_id: u8) {
+        let deck: Deck = Deck::Base;
+        let card: u8 = deck.get(card_id).into();
+        assert(card != Card::None.into(), errors::PLAYER_INVALID_CARD);
+        let index = Achievement::OracleStone.index();
+        assert(Bitmap::get_bit_at(self.achievements, index), errors::PLAYER_ACHIEVEMENT_LOCKED);
+    }
 }
 
 impl ZeroablePlayerImpl of core::Zeroable<Player> {
     #[inline(always)]
     fn zero() -> Player {
-        Player { id: 0, game_id: 0, achievements: 0, name: 0 }
+        Player { id: 0, game_id: 0, card_id: 0, achievements: 0, name: 0 }
     }
 
     #[inline(always)]

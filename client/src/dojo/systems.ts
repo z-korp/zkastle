@@ -53,6 +53,42 @@ export function systems({
     }
   };
 
+  const rename = async ({ account, ...props }: SystemTypes.Rename) => {
+    try {
+      const { transaction_hash } = await client.actions.rename({
+        account,
+        ...props,
+      });
+
+      notify(
+        `Player has been renamed.`,
+        await account.waitForTransaction(transaction_hash, {
+          retryInterval: 100,
+        }),
+      );
+    } catch (error: any) {
+      toast.error(extractedMessage(error.message));
+    }
+  };
+
+  const select = async ({ account, ...props }: SystemTypes.Select) => {
+    try {
+      const { transaction_hash } = await client.actions.select({
+        account,
+        ...props,
+      });
+
+      notify(
+        `Card has been selected.`,
+        await account.waitForTransaction(transaction_hash, {
+          retryInterval: 100,
+        }),
+      );
+    } catch (error: any) {
+      toast.error(extractedMessage(error.message));
+    }
+  };
+
   const start = async ({ account, ...props }: SystemTypes.Start) => {
     try {
       const { transaction_hash } = await client.actions.start({
@@ -127,6 +163,8 @@ export function systems({
 
   return {
     create,
+    rename,
+    select,
     start,
     play,
     remove,

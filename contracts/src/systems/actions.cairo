@@ -19,6 +19,8 @@ use zkastle::types::action::Action;
 #[starknet::interface]
 trait IActions<TContractState> {
     fn create(self: @TContractState, world: IWorldDispatcher, name: felt252);
+    fn rename(self: @TContractState, world: IWorldDispatcher, name: felt252);
+    fn select(self: @TContractState, world: IWorldDispatcher, card_id: u8);
     fn start(
         self: @TContractState, world: IWorldDispatcher, proof: Proof, seed: felt252, beta: felt252
     ) -> u32;
@@ -102,6 +104,14 @@ mod actions {
     impl ActionsImpl of IActions<ContractState> {
         fn create(self: @ContractState, world: IWorldDispatcher, name: felt252) {
             self.manageable._create(world, name);
+        }
+
+        fn rename(self: @ContractState, world: IWorldDispatcher, name: felt252) {
+            self.manageable._rename(world, name);
+        }
+
+        fn select(self: @ContractState, world: IWorldDispatcher, card_id: u8) {
+            self.manageable._select(world, card_id);
         }
 
         fn start(

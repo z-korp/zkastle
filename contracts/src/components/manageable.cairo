@@ -44,5 +44,33 @@ mod ManageableComponent {
             let player = PlayerTrait::new(caller.into(), name);
             store.set_player(player);
         }
+
+        fn _rename(self: @ComponentState<TContractState>, world: IWorldDispatcher, name: felt252,) {
+            // [Setup] Datastore
+            let store: Store = StoreImpl::new(world);
+
+            // [Check] Player not already exists
+            let caller = get_caller_address();
+            let mut player = store.player(caller.into());
+            player.assert_not_exists();
+
+            // [Effect] Create a new player
+            player.rename(name);
+            store.set_player(player);
+        }
+
+        fn _select(self: @ComponentState<TContractState>, world: IWorldDispatcher, card_id: u8,) {
+            // [Setup] Datastore
+            let store: Store = StoreImpl::new(world);
+
+            // [Check] Player not already exists
+            let caller = get_caller_address();
+            let mut player = store.player(caller.into());
+            player.assert_not_exists();
+
+            // [Effect] Create a new player
+            player.select(card_id);
+            store.set_player(player);
+        }
     }
 }

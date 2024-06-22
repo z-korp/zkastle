@@ -4,6 +4,7 @@ struct Player {
     #[key]
     id: felt252,
     game_id: u32,
+    card_id: u8,
     achievements: u32,
     name: felt252,
 }

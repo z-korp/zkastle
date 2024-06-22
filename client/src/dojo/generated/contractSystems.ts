@@ -16,6 +16,14 @@ export interface Create extends Signer {
   name: string;
 }
 
+export interface Rename extends Signer {
+  name: string;
+}
+
+export interface Select extends Signer {
+  card_id: number;
+}
+
 export interface Start extends Signer {
   x: bigint;
   y: bigint;
@@ -94,6 +102,41 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
         );
       } catch (error) {
         console.error("Error executing create:", error);
+        throw error;
+      }
+    };
+
+    const rename = async ({ account, name }: Rename) => {
+      try {
+        const encoded_name = shortString.encodeShortString(name);
+        return await provider.execute(
+          account,
+          {
+            contractName: contract_name,
+            entrypoint: "rename",
+            calldata: [provider.getWorldAddress(), encoded_name],
+          },
+          details,
+        );
+      } catch (error) {
+        console.error("Error executing rename:", error);
+        throw error;
+      }
+    };
+
+    const select = async ({ account, card_id }: Select) => {
+      try {
+        return await provider.execute(
+          account,
+          {
+            contractName: contract_name,
+            entrypoint: "select",
+            calldata: [provider.getWorldAddress(), card_id],
+          },
+          details,
+        );
+      } catch (error) {
+        console.error("Error executing select:", error);
         throw error;
       }
     };
@@ -193,6 +236,8 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       address: contract.address,
       initialize,
       create,
+      rename,
+      select,
       start,
       play,
       discard,

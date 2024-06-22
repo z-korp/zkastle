@@ -21,7 +21,7 @@ export class Player {
     this.achievements = Packer.unpack(BigInt(player.achievements), 1n)
       .map((value, index) => {
         if (value === 0) return null;
-        const id = index + 1;
+        let id = index + 1;
         return { id, achievement: Achievement.from(id) };
       })
       .filter((detail) => detail !== null) as AchivementDetail[];
