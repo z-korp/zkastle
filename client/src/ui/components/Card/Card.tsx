@@ -19,6 +19,7 @@ import { Action, ActionType } from "@/dojo/game/types/action";
 import { Cost } from "../Cost";
 import { useGameStore } from "@/stores/game";
 import { CARD_WIDTH, CARD_HEIGHT } from "@/ui/constants";
+import { useMediaQuery } from "react-responsive";
 import "./Card.css";
 
 interface CardProps {
@@ -49,6 +50,8 @@ const Card: React.FC<CardProps> = ({
   bgDescription = "",
   fgDescription = "",
 }) => {
+  const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
+
   const { card, side } = data;
 
   const { setUpgradeToShow, resetUpgradeToShow } = useGameStore();
@@ -68,7 +71,7 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`flip-card relative`}
+      className={`flip-card relative ${isMdOrLarger ? "" : "scale-[90%]"}`}
       style={{ width: `${CARD_WIDTH}px`, height: `${CARD_HEIGHT}px` }}
     >
       <div

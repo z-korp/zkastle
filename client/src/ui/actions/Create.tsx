@@ -46,7 +46,7 @@ export const Create = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button isLoading={isLoading} disabled={disabled}>
+        <Button isLoading={isLoading} disabled={disabled} className="text-xl">
           Create my Profile
         </Button>
       </DialogTrigger>

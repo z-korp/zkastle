@@ -66,6 +66,7 @@ export const Start = () => {
       disabled={disabled || isLoading}
       isLoading={isLoading}
       onClick={handleClick}
+      className="text-xl"
     >
       Start a Game
     </Button>
