@@ -1,12 +1,15 @@
 import { useGameStore } from "@/stores/game";
 import { motion, AnimatePresence } from "framer-motion";
 import Card from "../components/Card/Card";
+import { useMediaQuery } from "react-responsive";
 
 interface ShowUpradeProps {
   coords: { x: number; y: number };
 }
 
 export const ShowUprade: React.FC<ShowUpradeProps> = ({ coords }) => {
+  const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
+
   const { upgradeToShow } = useGameStore();
 
   if (!upgradeToShow) return null;
@@ -31,7 +34,6 @@ export const ShowUprade: React.FC<ShowUpradeProps> = ({ coords }) => {
           }}
           transition={{ type: "spring", stiffness: 80 }}
           className="absolute z-50 rounded-2xl"
-          style={{ boxShadow: "0 0 10px 5px rgba(255, 0, 0, 0.6)" }}
         >
           <Card
             data={{
@@ -40,6 +42,10 @@ export const ShowUprade: React.FC<ShowUpradeProps> = ({ coords }) => {
               id: 0,
             }}
             isFlipped={false}
+            style={{
+              boxShadow: "0 0 10px 5px rgba(255, 0, 0, 0.6)",
+              transform: isMdOrLarger ? "scale(1)" : "scale(0.9)",
+            }}
           />
         </motion.div>
       )}

@@ -37,8 +37,8 @@ export const GameInfo = () => {
         <ScoreTitle score={score} />
         <UpgradeTitle score={upgrade} />
       </div>
-      <div className="flex flex-col gap-2 items-center">
-        <span className="text-lg">Remaining</span>
+      <div className="flex flex-col items-center">
+        <span className="text-md">Remaining</span>
         <p className="text-6xl">{remaining}</p>
       </div>
 

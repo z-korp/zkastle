@@ -101,4 +101,5 @@ img {
 html,
 body {
   touch-action: none; /* Prevents touch-based panning */
+  height: 100vh;
 }

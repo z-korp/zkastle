@@ -36,6 +36,7 @@ interface CardProps {
   scale?: string;
   bgDescription?: string;
   fgDescription?: string;
+  style?: React.CSSProperties;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -49,6 +50,7 @@ const Card: React.FC<CardProps> = ({
   stored = false,
   bgDescription = "",
   fgDescription = "",
+  style = {},
 }) => {
   const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
 
@@ -71,8 +73,8 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`flip-card relative ${isMdOrLarger ? "" : "scale-[90%]"}`}
-      style={{ width: `${CARD_WIDTH}px`, height: `${CARD_HEIGHT}px` }}
+      className={`flip-card relative rounded-2xl ${isMdOrLarger ? "" : "scale-[90%]"}`}
+      style={{ width: `${CARD_WIDTH}px`, height: `${CARD_HEIGHT}px`, ...style }}
     >
       <div
         className={`flip-card-inner relative w-full h-full text-center transition-transform duration-800 transform-style-3d ${isFlipped ? "rotate-y-180" : ""} ${greyed && "grayscale"}`}

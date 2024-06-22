@@ -25,7 +25,7 @@ export const GameOver = () => {
   if (!player || !game || !game.isOver()) return null;
 
   return (
-    <div className="absolute top-1/2 right-1/2 translate-x-1/2 translate-y-1/2 flex flex-col gap-8">
+    <div className="absolute top-20 right-1/2 translate-x-1/2 translate-y-1/2 flex flex-col gap-8">
       <p className="text-4xl text-center">Game Over</p>
       <div className="h-full w-full flex justify-center gap-8 items-start">
         <ScoreTitle score={score} />

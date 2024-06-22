@@ -7,6 +7,7 @@ import { useDojo } from "@/dojo/useDojo";
 import { ShowUprade } from "../containers/ShowUpgrade";
 import { CardDetail } from "@/dojo/game/models/game";
 import { CARD_WIDTH, CARD_HEIGHT } from "../constants";
+import { useMediaQuery } from "react-responsive";
 
 enum PositionType {
   Deck,
@@ -14,8 +15,13 @@ enum PositionType {
   First,
 }
 
-const getPositionCoordinates = (width: number, height: number) => {
-  const widthBetweenCards = Math.max(width / 30, 15);
+const getPositionCoordinates = (
+  isMdOrLarger: boolean,
+  width: number,
+  height: number,
+) => {
+  const widthBetweenCards = Math.max(width / 30, 15) - (isMdOrLarger ? 0 : 20);
+
   return {
     [PositionType.Deck]: {
       x: -CARD_WIDTH / 2,
@@ -37,6 +43,8 @@ const Table: React.FC = () => {
     account: { account },
   } = useDojo();
 
+  const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
+
   const firstRender = useRef(true);
 
   const { player } = usePlayer({ playerId: account.address });
@@ -52,11 +60,11 @@ const Table: React.FC = () => {
     }[]
   >([]);
   const [coordinates, setCoordinates] = useState(
-    getPositionCoordinates(window.innerWidth, window.innerHeight),
+    getPositionCoordinates(isMdOrLarger, window.innerWidth, window.innerHeight),
   );
 
   const [deckCoordinates, setDeckCoordinates] = useState(
-    getPositionCoordinates(window.innerWidth, window.innerHeight)[
+    getPositionCoordinates(isMdOrLarger, window.innerWidth, window.innerHeight)[
       PositionType.Deck
     ],
   );
@@ -64,6 +72,7 @@ const Table: React.FC = () => {
   useEffect(() => {
     const handleResize = () => {
       const newCoordinates = getPositionCoordinates(
+        isMdOrLarger,
         window.innerWidth,
         window.innerHeight,
       );
@@ -73,7 +82,7 @@ const Table: React.FC = () => {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [isMdOrLarger]);
 
   const getPositions = (index: number, hand: number): PositionType => {
     if (index === 0) {
