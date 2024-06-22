@@ -4,7 +4,7 @@ import * as SystemTypes from "./generated/contractSystems";
 import { ClientModels } from "./models";
 import { shortenHex } from "@dojoengine/utils";
 import { Account } from "starknet";
-import { isAppPwa, isMdOrLarger } from "@/hooks/useIsPwa";
+import { isAppPwa } from "@/hooks/useIsPwa";
 
 export type SystemCalls = ReturnType<typeof systems>;
 
