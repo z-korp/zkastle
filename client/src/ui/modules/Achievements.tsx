@@ -24,10 +24,11 @@ import { useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
-import { Achievement } from "@/dojo/game/types/achievement";
+import { Achievement, AchievementType } from "@/dojo/game/types/achievement";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import Card from "../components/Card/Card";
+import { Select } from "../actions/Select";
 
 export const Achievements = () => {
   const {
@@ -37,6 +38,9 @@ export const Achievements = () => {
   const { player } = usePlayer({ playerId: account.address });
   const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
   const groups = useMemo(() => Game.getAchievements(), []);
+  const selectable = useMemo(() => {
+    return player && player.has(new Achievement(AchievementType.OracleStone));
+  }, [player]);
 
   return (
     <Drawer handleOnly={true}>
@@ -69,6 +73,7 @@ export const Achievements = () => {
                         ? player.has(group[0].achievement)
                         : false
                     }
+                    selectable={!!selectable}
                   />
                 </CarouselItem>
               ))}
@@ -83,9 +88,11 @@ export const Achievements = () => {
 export const Canvas = ({
   items,
   has,
+  selectable,
 }: {
   items: { achievement: Achievement; card: CardClass; side: Side }[];
   has: boolean;
+  selectable: boolean;
 }) => {
   const [page, setPage] = useState<SideType>(SideType.One);
   const [hover, setHover] = useState<boolean>(false);
@@ -93,6 +100,11 @@ export const Canvas = ({
     () => items.find(({ side }) => side.value === page),
     [items, page],
   );
+
+  const cardId = useMemo(() => {
+    if (!item) return 0;
+    return Game.getCardId(item.card);
+  }, [item]);
 
   if (!item && items.length === 0) return null;
 
@@ -146,6 +158,7 @@ export const Canvas = ({
           bgDescription={item.achievement.description()}
         />
       </div>
+      {selectable && <Select id={cardId} />}
     </div>
   );
 };

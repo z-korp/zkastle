@@ -12,12 +12,14 @@ export interface AchivementDetail {
 export class Player {
   public id: string;
   public game_id: string;
+  public card_id: number;
   public achievements: AchivementDetail[];
   public name: string;
 
   constructor(player: ComponentValue) {
     this.id = player.id;
     this.game_id = player.game_id;
+    this.card_id = player.card_id;
     this.achievements = Packer.unpack(BigInt(player.achievements), 1n)
       .map((value, index) => {
         if (value === 0) return null;
@@ -28,15 +30,15 @@ export class Player {
     this.name = shortString.decodeShortString(player.name);
   }
 
-  getShortAddress(): string {
+  public getShortAddress(): string {
     return shortenHex(this.id);
   }
 
-  getShortName(): string {
+  public getShortName(): string {
     return this.name.length > 16 ? `${this.name.slice(0, 13)}...` : this.name;
   }
 
-  has(achivement: Achievement): boolean {
+  public has(achivement: Achievement): boolean {
     return this.achievements.some(
       (detail) => detail.achievement.value === achivement.value,
     );

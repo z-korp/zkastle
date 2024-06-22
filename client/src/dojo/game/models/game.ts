@@ -2,7 +2,7 @@ import { ComponentValue } from "@dojoengine/recs";
 import { Packer } from "../helpers/packer";
 import { Side, SideType } from "../types/side";
 import { Card, CardType } from "../types/card";
-import { Deck } from "../types/deck";
+import { Deck, DeckType } from "../types/deck";
 import { Resource } from "../types/resource";
 import { Achievement } from "../types/achievement";
 
@@ -124,6 +124,12 @@ export class Game {
       const card = achievement.getCard();
       return card.getSides().map((side) => ({ achievement, card, side }));
     });
+  }
+
+  public static getCardId(card: Card): number {
+    const deck = new Deck(DeckType.Base);
+    const cardIds = deck.ids(card.value);
+    return !cardIds.length ? 0 : cardIds[0];
   }
 
   public isOver(): boolean {

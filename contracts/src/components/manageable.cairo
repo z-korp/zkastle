@@ -49,10 +49,10 @@ mod ManageableComponent {
             // [Setup] Datastore
             let store: Store = StoreImpl::new(world);
 
-            // [Check] Player not already exists
+            // [Check] Player exists
             let caller = get_caller_address();
             let mut player = store.player(caller.into());
-            player.assert_not_exists();
+            player.assert_exists();
 
             // [Effect] Create a new player
             player.rename(name);
@@ -63,10 +63,10 @@ mod ManageableComponent {
             // [Setup] Datastore
             let store: Store = StoreImpl::new(world);
 
-            // [Check] Player not already exists
+            // [Check] Player exists
             let caller = get_caller_address();
             let mut player = store.player(caller.into());
-            player.assert_not_exists();
+            player.assert_exists();
 
             // [Effect] Create a new player
             player.select(card_id);

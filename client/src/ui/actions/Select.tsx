@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { usePlayer } from "@/hooks/usePlayer";
+import { Achievement, AchievementType } from "@/dojo/game/types/achievement";
 
 export const Select = ({ id }: { id: number }) => {
   const {
@@ -30,7 +31,14 @@ export const Select = ({ id }: { id: number }) => {
   }, [account, id]);
 
   const disabled = useMemo(() => {
-    return !account || !master || account === master || !player;
+    return (
+      !account ||
+      !master ||
+      account === master ||
+      !player ||
+      player.has(new Achievement(AchievementType.OracleStone)) ||
+      player.card_id === id
+    );
   }, [account, master, player]);
 
   return (

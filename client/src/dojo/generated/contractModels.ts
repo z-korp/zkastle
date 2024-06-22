@@ -42,6 +42,7 @@ export function defineContractComponents(world: World) {
               "u128",
               "felt252",
             ],
+            customTypes: [],
           },
         },
       );
@@ -52,13 +53,15 @@ export function defineContractComponents(world: World) {
         {
           id: RecsType.BigInt,
           game_id: RecsType.Number,
+          card_id: RecsType.Number,
           achievements: RecsType.Number,
           name: RecsType.BigInt,
         },
         {
           metadata: {
             name: "Player",
-            types: ["felt252", "u32", "u32", "felt252"],
+            types: ["felt252", "u32", "u8", "u32", "felt252"],
+            customTypes: [],
           },
         },
       );
