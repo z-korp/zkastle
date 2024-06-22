@@ -4,6 +4,7 @@ use alexandria_math::bitmap::Bitmap;
 
 // Inernal imports
 
+use zkastle::constants;
 use zkastle::models::index::Player;
 use zkastle::types::card::Card;
 use zkastle::types::deck::{Deck, DeckTrait};
@@ -28,7 +29,9 @@ impl PlayerImpl of PlayerTrait {
         // [Check] Name is valid
         assert(name != 0, errors::INVALID_NAME);
         // [Return] Player
-        Player { id, game_id: 0, card_id: 0, achievements: 0, name, }
+        Player {
+            id, game_id: 0, card_id: 0, achievements: 0, enables: constants::DEFAULT_ENABLES, name,
+        }
     }
 
     #[inline(always)]
@@ -45,6 +48,15 @@ impl PlayerImpl of PlayerTrait {
         self.assert_is_selectable(card_id);
         // [Effect] Change the card
         self.card_id = card_id;
+    }
+
+    #[inline(always)]
+    fn enable(ref self: Player, achivement_id: u8, enable: bool) {
+        // [Check] Achievement is enableable
+        self.assert_is_enableable(achivement_id);
+        // [Effect] Change the card
+        let index = achivement_id - 1;
+        self.enables = Bitmap::set_bit_at(self.enables, index, enable);
     }
 }
 
@@ -68,12 +80,18 @@ impl PlayerAssert of AssertTrait {
         let index = Achievement::OracleStone.index();
         assert(Bitmap::get_bit_at(self.achievements, index), errors::PLAYER_ACHIEVEMENT_LOCKED);
     }
+
+    #[inline(always)]
+    fn assert_is_enableable(self: Player, achivement_id: u8) {
+        let index = achivement_id - 1;
+        assert(Bitmap::get_bit_at(self.achievements, index), errors::PLAYER_ACHIEVEMENT_LOCKED);
+    }
 }
 
 impl ZeroablePlayerImpl of core::Zeroable<Player> {
     #[inline(always)]
     fn zero() -> Player {
-        Player { id: 0, game_id: 0, card_id: 0, achievements: 0, name: 0 }
+        Player { id: 0, game_id: 0, card_id: 0, achievements: 0, enables: 0, name: 0 }
     }
 
     #[inline(always)]

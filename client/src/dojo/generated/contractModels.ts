@@ -55,12 +55,13 @@ export function defineContractComponents(world: World) {
           game_id: RecsType.Number,
           card_id: RecsType.Number,
           achievements: RecsType.Number,
+          enables: RecsType.Number,
           name: RecsType.BigInt,
         },
         {
           metadata: {
             name: "Player",
-            types: ["felt252", "u32", "u8", "u32", "felt252"],
+            types: ["felt252", "u32", "u8", "u32", "u32", "felt252"],
             customTypes: [],
           },
         },

@@ -21,6 +21,7 @@ trait IActions<TContractState> {
     fn create(self: @TContractState, world: IWorldDispatcher, name: felt252);
     fn rename(self: @TContractState, world: IWorldDispatcher, name: felt252);
     fn select(self: @TContractState, world: IWorldDispatcher, card_id: u8);
+    fn enable(self: @TContractState, world: IWorldDispatcher, achievement_id: u8, enabled: bool);
     fn start(
         self: @TContractState, world: IWorldDispatcher, proof: Proof, seed: felt252, beta: felt252
     ) -> u32;
@@ -112,6 +113,12 @@ mod actions {
 
         fn select(self: @ContractState, world: IWorldDispatcher, card_id: u8) {
             self.manageable._select(world, card_id);
+        }
+
+        fn enable(
+            self: @ContractState, world: IWorldDispatcher, achievement_id: u8, enabled: bool
+        ) {
+            self.manageable._enable(world, achievement_id, enabled);
         }
 
         fn start(

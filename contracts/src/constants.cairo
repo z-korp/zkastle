@@ -1,3 +1,7 @@
+// Player
+
+const DEFAULT_ENABLES: u32 = 0x1ff; // 0b111111111
+
 // Game
 
 const DEFAULT_STORE_SIZE: u8 = 4;

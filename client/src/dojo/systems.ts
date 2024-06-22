@@ -92,6 +92,14 @@ export function systems({
     );
   };
 
+  const enable = async ({ account, ...props }: SystemTypes.Enable) => {
+    await handleTransaction(
+      account,
+      () => client.actions.enable({ account, ...props }),
+      "Achievement status has been updated.",
+    );
+  };
+
   const start = async ({ account, ...props }: SystemTypes.Start) => {
     await handleTransaction(
       account,
@@ -128,6 +136,7 @@ export function systems({
     create,
     rename,
     select,
+    enable,
     start,
     play,
     remove,

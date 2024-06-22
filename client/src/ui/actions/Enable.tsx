@@ -3,14 +3,14 @@ import { useCallback, useMemo, useState } from "react";
 import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { usePlayer } from "@/hooks/usePlayer";
-import { Achievement, AchievementType } from "@/dojo/game/types/achievement";
+import { Achievement } from "@/dojo/game/types/achievement";
 
-export const Select = ({ id }: { id: number }) => {
+export const Enable = ({ id }: { id: number }) => {
   const {
     account: { account },
     master,
     setup: {
-      systemCalls: { select },
+      systemCalls: { enable },
     },
   } = useDojo();
 
@@ -21,23 +21,30 @@ export const Select = ({ id }: { id: number }) => {
   const handleClick = useCallback(async () => {
     setIsLoading(true);
     try {
-      await select({
+      await enable({
         account: account as Account,
-        card_id: id,
+        achievement_id: id,
+        enable: true,
       });
     } finally {
       setIsLoading(false);
     }
   }, [account, id]);
 
+  const status = useMemo(() => {
+    if (!player) return false;
+    const achievement = Achievement.from(id);
+    return player.isEnabled(achievement);
+  }, [player]);
+
   const disabled = useMemo(() => {
+    const achievement = Achievement.from(id);
     return (
       !account ||
       !master ||
       account === master ||
       !player ||
-      !player.has(new Achievement(AchievementType.OracleStone)) ||
-      player.card_id === id
+      !player.has(achievement)
     );
   }, [account, master, player]);
 
@@ -49,7 +56,7 @@ export const Select = ({ id }: { id: number }) => {
       isLoading={isLoading}
       onClick={handleClick}
     >
-      Select
+      {status ? "Enable" : "Disable"}
     </Button>
   );
 };

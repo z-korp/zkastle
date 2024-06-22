@@ -6,6 +6,7 @@ struct Player {
     game_id: u32,
     card_id: u8,
     achievements: u32,
+    enables: u32,
     name: felt252,
 }
 

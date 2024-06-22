@@ -68,8 +68,27 @@ mod ManageableComponent {
             let mut player = store.player(caller.into());
             player.assert_exists();
 
-            // [Effect] Create a new player
+            // [Effect] Select the card
             player.select(card_id);
+            store.set_player(player);
+        }
+
+        fn _enable(
+            self: @ComponentState<TContractState>,
+            world: IWorldDispatcher,
+            achivement_id: u8,
+            enabled: bool,
+        ) {
+            // [Setup] Datastore
+            let store: Store = StoreImpl::new(world);
+
+            // [Check] Player exists
+            let caller = get_caller_address();
+            let mut player = store.player(caller.into());
+            player.assert_exists();
+
+            // [Effect] Update the achievement enable status
+            player.enable(achivement_id, enabled);
             store.set_player(player);
         }
     }

@@ -8,12 +8,18 @@ export interface AchivementDetail {
   id: number;
   achievement: Achievement;
 }
+export interface EnabledDetail {
+  id: number;
+  achievement: Achievement;
+  status: boolean;
+}
 
 export class Player {
   public id: string;
   public game_id: string;
   public card_id: number;
   public achievements: AchivementDetail[];
+  public enables: EnabledDetail[];
   public name: string;
 
   constructor(player: ComponentValue) {
@@ -27,6 +33,12 @@ export class Player {
         return { id, achievement: Achievement.from(id) };
       })
       .filter((detail) => detail !== null) as AchivementDetail[];
+    this.enables = Packer.unpack(BigInt(player.enables), 1n).map(
+      (value, index) => {
+        let id = index + 1;
+        return { id, achievement: Achievement.from(id), status: value === 1 };
+      },
+    ) as EnabledDetail[];
     this.name = shortString.decodeShortString(player.name);
   }
 
@@ -41,6 +53,13 @@ export class Player {
   public has(achivement: Achievement): boolean {
     return this.achievements.some(
       (detail) => detail.achievement.value === achivement.value,
+    );
+  }
+
+  public isEnabled(achivement: Achievement): boolean {
+    return this.enables.some(
+      (detail) =>
+        detail.achievement.value === achivement.value && detail.status,
     );
   }
 }

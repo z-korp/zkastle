@@ -27,6 +27,7 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { Achievement, AchievementType } from "@/dojo/game/types/achievement";
 import Card from "../components/Card/Card";
 import { Select } from "../actions/Select";
+import { Enable } from "../actions/Enable";
 
 export const Achievements = () => {
   const {
@@ -58,7 +59,7 @@ export const Achievements = () => {
             orientation={"horizontal"}
             opts={{ dragFree: isMdOrLarger }}
           >
-            <CarouselContent className="flex items-center">
+            <CarouselContent className="flex items-end">
               {groups.map((group, index) => (
                 <CarouselItem
                   key={index}
@@ -124,6 +125,9 @@ export const Canvas = ({
             bgDescription={achievement.description()}
           />
         </div>
+        <div className="w-full flex justify-center">
+          <Enable id={cardId} />
+        </div>
       </div>
     );
   }
@@ -146,7 +150,7 @@ export const Canvas = ({
         </PaginationContent>
       </Pagination>
       <div
-        className={`mb-2 ${!has && "grayscale"}`}
+        className={`${!has && "grayscale"}`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -156,7 +160,10 @@ export const Canvas = ({
           bgDescription={item.achievement.description()}
         />
       </div>
-      {selectable && <Select id={cardId} />}
+      <div className="w-full flex justify-center gap-4">
+        {selectable && <Select id={cardId} />}
+        <Enable id={cardId} />
+      </div>
     </div>
   );
 };

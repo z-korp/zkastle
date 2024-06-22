@@ -24,6 +24,11 @@ export interface Select extends Signer {
   card_id: number;
 }
 
+export interface Enable extends Signer {
+  achievement_id: number;
+  enable: boolean;
+}
+
 export interface Start extends Signer {
   x: bigint;
   y: bigint;
@@ -141,6 +146,23 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       }
     };
 
+    const enable = async ({ account, achievement_id, enable }: Enable) => {
+      try {
+        return await provider.execute(
+          account,
+          {
+            contractName: contract_name,
+            entrypoint: "enable",
+            calldata: [provider.getWorldAddress(), achievement_id, enable],
+          },
+          details,
+        );
+      } catch (error) {
+        console.error("Error executing enable:", error);
+        throw error;
+      }
+    };
+
     const start = async ({
       account,
       x,
@@ -238,6 +260,7 @@ export async function setupWorld(provider: DojoProvider, config: Config) {
       create,
       rename,
       select,
+      enable,
       start,
       play,
       discard,
