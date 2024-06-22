@@ -69,9 +69,9 @@ export const MusicPlayer = () => {
           size={"sm"}
         >
           {isPlaying ? (
-            <FontAwesomeIcon className="h-6 w-6" icon={faVolumeMute} />
-          ) : (
             <FontAwesomeIcon className="h-6 w-6" icon={faVolumeHigh} />
+          ) : (
+            <FontAwesomeIcon className="h-6 w-6" icon={faVolumeMute} />
           )}
         </Button>
 
