@@ -61,9 +61,9 @@ export const Header = () => {
   ) : (
     <div>
       <div className="p-4 flex gap-5">
-        <Drawer direction="right">
+        <Drawer direction="left">
           <DrawerTrigger>
-            <FontAwesomeIcon icon={faBars} />
+            <FontAwesomeIcon icon={faBars} size="xl" />
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader className="mt-4">
