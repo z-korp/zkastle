@@ -1,9 +1,9 @@
 import type { IWorld } from "./generated/contractSystems";
-
 import { toast } from "sonner";
 import * as SystemTypes from "./generated/contractSystems";
 import { ClientModels } from "./models";
 import { shortenHex } from "@dojoengine/utils";
+import { Account } from "starknet";
 
 export type SystemCalls = ReturnType<typeof systems>;
 
@@ -18,147 +18,110 @@ export function systems({
     return message.match(/\('([^']+)'\)/)?.[1];
   };
 
-  const notify = (message: string, transaction: any) => {
-    if (transaction.execution_status != "REVERTED") {
+  const getToastAction = (transaction_hash: string) => {
+    return {
+      label: "View",
+      onClick: () =>
+        window.open(
+          `https://worlds.dev/networks/slot/worlds/zkastle/txs/${transaction_hash}`,
+        ),
+    };
+  };
+
+  const notify = (
+    message: string,
+    transaction: any,
+    toastId: string | number,
+  ) => {
+    if (transaction.execution_status !== "REVERTED") {
       toast.success(message, {
+        id: toastId,
         description: shortenHex(transaction.transaction_hash),
-        action: {
-          label: "View",
-          onClick: () =>
-            window.open(
-              `https://worlds.dev/networks/slot/worlds/zkastle/txs/${transaction.transaction_hash}`,
-            ),
-        },
+        action: getToastAction(transaction.transaction_hash),
       });
     } else {
-      toast.error(extractedMessage(transaction.revert_reason));
+      toast.error(extractedMessage(transaction.revert_reason), { id: toastId });
+    }
+  };
+
+  const handleTransaction = async (
+    account: Account,
+    action: () => Promise<{ transaction_hash: string }>,
+    successMessage: string,
+  ) => {
+    const toastId = toast.loading("Transaction in progress...");
+    try {
+      const { transaction_hash } = await action();
+      toast.loading("Transaction in progress...", {
+        description: shortenHex(transaction_hash),
+        action: getToastAction(transaction_hash),
+        id: toastId,
+      });
+
+      const transaction = await account.waitForTransaction(transaction_hash, {
+        retryInterval: 100,
+      });
+
+      notify(successMessage, transaction, toastId);
+    } catch (error: any) {
+      toast.error(extractedMessage(error.message), { id: toastId });
     }
   };
 
   const create = async ({ account, ...props }: SystemTypes.Create) => {
-    try {
-      const { transaction_hash } = await client.actions.create({
-        account,
-        ...props,
-      });
-
-      notify(
-        `Player has been created.`,
-        await account.waitForTransaction(transaction_hash, {
-          retryInterval: 100,
-        }),
-      );
-    } catch (error: any) {
-      toast.error(extractedMessage(error.message));
-    }
+    await handleTransaction(
+      account,
+      () => client.actions.create({ account, ...props }),
+      "Player has been created.",
+    );
   };
 
   const rename = async ({ account, ...props }: SystemTypes.Rename) => {
-    try {
-      const { transaction_hash } = await client.actions.rename({
-        account,
-        ...props,
-      });
-
-      notify(
-        `Player has been renamed.`,
-        await account.waitForTransaction(transaction_hash, {
-          retryInterval: 100,
-        }),
-      );
-    } catch (error: any) {
-      toast.error(extractedMessage(error.message));
-    }
+    await handleTransaction(
+      account,
+      () => client.actions.rename({ account, ...props }),
+      "Player has been renamed.",
+    );
   };
 
   const select = async ({ account, ...props }: SystemTypes.Select) => {
-    try {
-      const { transaction_hash } = await client.actions.select({
-        account,
-        ...props,
-      });
-
-      notify(
-        `Card has been selected.`,
-        await account.waitForTransaction(transaction_hash, {
-          retryInterval: 100,
-        }),
-      );
-    } catch (error: any) {
-      toast.error(extractedMessage(error.message));
-    }
+    await handleTransaction(
+      account,
+      () => client.actions.select({ account, ...props }),
+      "Card has been selected.",
+    );
   };
 
   const start = async ({ account, ...props }: SystemTypes.Start) => {
-    try {
-      const { transaction_hash } = await client.actions.start({
-        account,
-        ...props,
-      });
-
-      notify(
-        `Game has been started.`,
-        await account.waitForTransaction(transaction_hash, {
-          retryInterval: 100,
-        }),
-      );
-    } catch (error: any) {
-      toast.error(extractedMessage(error.message));
-    }
+    await handleTransaction(
+      account,
+      () => client.actions.start({ account, ...props }),
+      "Game has been started.",
+    );
   };
 
   const play = async ({ account, ...props }: SystemTypes.Play) => {
-    try {
-      const { transaction_hash } = await client.actions.play({
-        account,
-        ...props,
-      });
-
-      notify(
-        `Move has been registered.`,
-        await account.waitForTransaction(transaction_hash, {
-          retryInterval: 100,
-        }),
-      );
-    } catch (error: any) {
-      toast.error(extractedMessage(error.message));
-    }
+    await handleTransaction(
+      account,
+      () => client.actions.play({ account, ...props }),
+      "Move has been registered.",
+    );
   };
 
   const remove = async ({ account, ...props }: SystemTypes.Discard) => {
-    try {
-      const { transaction_hash } = await client.actions.discard({
-        account,
-        ...props,
-      });
-
-      notify(
-        `Game has been discarded.`,
-        await account.waitForTransaction(transaction_hash, {
-          retryInterval: 100,
-        }),
-      );
-    } catch (error: any) {
-      toast.error(extractedMessage(error.message));
-    }
+    await handleTransaction(
+      account,
+      () => client.actions.discard({ account, ...props }),
+      "Game has been discarded.",
+    );
   };
 
   const surrender = async ({ account, ...props }: SystemTypes.Surrender) => {
-    try {
-      const { transaction_hash } = await client.actions.surrender({
-        account,
-        ...props,
-      });
-
-      notify(
-        `Game has been surrendered.`,
-        await account.waitForTransaction(transaction_hash, {
-          retryInterval: 100,
-        }),
-      );
-    } catch (error: any) {
-      toast.error(extractedMessage(error.message));
-    }
+    await handleTransaction(
+      account,
+      () => client.actions.surrender({ account, ...props }),
+      "Game has been surrendered.",
+    );
   };
 
   return {
