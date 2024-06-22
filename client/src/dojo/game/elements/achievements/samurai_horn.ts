@@ -43,7 +43,7 @@ export const SamuraiHorn: AchievementInterface = class SamuraiHorn {
   }
 
   public static description(): string {
-    return "Have 32 points or more and 2 upgrades on all taverns and citadels in the deck.";
+    return "Have 32+ points and both Tavern and Citadel at IV at the end of the game.";
   }
 
   public static effect(): string {

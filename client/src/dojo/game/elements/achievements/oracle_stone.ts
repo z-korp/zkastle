@@ -18,7 +18,7 @@ export const OracleStone: AchievementInterface = class OracleStone {
   }
 
   public static description(): string {
-    return "Have 40 points or more at the end of the game.";
+    return "Have 40+ points at the end of the game.";
   }
 
   public static effect(): string {

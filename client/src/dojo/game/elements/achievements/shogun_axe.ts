@@ -38,7 +38,7 @@ export const ShogunAxe: AchievementInterface = class ShogunAxe {
   }
 
   public static description(): string {
-    return "Have 34 points or more and 2 upgrades on all quarries in the deck.";
+    return "Have 34+ points and all Quarries at III or IV at the end of the game.";
   }
 
   public static effect(): string {

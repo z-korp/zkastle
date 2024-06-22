@@ -28,7 +28,7 @@ export const MonkStaff: AchievementInterface = class MonkStaff {
   }
 
   public static description(): string {
-    return "Have 2 upgrades on all cards in the deck.";
+    return "Have all cards set at 2 Upgrades at the end of the game.";
   }
 
   public static effect(): string {
