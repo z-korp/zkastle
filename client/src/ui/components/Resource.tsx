@@ -6,11 +6,11 @@ import { useMemo } from "react";
 
 export const Resource = ({ resource }: { resource: ResourceClass }) => {
   const { height, width } = useMemo(
-    () => ({ height: "h-12", width: "w-12" }),
+    () => ({ height: "h-10", width: "w-10" }),
     [],
   );
   return (
-    <div className="flex gap-4 justify-center">
+    <div className="flex gap-2 justify-center">
       {Array.from({ length: resource.wheat }, (_, i) => (
         <Wheat key={i} height={height} width={width} />
       ))}

@@ -30,7 +30,8 @@ export const ShowUprade: React.FC<ShowUpradeProps> = ({ coords }) => {
             opacity: 0, // Fade out
           }}
           transition={{ type: "spring", stiffness: 80 }}
-          className="absolute z-50"
+          className="absolute z-50 rounded-2xl"
+          style={{ boxShadow: "0 0 10px 5px rgba(255, 0, 0, 0.6)" }}
         >
           <Card
             data={{

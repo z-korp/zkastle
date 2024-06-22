@@ -71,10 +71,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onMouseDown={() => playClick()}
         {...props}
       >
-        {isLoading ? (
-          <div className="flex gap-2 items-center">
+        {false ? (
+          <div className="flex gap-1 items-center">
             {children}
-            <LucideLoader className="animate-spin-slow" size={15} />
+            <LucideLoader className="animate-spin-slow" size={12} />
           </div>
         ) : (
           children

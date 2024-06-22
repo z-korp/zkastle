@@ -38,7 +38,7 @@ export const OniFang: AchievementInterface = class OniFang {
   }
 
   public static description(): string {
-    return "Have 30+ points and all Farms at III at the end of the game.";
+    return "Have 30+ points and all Farms at IV at the end of the game.";
   }
 
   public static effect(): string {

@@ -6,10 +6,10 @@ import { Iron } from "@/ui/components/Resource";
 export const Cost = ({
   resources,
   textColor = "text-neutral-800",
-  height = "h-6",
-  width = "w-6",
+  height = "h-5",
+  width = "w-5",
   col = false,
-  gap = 0.5,
+  gap = 1,
 }: {
   resources: ResourceClass[];
   textColor?: string;

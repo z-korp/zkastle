@@ -48,6 +48,8 @@ export const Content = () => {
     [games],
   );
 
+  console.log("disabled", disabled);
+
   return (
     <Table className="text-md">
       <TableCaption className={`${disabled && "hidden"}`}>

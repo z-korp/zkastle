@@ -104,6 +104,12 @@ const Table: React.FC = () => {
   }, [game]);
 
   useEffect(() => {
+    if (game?.isOver()) {
+      firstRender.current = true; // Reset firstRender if the game is over
+    }
+  }, [game]);
+
+  useEffect(() => {
     if (!game || firstRender.current) return;
 
     // Update the positions of the cards based on game state
@@ -171,7 +177,12 @@ const Table: React.FC = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="relative">
-        <ShowUprade coords={deckCoordinates} />
+        <ShowUprade
+          coords={{
+            x: deckCoordinates.x,
+            y: deckCoordinates.y + CARD_HEIGHT / 2,
+          }}
+        />
         {cards.map((card, index) => {
           // Get deck cards and sort them by zIndex in descending order
           const deckCards = cards
@@ -201,8 +212,9 @@ const Table: React.FC = () => {
               <Card
                 isFlipped={
                   // Show the card flipped if in Deck pile except for the first card
+                  // or if there are less than 3 cards in the deck
                   card.position === PositionType.Deck &&
-                  !isFirstCardInDeck(card)
+                  (!isFirstCardInDeck(card) || game?.getRemaining() < 3)
                 }
                 data={{
                   card: card.data.card,
@@ -213,7 +225,8 @@ const Table: React.FC = () => {
                 first={card.position === PositionType.First}
                 actionable={
                   (card.position === PositionType.First &&
-                    !game.inStorage(game.card_one.id)) ||
+                    !game.inStorage(game.card_one.id) &&
+                    !game.inStorage(game.card_two.id)) ||
                   (card.position === PositionType.Second &&
                     !game.inStorage(game.card_two.id))
                 }

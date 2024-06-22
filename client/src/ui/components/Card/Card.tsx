@@ -119,7 +119,9 @@ const FlipCard: React.FC<FlipCardProps> = ({
           </div>
 
           {/* Resources */}
-          <div className={`absolute bottom-1/2 left-1/2 -translate-x-1/2 z-10`}>
+          <div
+            className={`absolute bottom-[60%] left-1/2 -translate-x-1/2 z-10`}
+          >
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
