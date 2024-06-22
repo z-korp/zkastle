@@ -72,14 +72,9 @@ const FlipCard: React.FC<FlipCardProps> = ({
       style={{ width: `${CARD_WIDTH}px`, height: `${CARD_HEIGHT}px` }}
     >
       <div
-        className={`flip-card-inner relative w-full h-full text-center transition-transform duration-800 transform-style-3d ${isFlipped ? "rotate-y-180" : ""}`}
+        className={`flip-card-inner relative w-full h-full text-center transition-transform duration-800 transform-style-3d ${isFlipped ? "rotate-y-180" : ""} ${greyed && "grayscale"}`}
       >
         <div className="bg-cover bg-center flip-card-front absolute flex flex-col justify-center w-full h-full rounded-2xl overflow-clip border border-slate-900 bg-slate-200 backface-hidden">
-          {greyed && (
-            <div
-              className={`absolute h-full w-full bg-black opacity-20 z-50`}
-            />
-          )}
           {!noBg && (
             <div
               className={`absolute h-full w-full bg-cover bg-center opacity-50 z-0`}
