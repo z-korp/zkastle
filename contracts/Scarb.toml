@@ -24,13 +24,13 @@ initializer_class_hash = "0xbeef"
 
 [profile.dev.tool.dojo.env]
 rpc_url = "http://localhost:5050/"
-account_address = "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca"
-private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
+account_address = "0x6b12008f51ab9bb1b078e175cf0f7a18e7e59deb8125b2c544ebac9386b3929"
+private_key = "0x7de91e7a859544bd2bf5354b2aff2253777a9c7b2c5e306a0718d06bf272697"
 
 [profile.slot.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/zkastle/katana"
-account_address = "0x7f72521e15721c6e0ea834aee0ca964147b6de30351ba761b3548f7d1a8beb8"
-private_key = "0x31f6f3f619373d03d9a7dcf219f863925f470ee577577f7731d510ce81cbed6"
+account_address = "0x7071ed6ccea60f2a33014faec536075c3d05edb435ae2cc0915d4eb4d6012d1"
+private_key = "0x7926b3cd3cbca3ec4fc72da9376cd4961169d5e4eac9a5429bbc4a3da292909"
 
 # Sepolia
 [profile.sepolia.tool.dojo.env]

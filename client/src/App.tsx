@@ -1,11 +1,9 @@
-import "./App.css";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "./ui/elements/sonner";
 import { Home } from "./ui/screens/Home";
-import { useGame } from "@/hooks/useGame";
-import { useQueryParams } from "@/hooks/useQueryParams";
 import { ThemeProvider } from "./ui/elements/theme-provider";
+
+import "./App.css";
 
 export const SceneManager = () => {
   return <Home />;
@@ -14,7 +12,7 @@ export const SceneManager = () => {
 export default () => {
   return (
     <>
-      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <Router>
           <Routes>
             <Route path="/" element={<SceneManager />} />

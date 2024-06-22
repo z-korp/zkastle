@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
-original_class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
+class_hash = "0x4be10cbeb28a10a5b5e5fb55c41269de0fb6ea6eaeec2ac11395e186b9f9e1c"
+original_class_hash = "0x4be10cbeb28a10a5b5e5fb55c41269de0fb6ea6eaeec2ac11395e186b9f9e1c"
 abi = "manifests/slot/abis/base/models/zkastle_models_index_player.json"
 name = "zkastle::models::index::player"
 
@@ -15,7 +15,17 @@ type = "u32"
 key = false
 
 [[members]]
+name = "card_id"
+type = "u8"
+key = false
+
+[[members]]
 name = "achievements"
+type = "u32"
+key = false
+
+[[members]]
+name = "enables"
 type = "u32"
 key = false
 
