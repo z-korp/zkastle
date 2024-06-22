@@ -60,6 +60,7 @@
     "tailwindcss-animate": "^1.0.7",
     "use-sound": "^4.0.1",
     "vaul": "^0.9.1",
+    "vite-plugin-pwa": "^0.20.0",
     "vite-plugin-top-level-await": "^1.4.1",
     "vite-plugin-wasm": "^3.3.0",
     "zustand": "^4.5.2"
