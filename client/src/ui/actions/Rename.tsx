@@ -60,7 +60,9 @@ export const Create = () => {
           type="text"
           value={playerName}
           onChange={(e) => {
-            setPlayerName(e.target.value);
+            if (e.target.value.length <= 19) {
+              setPlayerName(e.target.value);
+            }
           }}
         />
 
