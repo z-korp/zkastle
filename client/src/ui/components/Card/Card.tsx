@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Card } from "@/dojo/game/types/card";
+import { Card as CardClass } from "@/dojo/game/types/card";
 import { faKhanda, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Side } from "@/dojo/game/types/side";
@@ -21,8 +21,8 @@ import { useGameStore } from "@/stores/game";
 import { CARD_WIDTH, CARD_HEIGHT } from "@/ui/constants";
 import "./Card.css";
 
-interface FlipCardProps {
-  data: { card: Card; side: Side; id: number };
+interface CardProps {
+  data: { card: CardClass; side: Side; id: number };
   isFlipped: boolean;
   first?: boolean;
   greyed?: boolean;
@@ -37,7 +37,7 @@ interface FlipCardProps {
   fgDescription?: string;
 }
 
-const FlipCard: React.FC<FlipCardProps> = ({
+const Card: React.FC<CardProps> = ({
   data,
   isFlipped,
   first = false,
@@ -229,4 +229,4 @@ const FlipCard: React.FC<FlipCardProps> = ({
   );
 };
 
-export default FlipCard;
+export default Card;
