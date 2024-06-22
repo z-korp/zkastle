@@ -135,13 +135,6 @@ const Card: React.FC<CardProps> = ({
           <div className="flex flex-col justify-between h-full pt-8 pb-4">
             <Badge className="flex mx-auto text z-10">{card.value}</Badge>
             <div className="flex flex-col gap-2 items-start z-10 ml-2">
-              {/* Discard */}
-              {!noButton &&
-                first &&
-                card.isAllowed(side, new Action(ActionType.Discard)) && (
-                  <Discard choice={first} />
-                )}
-
               {/* Store */}
               {card.isAllowed(side, new Action(ActionType.Store)) && (
                 <div className="flex gap-2 items-center">
@@ -210,6 +203,12 @@ const Card: React.FC<CardProps> = ({
                       )}
                     />
                   </div>
+                )}
+
+              {/* Discard */}
+              {!noButton &&
+                card.isAllowed(side, new Action(ActionType.Discard)) && (
+                  <Discard choice={first} enabled={first} />
                 )}
             </div>
           </div>

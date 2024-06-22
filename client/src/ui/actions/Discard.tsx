@@ -7,7 +7,13 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { Action, ActionType } from "@/dojo/game/types/action";
 import { useGameStore } from "@/stores/game";
 
-export const Discard = ({ choice }: { choice: boolean }) => {
+export const Discard = ({
+  choice,
+  enabled,
+}: {
+  choice: boolean;
+  enabled: boolean;
+}) => {
   const {
     account: { account },
     master,
@@ -48,7 +54,7 @@ export const Discard = ({ choice }: { choice: boolean }) => {
     <Button
       className="w-[55px] h-[28px]"
       size="sm"
-      disabled={disabled || isLoading}
+      disabled={!enabled || disabled || isLoading}
       isLoading={isLoading}
       onClick={handleClick}
     >
