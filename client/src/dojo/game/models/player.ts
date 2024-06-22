@@ -56,10 +56,10 @@ export class Player {
     );
   }
 
-  public isEnabled(achivement: Achievement): boolean {
+  public isEnabled(achievement: Achievement): boolean {
     return this.enables.some(
       (detail) =>
-        detail.achievement.value === achivement.value && detail.status,
+        detail.achievement.value === achievement.value && detail.status,
     );
   }
 }

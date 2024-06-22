@@ -18,24 +18,24 @@ export const Enable = ({ id }: { id: number }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const status = useMemo(() => {
+    if (!player) return false;
+    const achievement = Achievement.from(id);
+    return player.isEnabled(achievement);
+  }, [player]);
+
   const handleClick = useCallback(async () => {
     setIsLoading(true);
     try {
       await enable({
         account: account as Account,
         achievement_id: id,
-        enable: true,
+        enable: !status,
       });
     } finally {
       setIsLoading(false);
     }
-  }, [account, id]);
-
-  const status = useMemo(() => {
-    if (!player) return false;
-    const achievement = Achievement.from(id);
-    return player.isEnabled(achievement);
-  }, [player]);
+  }, [account, status, id]);
 
   const disabled = useMemo(() => {
     const achievement = Achievement.from(id);
@@ -46,7 +46,7 @@ export const Enable = ({ id }: { id: number }) => {
       !player ||
       !player.has(achievement)
     );
-  }, [account, master, player]);
+  }, [account, master, player, id]);
 
   return (
     <Button
@@ -56,7 +56,7 @@ export const Enable = ({ id }: { id: number }) => {
       isLoading={isLoading}
       onClick={handleClick}
     >
-      {status ? "Enable" : "Disable"}
+      {status ? "Disable" : "Enable"}
     </Button>
   );
 };

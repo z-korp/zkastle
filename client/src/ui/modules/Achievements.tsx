@@ -67,10 +67,13 @@ export const Achievements = () => {
                 >
                   <Canvas
                     items={group}
-                    has={
-                      player && group.length > 0
-                        ? player.has(group[0].achievement)
-                        : false
+                    enabled={
+                      (player &&
+                        (group.length > 0
+                          ? player.has(group[0].achievement)
+                          : false) &&
+                        player.isEnabled(group[0].achievement)) ||
+                      false
                     }
                     selectable={!!selectable}
                   />
@@ -86,11 +89,11 @@ export const Achievements = () => {
 
 export const Canvas = ({
   items,
-  has,
+  enabled,
   selectable,
 }: {
   items: { achievement: Achievement; card: CardClass; side: Side }[];
-  has: boolean;
+  enabled: boolean;
   selectable: boolean;
 }) => {
   const [page, setPage] = useState<SideType>(SideType.One);
@@ -105,8 +108,14 @@ export const Canvas = ({
     return Game.getCardId(item.card);
   }, [item]);
 
+  const achievementId = useMemo(() => {
+    if (!items.length) return 0;
+    return items[0].achievement.into();
+  }, [item]);
+
   if (!item && items.length === 0) return null;
 
+  // Achievement with no card
   if (!item) {
     const achievement = items[0].achievement;
     const card = items[0].card;
@@ -114,7 +123,7 @@ export const Canvas = ({
     return (
       <div className="flex flex-col gap-2 pb-2">
         <div
-          className={`flex flex-col justify-center items-center ${!has && "grayscale"}`}
+          className={`flex flex-col justify-center items-center ${!enabled && "grayscale"}`}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
@@ -126,12 +135,13 @@ export const Canvas = ({
           />
         </div>
         <div className="w-full flex justify-center">
-          <Enable id={cardId} />
+          <Enable id={achievementId} />
         </div>
       </div>
     );
   }
 
+  // Achievement with card
   return (
     <div className="flex flex-col justify-center items-center gap-2 pb-2">
       <Pagination>
@@ -150,7 +160,7 @@ export const Canvas = ({
         </PaginationContent>
       </Pagination>
       <div
-        className={`${!has && "grayscale"}`}
+        className={`${!enabled && "grayscale"}`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -162,7 +172,7 @@ export const Canvas = ({
       </div>
       <div className="w-full flex justify-center gap-4">
         {selectable && <Select id={cardId} />}
-        <Enable id={cardId} />
+        <Enable id={achievementId} />
       </div>
     </div>
   );
