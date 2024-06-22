@@ -145,7 +145,7 @@ const Table: React.FC = () => {
                 id: updatedCard.id,
               },
               position: updatedCard.position,
-              zIndex: zIndex,
+              zIndex,
             }
           : cardData;
       });

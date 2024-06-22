@@ -7,13 +7,7 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { Action, ActionType } from "@/dojo/game/types/action";
 import { useGameStore } from "@/stores/game";
 
-export const Discard = ({
-  choice,
-  enabled,
-}: {
-  choice: boolean;
-  enabled: boolean;
-}) => {
+export const Discard = ({ enabled }: { enabled: boolean }) => {
   const {
     account: { account },
     master,
@@ -37,7 +31,7 @@ export const Discard = ({
       await play({
         account: account as Account,
         action: new Action(ActionType.Discard).into(),
-        choice,
+        choice: true, // first
         resources: 0n,
       });
       setResources(0n);
