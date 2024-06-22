@@ -97,3 +97,9 @@ img {
   -webkit-user-drag: none;
   pointer-events: none;
 }
+
+html,
+body {
+  overflow: hidden;
+  touch-action: none; /* Prevents touch-based panning */
+}
