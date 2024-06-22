@@ -4,6 +4,7 @@ import * as SystemTypes from "./generated/contractSystems";
 import { ClientModels } from "./models";
 import { shortenHex } from "@dojoengine/utils";
 import { Account } from "starknet";
+import { isAppPwa, isMdOrLarger } from "@/hooks/useIsPwa";
 
 export type SystemCalls = ReturnType<typeof systems>;
 
@@ -18,6 +19,10 @@ export function systems({
     return message.match(/\('([^']+)'\)/)?.[1];
   };
 
+  const isMdOrLarger = (): boolean => {
+    return window.matchMedia("(min-width: 768px)").matches;
+  };
+
   const getToastAction = (transaction_hash: string) => {
     return {
       label: "View",
@@ -27,6 +32,19 @@ export function systems({
         ),
     };
   };
+
+  const getToastPlacement = ():
+    | "top-center"
+    | "bottom-center"
+    | "bottom-right" => {
+    if (!isMdOrLarger()) {
+      // if mobile
+      return isAppPwa() ? "top-center" : "bottom-center";
+    }
+    return "bottom-right";
+  };
+
+  const toastPlacement = getToastPlacement();
 
   const notify = (
     message: string,
@@ -38,12 +56,12 @@ export function systems({
         id: toastId,
         description: shortenHex(transaction.transaction_hash),
         action: getToastAction(transaction.transaction_hash),
-        position: "top-center",
+        position: toastPlacement,
       });
     } else {
       toast.error(extractedMessage(transaction.revert_reason), {
         id: toastId,
-        position: "top-center",
+        position: toastPlacement,
       });
     }
   };
@@ -53,14 +71,17 @@ export function systems({
     action: () => Promise<{ transaction_hash: string }>,
     successMessage: string,
   ) => {
-    const toastId = toast.loading("Transaction in progress...");
+    const toastId = toast.loading("Transaction in progress...", {
+      position: toastPlacement,
+      description: "",
+    });
     try {
       const { transaction_hash } = await action();
       toast.loading("Transaction in progress...", {
         description: shortenHex(transaction_hash),
         action: getToastAction(transaction_hash),
         id: toastId,
-        position: "top-center",
+        position: toastPlacement,
       });
 
       const transaction = await account.waitForTransaction(transaction_hash, {

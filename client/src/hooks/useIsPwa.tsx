@@ -4,15 +4,19 @@ interface Navigator {
   standalone?: boolean;
 }
 
-const useIsPwa = () => {
+export const isAppPwa = (): boolean => {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    (window.navigator as Navigator).standalone === true
+  );
+};
+
+function useIsPwa() {
   const [isPwa, setIsPwa] = useState(false);
 
   useEffect(() => {
     const checkPwa = () => {
-      const isInPwa =
-        window.matchMedia("(display-mode: standalone)").matches ||
-        (window.navigator as Navigator).standalone === true;
-      setIsPwa(isInPwa);
+      setIsPwa(isAppPwa());
     };
 
     checkPwa();
@@ -24,6 +28,6 @@ const useIsPwa = () => {
   }, []);
 
   return isPwa;
-};
+}
 
 export default useIsPwa;
