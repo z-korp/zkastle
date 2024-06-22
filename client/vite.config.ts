@@ -26,7 +26,7 @@ export default defineConfig({
         short_name: "zKastle",
         description:
           "Solo strategy card game where you manage resources and upgrade your village to maximize points. Make tactical decisions to help your village grow and flourish.",
-        theme_color: "#E50D2C",
+        theme_color: "#000000",
         icons: [
           {
             src: "/assets/pwa-192x192.png",
