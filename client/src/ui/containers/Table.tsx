@@ -29,11 +29,11 @@ const getPositionCoordinates = (
     },
     [PositionType.Second]: {
       x: -CARD_WIDTH - widthBetweenCards / 2,
-      y: height / 8 + CARD_HEIGHT + widthBetweenCards,
+      y: height / 8 + CARD_HEIGHT + widthBetweenCards - (isMdOrLarger ? 0 : 10),
     },
     [PositionType.First]: {
       x: widthBetweenCards,
-      y: height / 8 + CARD_HEIGHT + widthBetweenCards,
+      y: height / 8 + CARD_HEIGHT + widthBetweenCards - (isMdOrLarger ? 0 : 10),
     },
   };
 };
