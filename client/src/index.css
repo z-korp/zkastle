@@ -91,3 +91,9 @@
       "calt" 1;
   }
 }
+
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
