@@ -39,7 +39,7 @@ export function systems({
     | "bottom-right" => {
     if (!isMdOrLarger()) {
       // if mobile
-      return isAppPwa() ? "top-center" : "bottom-center";
+      return isAppPwa() ? "bottom-center" : "top-center";
     }
     return "bottom-right";
   };
