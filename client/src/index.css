@@ -100,6 +100,5 @@ img {
 
 html,
 body {
-  overflow: hidden;
   touch-action: none; /* Prevents touch-based panning */
 }

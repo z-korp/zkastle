@@ -211,7 +211,7 @@ const Card: React.FC<CardProps> = ({
               {/* Discard */}
               {!noButton &&
                 card.isAllowed(side, new Action(ActionType.Discard)) && (
-                  <Discard choice={first} enabled={first} />
+                  <Discard enabled={first} />
                 )}
             </div>
           </div>
