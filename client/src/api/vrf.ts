@@ -11,7 +11,7 @@ export interface VrfResponse {
 
 export const fetchVrfData = async (): Promise<VrfResponse> => {
   try {
-    const response = await fetch("/api/vrf");
+    const response = await fetch(import.meta.env.VITE_VRF_URL as string);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
