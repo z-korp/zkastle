@@ -7,9 +7,9 @@ edition = "2023_10"
 sierra-replace-ids = true
 
 [scripts]
-deploy-dev = "NAME=v0 && sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan --name $NAME && sozo --profile dev migrate apply --name $NAME"
-deploy-slot = "NAME=v4 && sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name $NAME && sozo --profile slot migrate apply --name $NAME"
-deploy-sepolia = "NAME=v0 && sozo --profile sepolia clean && sozo --profile sepolia build && sozo --profile sepolia migrate plan --name $NAME && sozo --profile sepolia migrate apply --name $NAME"
+dev = "sozo --profile dev clean && sozo --profile dev build && sozo --profile dev migrate plan && sozo --profile dev migrate apply"
+slot = "NAME=v1 && sozo --profile slot clean && sozo --profile slot build && sozo --profile slot migrate plan --name $NAME && sozo --profile slot migrate apply --name $NAME"
+sepolia = "NAME=v1 && sozo --profile sepolia clean && sozo --profile sepolia clean && sozo --profile sepolia build && sozo --profile sepolia migrate plan --name $NAME && sozo --profile sepolia migrate apply --fee-estimate-multiplier 10 --name $NAME"
 
 [dependencies]
 alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria", rev = "78b0d51" }
@@ -43,7 +43,7 @@ private_key = ""
 
 [tool.dojo.world]
 name = "zKastle"
-description = "Solo strategy card game."
+description = "Solo strategy card game where you manage resources and upgrade your village to maximize points. Make tactical decisions to help your village grow and flourish."
 cover_uri = "file://assets/cover.png"
 icon_uri = "file://assets/icon.png"
 website = "https://app.zkastle.xyz"
