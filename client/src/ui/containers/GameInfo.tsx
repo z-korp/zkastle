@@ -42,7 +42,7 @@ export const GameInfo = () => {
         <p className="text-6xl">{remaining}</p>
       </div>
 
-      <div className="flex flex-col gap-2 w-full items-end">
+      <div className="flex flex-col gap-2 w-full items-end py-1">
         <Surrender />
         <Storage />
         <Cost

@@ -14,7 +14,7 @@ export const Home = () => {
           <Create />
           <Start />
         </div>
-        <div className="absolute top-0 flex flex-col items-center gap-4 w-full p-4 max-w-4xl">
+        <div className="absolute top-0 flex flex-col items-center gap-4 w-full px-4 py-2 max-w-4xl">
           <GameInfo />
           <GameOver />
         </div>

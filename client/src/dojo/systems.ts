@@ -38,9 +38,13 @@ export function systems({
         id: toastId,
         description: shortenHex(transaction.transaction_hash),
         action: getToastAction(transaction.transaction_hash),
+        position: "top-center",
       });
     } else {
-      toast.error(extractedMessage(transaction.revert_reason), { id: toastId });
+      toast.error(extractedMessage(transaction.revert_reason), {
+        id: toastId,
+        position: "top-center",
+      });
     }
   };
 
@@ -56,6 +60,7 @@ export function systems({
         description: shortenHex(transaction_hash),
         action: getToastAction(transaction_hash),
         id: toastId,
+        position: "top-center",
       });
 
       const transaction = await account.waitForTransaction(transaction_hash, {
