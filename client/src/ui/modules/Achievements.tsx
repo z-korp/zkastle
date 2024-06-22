@@ -25,8 +25,6 @@ import { useMediaQuery } from "react-responsive";
 import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Achievement, AchievementType } from "@/dojo/game/types/achievement";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import Card from "../components/Card/Card";
 import { Select } from "../actions/Select";
 
@@ -60,7 +58,7 @@ export const Achievements = () => {
             orientation={"horizontal"}
             opts={{ dragFree: isMdOrLarger }}
           >
-            <CarouselContent className="flex items-end">
+            <CarouselContent className="flex items-center">
               {groups.map((group, index) => (
                 <CarouselItem
                   key={index}
@@ -148,7 +146,7 @@ export const Canvas = ({
         </PaginationContent>
       </Pagination>
       <div
-        className={`${!has && "grayscale"}`}
+        className={`mb-2 ${!has && "grayscale"}`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >

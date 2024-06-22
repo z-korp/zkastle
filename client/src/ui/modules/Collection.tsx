@@ -27,7 +27,6 @@ import Card from "../components/Card/Card";
 import { Select } from "../actions/Select";
 import { useDojo } from "@/dojo/useDojo";
 import { usePlayer } from "@/hooks/usePlayer";
-import { Player } from "@/dojo/game/models/player";
 import { Achievement, AchievementType } from "@/dojo/game/types/achievement";
 
 export const Collection = () => {
@@ -42,8 +41,6 @@ export const Collection = () => {
   const selectable = useMemo(() => {
     return player && player.has(new Achievement(AchievementType.OracleStone));
   }, [player]);
-
-  if (!player) return null;
 
   return (
     <Drawer handleOnly={true}>
@@ -116,7 +113,9 @@ export const Canvas = ({
           ))}
         </PaginationContent>
       </Pagination>
-      <Card data={{ ...item, id: 0 }} isFlipped={false} />
+      <div className="mb-2">
+        <Card data={{ ...item, id: 0 }} isFlipped={false} />
+      </div>
       {selectable && <Select id={cardId} />}
     </div>
   );

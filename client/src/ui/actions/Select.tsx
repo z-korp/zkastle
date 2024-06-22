@@ -36,7 +36,7 @@ export const Select = ({ id }: { id: number }) => {
       !master ||
       account === master ||
       !player ||
-      player.has(new Achievement(AchievementType.OracleStone)) ||
+      !player.has(new Achievement(AchievementType.OracleStone)) ||
       player.card_id === id
     );
   }, [account, master, player]);
