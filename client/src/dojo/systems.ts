@@ -72,6 +72,10 @@ export function systems({
     action: () => Promise<{ transaction_hash: string }>,
     successMessage: string,
   ) => {
+    toast.loading("Transaction in progress...", {
+      id: TOAST_ID,
+      position: toastPlacement,
+    });
     try {
       const { transaction_hash } = await action();
       toast.loading("Transaction in progress...", {
