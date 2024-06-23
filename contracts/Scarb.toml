@@ -34,7 +34,7 @@ private_key = "0x7926b3cd3cbca3ec4fc72da9376cd4961169d5e4eac9a5429bbc4a3da292909
 
 # Sepolia
 [profile.sepolia.tool.dojo.env]
-rpc_url = "https://starknet-mainnet.public.blastapi.io/rpc/v0_7"
+rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
 #rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_6"
 #rpc_url = "https://free-rpc.nethermind.io/sepolia-juno/v0_6"
 #rpc_url = "https://rpc.nethermind.io/sepolia-juno/v0_6?apiKey=supVUiu9olj34NdcUsq6T5dAFsp0ZpjMHyWlGJ1Zd6GtRiVr"
