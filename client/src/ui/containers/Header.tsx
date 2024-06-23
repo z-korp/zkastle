@@ -127,6 +127,7 @@ export const Header = () => {
           {!!player && (
             <p className="text-2xl max-w-44 truncate">{player.name}</p>
           )}
+          <Connect />
         </div>
       </div>
       <Separator />
