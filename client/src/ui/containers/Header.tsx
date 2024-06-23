@@ -89,7 +89,7 @@ export const Header = () => {
     </div>
   ) : (
     <div>
-      <div className="px-3 py-2 flex gap-5">
+      <div className="px-3 py-2 flex gap-3">
         <Drawer direction="left">
           <DrawerTrigger>
             <FontAwesomeIcon icon={faBars} size="xl" />
@@ -126,7 +126,7 @@ export const Header = () => {
         <div className="w-full flex justify-between items-center">
           <p className="text-4xl font-bold">zKastle</p>
           {!!player ? (
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-2 items-center">
               <p className="text-2xl max-w-44 truncate">{player.name}</p>
               <Balance
                 address={account.address}
