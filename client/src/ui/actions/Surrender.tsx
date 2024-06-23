@@ -47,7 +47,7 @@ export const Surrender = () => {
   if (disabled) return null;
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-4">
       <div className="text-2xl hidden md:block">Surrender</div>
       <Dialog>
         <DialogTrigger asChild>
