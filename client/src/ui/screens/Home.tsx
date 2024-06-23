@@ -4,8 +4,11 @@ import { Start } from "../actions/Start";
 import Table from "../containers/Table";
 import { GameInfo } from "../containers/GameInfo";
 import { GameOver } from "../containers/GameOver";
+import { useDojo } from "@/dojo/useDojo";
 
 export const Home = () => {
+  const { account } = useDojo();
+
   return (
     <div className="relative flex flex-col">
       <Header />
@@ -13,6 +16,9 @@ export const Home = () => {
         <div className="absolute top-10 flex flex-col items-center gap-4 w-full p-4 max-w-4xl">
           <Create />
           <Start />
+          {account === undefined && (
+            <div className="text-xl">Please connect a Wallet.</div>
+          )}
         </div>
         <div className="absolute top-0 flex flex-col items-center gap-4 w-full px-4 py-2 max-w-4xl">
           <GameInfo />
