@@ -9,7 +9,8 @@ const {
   VITE_PUBLIC_MASTER_PRIVATE_KEY,
   VITE_PUBLIC_ACCOUNT_CLASS_HASH,
   VITE_PUBLIC_FEE_TOKEN_ADDRESS,
-  VITE_PUBLIC_PRODUCTION,
+  VITE_PUBLIC_SEPOLIA,
+  VITE_PUBLIC_SLOT,
 } = import.meta.env;
 
 export type Config = ReturnType<typeof dojoConfig>;
@@ -30,11 +31,6 @@ export function dojoConfig() {
     feeTokenAddress:
       VITE_PUBLIC_FEE_TOKEN_ADDRESS ||
       "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
-    manifest:
-      VITE_PUBLIC_PRODUCTION && VITE_PUBLIC_PRODUCTION === "slot"
-        ? slot
-        : VITE_PUBLIC_PRODUCTION && VITE_PUBLIC_PRODUCTION === "sepolia"
-          ? sepolia
-          : local,
+    manifest: VITE_PUBLIC_SLOT ? slot : VITE_PUBLIC_SEPOLIA ? sepolia : local,
   };
 }
