@@ -16,7 +16,11 @@ import {
   DrawerTrigger,
 } from "@/ui/elements/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faGear } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faGear,
+  faArrowUpRightFromSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import { Leaderboard } from "../modules/Leaderboard";
 import { Achievements } from "../modules/Achievements";
 import {
@@ -55,6 +59,12 @@ export const Header = () => {
           <Collection />
           <Achievements />
           <Leaderboard />
+          <a href={"https://zkastle-docs.vercel.app/"} target="_blank">
+            <Button variant="outline" className="flex gap-2">
+              <p>Doc</p>
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+            </Button>
+          </a>
         </div>
         <div className="flex flex-col gap-4 items-center md:flex-row">
           {!!player && (
@@ -100,6 +110,12 @@ export const Header = () => {
               <Collection />
               <Achievements />
               <Leaderboard />
+              <a href={"https://zkastle-docs.vercel.app/"} target="_blank">
+                <Button variant="outline" className="flex gap-2 w-full">
+                  <p>Doc</p>
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                </Button>
+              </a>
             </div>
             <div className="flex flex-col gap-5 p-4">
               <div className="flex flex-col gap-2 items-center">
