@@ -1,5 +1,6 @@
 import { erc20ABI } from "@/utils/erc20";
 import { useContractRead } from "@starknet-react/core";
+import { useMediaQuery } from "react-responsive";
 import { BlockTag } from "starknet";
 
 interface BalanceProps {
@@ -14,6 +15,8 @@ interface BalanceData {
 }
 
 const Balance = ({ address, token_address }: BalanceProps) => {
+  const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
+
   // useBalance doesn't work on Katana, don't know why
   const { data, isError, isLoading, error } = useContractRead({
     functionName: "balanceOf",
@@ -32,7 +35,7 @@ const Balance = ({ address, token_address }: BalanceProps) => {
   return (
     <div className="text-sm">{`${parseFloat(
       formatUnits(balanceData.balance.low, 18),
-    ).toFixed(5)} ETH`}</div>
+    ).toFixed(isMdOrLarger ? 5 : 2)} ETH`}</div>
   );
 };
 
