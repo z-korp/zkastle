@@ -126,7 +126,7 @@ export const Header = () => {
         <div className="w-full flex justify-between items-center">
           <p className="text-4xl font-bold">zKastle</p>
           {!!player ? (
-            <div className="flex gap-1">
+            <div className="flex gap-1 items-center">
               <p className="text-2xl max-w-44 truncate">{player.name}</p>
               <Balance
                 address={account.address}

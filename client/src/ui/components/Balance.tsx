@@ -35,7 +35,7 @@ const Balance = ({ address, token_address }: BalanceProps) => {
   return (
     <div className="text-sm">{`${parseFloat(
       formatUnits(balanceData.balance.low, 18),
-    ).toFixed(isMdOrLarger ? 5 : 2)} ETH`}</div>
+    ).toFixed(isMdOrLarger ? 5 : 2)}ETH`}</div>
   );
 };
 
