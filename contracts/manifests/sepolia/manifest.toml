@@ -26,7 +26,10 @@ original_class_hash = "0x3f57b011e7adc1d223f744e93ad35906e3e3013e5f4818f06cc2e3c
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
 abi = "manifests/sepolia/abis/deployments/contracts/zkastle_systems_actions_actions.json"
 reads = []
-writes = []
+writes = [
+    "Player",
+    "Game",
+]
 computed = []
 init_calldata = []
 name = "zkastle::systems::actions::actions"

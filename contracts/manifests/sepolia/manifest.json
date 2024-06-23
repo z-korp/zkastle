@@ -1373,7 +1373,10 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "Player",
+        "Game"
+      ],
       "computed": [],
       "init_calldata": [],
       "name": "zkastle::systems::actions::actions"

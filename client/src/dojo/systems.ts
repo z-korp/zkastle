@@ -32,9 +32,7 @@ export function systems({
     return {
       label: "View",
       onClick: () =>
-        window.open(
-          `https://worlds.dev/networks/slot/worlds/zkastle/txs/${transaction_hash}`,
-        ),
+        window.open(`https://sepolia.voyager.online/tx/${transaction_hash}`),
     };
   };
 
