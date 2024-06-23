@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --mode dev",
     "slot": "vite --mode slot",
-    "sepolia": "vite --mode sepolia",
+    "sepolia": "vite --mode sepolia --host",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -86,6 +86,7 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5",
-    "vite": "^4.5.3"
+    "vite": "^4.5.3",
+    "vite-plugin-mkcert": "^1.17.5"
   }
 }
