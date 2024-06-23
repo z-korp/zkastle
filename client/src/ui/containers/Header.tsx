@@ -16,9 +16,17 @@ import {
   DrawerTrigger,
 } from "@/ui/elements/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faGear } from "@fortawesome/free-solid-svg-icons";
 import { Leaderboard } from "../modules/Leaderboard";
 import { Achievements } from "../modules/Achievements";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/ui/elements/dropdown-menu";
 
 export const Header = () => {
   const {
@@ -53,7 +61,22 @@ export const Header = () => {
             <p className="text-2xl max-w-44 truncate">{player.name}</p>
           )}
           <div className="flex gap-2">
-            <Account />
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <FontAwesomeIcon icon={faGear} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent sideOffset={24}>
+                <DropdownMenuLabel>Sound</DropdownMenuLabel>
+                <DropdownMenuItem>
+                  <MusicPlayer />
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Burner Account</DropdownMenuLabel>
+                <DropdownMenuItem>
+                  <Account />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <ModeToggle />
           </div>
         </div>
