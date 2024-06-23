@@ -98,7 +98,7 @@ const Table: React.FC = () => {
   useEffect(() => {
     if (firstRender.current && game?.cards && game?.getCardInHand()) {
       const updatedCards = game.cards.map((cardData, index: number) => ({
-        zIndex: game.cards.length - index,
+        zIndex: 1000 + (game.cards.length - index),
         data: {
           card: cardData.card,
           side: cardData.side,
