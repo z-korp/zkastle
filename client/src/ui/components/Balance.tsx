@@ -30,9 +30,9 @@ const Balance = ({ address, token_address }: BalanceProps) => {
   const balanceData = data as BalanceData; // Type assertion here
 
   return (
-    <div className="font-joystix text-xs">{`${parseFloat(
+    <div className="text-sm">{`${parseFloat(
       formatUnits(balanceData.balance.low, 18),
-    ).toFixed(7)} ETH`}</div>
+    ).toFixed(5)} ETH`}</div>
   );
 };
 

@@ -16,10 +16,19 @@ import {
   DrawerTrigger,
 } from "@/ui/elements/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faGear } from "@fortawesome/free-solid-svg-icons";
 import { Leaderboard } from "../modules/Leaderboard";
 import { Achievements } from "../modules/Achievements";
 import Connect from "../components/Connect";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@/ui/elements/dropdown-menu";
+import AccountData from "../components/AccountData";
 
 export const Header = () => {
   const {
@@ -44,7 +53,7 @@ export const Header = () => {
           onClick={handleClick}
         >
           <p className="text-4xl font-bold">zKastle</p>
-          <MusicPlayer />
+
           <Collection />
           <Achievements />
           <Leaderboard />
@@ -54,6 +63,22 @@ export const Header = () => {
             <p className="text-2xl max-w-44 truncate">{player.name}</p>
           )}
           <Connect />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <FontAwesomeIcon icon={faGear} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent sideOffset={24}>
+              <DropdownMenuLabel>Sound</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <MusicPlayer />
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Account</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <AccountData />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div className="flex gap-2">
             <ModeToggle />
           </div>
