@@ -46,10 +46,6 @@ export class Player {
     return shortenHex(this.id);
   }
 
-  public getShortName(): string {
-    return this.name.length > 16 ? `${this.name.slice(0, 13)}...` : this.name;
-  }
-
   public has(achivement: Achievement): boolean {
     return this.achievements.some(
       (detail) => detail.achievement.value === achivement.value,

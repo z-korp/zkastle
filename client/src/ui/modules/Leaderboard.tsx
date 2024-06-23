@@ -99,7 +99,7 @@ export const Row = ({ rank, game }: { rank: number; game: Game }) => {
         <Achievements details={game.achievements} />
       </TableCell>
       <TableCell className="text-left max-w-36 truncate">
-        {player?.getShortName() || "-"}
+        {player?.name || "-"}
       </TableCell>
     </TableRow>
   );
