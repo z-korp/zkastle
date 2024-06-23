@@ -21,7 +21,7 @@ const AccountData = () => {
   if (status === "connected" && address) {
     return (
       <div className="flex gap-3 items-center flex-col text-primary">
-        <div className="flex items-center gap-3 w-full">
+        <div className="flex items-center gap-3 w-full flex-wrap md:flex-nowrap">
           <div className="flex items-center gap-3 rounded-lg px-3 py-1 justify-between border">
             <p className="text-sm">{shortAddress(address, 4)}</p>
             <Balance

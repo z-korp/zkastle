@@ -106,7 +106,10 @@ export const Header = () => {
               {/*<div className="flex flex-col gap-2 items-center">
                 <p className="self-start">Burner Account</p> <Account />
               </div>*/}
-              <Connect />
+
+              <div className="flex flex-col gap-2 items-center">
+                <p className="self-start">Account</p> <AccountData />
+              </div>
               <div className="flex flex-col gap-2 items-center">
                 <p className="self-start">Theme</p> <ModeToggle />
               </div>
