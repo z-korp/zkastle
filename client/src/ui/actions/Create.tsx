@@ -13,6 +13,7 @@ import { Button } from "@/ui/elements/button";
 import { Input } from "@/ui/elements/input";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Account } from "starknet";
+import { MAX_CHAR_PSEUDO } from "../constants";
 
 export const Create = () => {
   const [playerName, setPlayerName] = useState("");
@@ -62,7 +63,7 @@ export const Create = () => {
           type="text"
           value={playerName}
           onChange={(e) => {
-            if (e.target.value.length <= 19) {
+            if (e.target.value.length <= MAX_CHAR_PSEUDO) {
               setPlayerName(e.target.value);
             }
           }}

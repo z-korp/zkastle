@@ -4,7 +4,6 @@ import * as SystemTypes from "./generated/contractSystems";
 import { ClientModels } from "./models";
 import { shortenHex } from "@dojoengine/utils";
 import { Account } from "starknet";
-import { isAppPwa } from "@/hooks/useIsPwa";
 
 export type SystemCalls = ReturnType<typeof systems>;
 
@@ -15,12 +14,18 @@ export function systems({
   client: IWorld;
   clientModels: ClientModels;
 }) {
+  const TOAST_ID = "unique-id";
+
   const extractedMessage = (message: string) => {
     return message.match(/\('([^']+)'\)/)?.[1];
   };
 
   const isMdOrLarger = (): boolean => {
     return window.matchMedia("(min-width: 768px)").matches;
+  };
+
+  const isSmallHeight = (): boolean => {
+    return window.matchMedia("(max-height: 768px)").matches;
   };
 
   const getToastAction = (transaction_hash: string) => {
@@ -39,28 +44,24 @@ export function systems({
     | "bottom-right" => {
     if (!isMdOrLarger()) {
       // if mobile
-      return isAppPwa() ? "bottom-center" : "top-center";
+      return isSmallHeight() ? "top-center" : "bottom-center";
     }
     return "bottom-right";
   };
 
   const toastPlacement = getToastPlacement();
 
-  const notify = (
-    message: string,
-    transaction: any,
-    toastId: string | number,
-  ) => {
+  const notify = (message: string, transaction: any) => {
     if (transaction.execution_status !== "REVERTED") {
       toast.success(message, {
-        id: toastId,
+        id: TOAST_ID,
         description: shortenHex(transaction.transaction_hash),
         action: getToastAction(transaction.transaction_hash),
         position: toastPlacement,
       });
     } else {
       toast.error(extractedMessage(transaction.revert_reason), {
-        id: toastId,
+        id: TOAST_ID,
         position: toastPlacement,
       });
     }
@@ -71,16 +72,12 @@ export function systems({
     action: () => Promise<{ transaction_hash: string }>,
     successMessage: string,
   ) => {
-    const toastId = toast.loading("Transaction in progress...", {
-      position: toastPlacement,
-      description: "",
-    });
     try {
       const { transaction_hash } = await action();
       toast.loading("Transaction in progress...", {
         description: shortenHex(transaction_hash),
         action: getToastAction(transaction_hash),
-        id: toastId,
+        id: TOAST_ID,
         position: toastPlacement,
       });
 
@@ -88,9 +85,9 @@ export function systems({
         retryInterval: 100,
       });
 
-      notify(successMessage, transaction, toastId);
+      notify(successMessage, transaction);
     } catch (error: any) {
-      toast.error(extractedMessage(error.message), { id: toastId });
+      toast.error(extractedMessage(error.message), { id: TOAST_ID });
     }
   };
 

@@ -98,7 +98,7 @@ export const Row = ({ rank, game }: { rank: number; game: Game }) => {
       <TableCell className="flex justify-center">
         <Achievements details={game.achievements} />
       </TableCell>
-      <TableCell className="text-left">
+      <TableCell className="text-left max-w-36 truncate">
         {player?.getShortName() || "-"}
       </TableCell>
     </TableRow>
@@ -107,7 +107,7 @@ export const Row = ({ rank, game }: { rank: number; game: Game }) => {
 
 export const Achievements = ({ details }: { details: AchievementDetail[] }) => {
   return (
-    <div className="flex gap-1 justify-center">
+    <div className="grid grid-cols-5 gap-1 sm:grid-cols-9">
       {details.map(({ achievement, has }, index) => (
         <div
           key={index}

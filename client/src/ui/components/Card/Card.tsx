@@ -21,7 +21,6 @@ import { useGameStore } from "@/stores/game";
 import { CARD_WIDTH, CARD_HEIGHT } from "@/ui/constants";
 import { useMediaQuery } from "react-responsive";
 import "./Card.css";
-import useIsPwa from "@/hooks/useIsPwa";
 
 interface CardProps {
   data: { card: CardClass; side: Side; id: number };
@@ -54,7 +53,6 @@ const Card: React.FC<CardProps> = ({
   style = {},
 }) => {
   const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
-  const isPwa = useIsPwa();
 
   const { card, side } = data;
 
@@ -75,7 +73,7 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`flip-card relative rounded-2xl ${!isMdOrLarger ? (isPwa ? "scale-[85%]" : "scale-[90%]") : ""}`}
+      className={`flip-card relative rounded-2xl ${!isMdOrLarger ? "scale-[90%]" : ""}`}
       style={{ width: `${CARD_WIDTH}px`, height: `${CARD_HEIGHT}px`, ...style }}
     >
       <div

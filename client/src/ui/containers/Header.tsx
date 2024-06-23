@@ -49,7 +49,9 @@ export const Header = () => {
           <Leaderboard />
         </div>
         <div className="flex flex-col gap-4 items-center md:flex-row">
-          {!!player && <p className="text-2xl">{player.name}</p>}
+          {!!player && (
+            <p className="text-2xl max-w-44 truncate">{player.name}</p>
+          )}
           <div className="flex gap-2">
             <Account />
             <ModeToggle />
@@ -92,7 +94,9 @@ export const Header = () => {
         </Drawer>
         <div className="w-full flex justify-between items-center">
           <p className="text-4xl font-bold">zKastle</p>
-          {!!player && <p className="text-2xl">{player.name}</p>}
+          {!!player && (
+            <p className="text-2xl max-w-44 truncate">{player.name}</p>
+          )}
         </div>
       </div>
       <Separator />
