@@ -38,8 +38,8 @@ rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
 #rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_6"
 #rpc_url = "https://free-rpc.nethermind.io/sepolia-juno/v0_6"
 #rpc_url = "https://rpc.nethermind.io/sepolia-juno/v0_6?apiKey=supVUiu9olj34NdcUsq6T5dAFsp0ZpjMHyWlGJ1Zd6GtRiVr"
-account_address = ""
-private_key = ""
+account_address = "0x063fd4be5b4df3068e3c4ae4062e999609b96a569e69628d6ba3331bf56e826c"
+private_key = "0x05c38e8a5fe551d71755d7c4c77ea8aa7083479b222b413fef3772205fefec00"
 
 [tool.dojo.world]
 name = "zKastle"

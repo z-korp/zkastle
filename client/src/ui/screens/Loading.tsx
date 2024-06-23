@@ -27,14 +27,14 @@ export const Loading = ({
 
       {/* Loader */}
       <div
-        className={`flex justify-center items-center z-50 ${!enter && "hidden"}`}
+        className={`flex justify-center items-center z-[2000] ${!enter && "hidden"}`}
       >
         <img src={loader} alt="loader" className="h-32 md:h-40" />
       </div>
 
       {/* Enter Button */}
       <div
-        className={`absolute bottom-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center z-50 ${enter && "hidden"}`}
+        className={`absolute bottom-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center z-[2000] ${enter && "hidden"}`}
       >
         <Button
           onClick={() => setEnter(true)}
