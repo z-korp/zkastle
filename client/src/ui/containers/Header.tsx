@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { Account } from "@/ui/components/Account";
 import { Separator } from "@/ui/elements/separator";
 import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "@/ui/components/Theme";
@@ -29,6 +28,8 @@ import {
   DropdownMenuItem,
 } from "@/ui/elements/dropdown-menu";
 import AccountData from "../components/AccountData";
+import { KATANA_ETH_CONTRACT_ADDRESS } from "@dojoengine/core";
+import Balance from "../components/Balance";
 
 export const Header = () => {
   const {
@@ -124,10 +125,17 @@ export const Header = () => {
         </Drawer>
         <div className="w-full flex justify-between items-center">
           <p className="text-4xl font-bold">zKastle</p>
-          {!!player && (
-            <p className="text-2xl max-w-44 truncate">{player.name}</p>
+          {!!player ? (
+            <div className="flex gap-1">
+              <p className="text-2xl max-w-44 truncate">{player.name}</p>
+              <Balance
+                address={account.address}
+                token_address={KATANA_ETH_CONTRACT_ADDRESS}
+              />
+            </div>
+          ) : (
+            <Connect />
           )}
-          <Connect />
         </div>
       </div>
       <Separator />
