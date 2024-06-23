@@ -6,6 +6,14 @@ import { useGame } from "@/hooks/useGame";
 import { usePlayer } from "@/hooks/usePlayer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFontAwesome } from "@fortawesome/free-solid-svg-icons";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/ui/elements/dialog";
 
 export const Surrender = () => {
   const {
@@ -39,16 +47,40 @@ export const Surrender = () => {
   if (disabled) return null;
 
   return (
-    <div className="flex items-center gap-4">
-      <p className="text-2xl hidden md:block">Surrender</p>
-      <Button
-        size={"icon"}
-        disabled={disabled || isLoading}
-        isLoading={isLoading}
-        onClick={handleClick}
-      >
-        <FontAwesomeIcon icon={faFontAwesome} className="h-6 w-6" />
-      </Button>
+    <div className="flex gap-2">
+      <div className="text-2xl hidden md:block">Surrender</div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            size={"icon"}
+            disabled={disabled || isLoading}
+            isLoading={isLoading}
+          >
+            <FontAwesomeIcon icon={faFontAwesome} className="h-6 w-6" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Surrender Game?</DialogTitle>
+          </DialogHeader>
+
+          <div className="flex gap-2 w-full">
+            <DialogClose asChild className="w-1/2">
+              <Button>No, Continue Playing</Button>
+            </DialogClose>
+            <DialogClose asChild className="w-1/2">
+              <Button
+                variant="destructive"
+                disabled={disabled || isLoading}
+                isLoading={isLoading}
+                onClick={handleClick}
+              >
+                Yes, Surrender
+              </Button>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
