@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Leaderboard } from "../modules/Leaderboard";
 import { Achievements } from "../modules/Achievements";
+import Connect from "../components/Connect";
 
 export const Header = () => {
   const {
@@ -52,6 +53,7 @@ export const Header = () => {
           {!!player && (
             <p className="text-2xl max-w-44 truncate">{player.name}</p>
           )}
+          <Connect />
           <div className="flex gap-2">
             <ModeToggle />
           </div>
@@ -79,6 +81,7 @@ export const Header = () => {
               {/*<div className="flex flex-col gap-2 items-center">
                 <p className="self-start">Burner Account</p> <Account />
               </div>*/}
+              <Connect />
               <div className="flex flex-col gap-2 items-center">
                 <p className="self-start">Theme</p> <ModeToggle />
               </div>
