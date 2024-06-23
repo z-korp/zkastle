@@ -27,6 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/ui/elements/dropdown-menu";
+import { Button } from "../elements/button";
 
 export const Header = () => {
   const {
@@ -51,7 +52,6 @@ export const Header = () => {
           onClick={handleClick}
         >
           <p className="text-4xl font-bold">zKastle</p>
-          <MusicPlayer />
           <Collection />
           <Achievements />
           <Leaderboard />
@@ -60,10 +60,12 @@ export const Header = () => {
           {!!player && (
             <p className="text-2xl max-w-44 truncate">{player.name}</p>
           )}
-          <div className="flex gap-2">
+          <div className="flex gap-4">
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <FontAwesomeIcon icon={faGear} />
+                <Button variant="outline" size="icon">
+                  <FontAwesomeIcon icon={faGear} />
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent sideOffset={24}>
                 <DropdownMenuLabel>Sound</DropdownMenuLabel>
