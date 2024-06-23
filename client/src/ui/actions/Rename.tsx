@@ -27,19 +27,21 @@ export const Create = () => {
     },
   } = useDojo();
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
 
   const handleClick = useCallback(async () => {
+    if (!account) return;
+
     setIsLoading(true);
     try {
-      await rename({ account: account as Account, name: playerName });
+      await rename({ account: account, name: playerName });
     } finally {
       setIsLoading(false);
     }
   }, [account, playerName]);
 
   const disabled = useMemo(() => {
-    return !account || !master || account === master || !player;
+    return !account || !master || account.address === master.address || !player;
   }, [account, master, player]);
 
   if (disabled) return null;

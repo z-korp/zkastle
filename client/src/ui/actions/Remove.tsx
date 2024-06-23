@@ -19,7 +19,7 @@ export const Remove = ({ index }: { index: number }) => {
 
   const { setResources } = useGameStore();
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
   const { game } = useGame({
     gameId: player?.game_id || "0x0",
   });
@@ -27,10 +27,12 @@ export const Remove = ({ index }: { index: number }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = useCallback(async () => {
+    if (!account) return;
+
     setIsLoading(true);
     try {
       await remove({
-        account: account as Account,
+        account: account,
         slot_index: index,
       });
       setResources(0n);
@@ -40,7 +42,13 @@ export const Remove = ({ index }: { index: number }) => {
   }, [account]);
 
   const disabled = useMemo(() => {
-    return !account || !master || account === master || !player || !game;
+    return (
+      !account ||
+      !master ||
+      account.address === master.address ||
+      !player ||
+      !game
+    );
   }, [account, master, player, game]);
 
   return (

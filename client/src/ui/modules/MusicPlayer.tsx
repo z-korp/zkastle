@@ -25,7 +25,7 @@ export const MusicPlayer = () => {
   const {
     account: { account },
   } = useDojo();
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
   const { game } = useGame({ gameId: player?.game_id || "0x0" });
 
   const handlePlay = () => {

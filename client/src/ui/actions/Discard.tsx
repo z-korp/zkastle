@@ -18,7 +18,7 @@ export const Discard = ({ enabled }: { enabled: boolean }) => {
 
   const { setResources } = useGameStore();
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
   const { game } = useGame({
     gameId: player?.game_id || "0x0",
   });
@@ -26,10 +26,11 @@ export const Discard = ({ enabled }: { enabled: boolean }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = useCallback(async () => {
+    if (!account) return;
     setIsLoading(true);
     try {
       await play({
-        account: account as Account,
+        account: account,
         action: new Action(ActionType.Discard).into(),
         choice: true, // first
         resources: 0n,
@@ -41,7 +42,13 @@ export const Discard = ({ enabled }: { enabled: boolean }) => {
   }, [account]);
 
   const disabled = useMemo(() => {
-    return !account || !master || account === master || !player || !game;
+    return (
+      !account ||
+      !master ||
+      account.address === master.address ||
+      !player ||
+      !game
+    );
   }, [account, master, player, game]);
 
   return (

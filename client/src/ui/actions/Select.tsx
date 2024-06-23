@@ -14,15 +14,17 @@ export const Select = ({ id }: { id: number }) => {
     },
   } = useDojo();
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = useCallback(async () => {
+    if (!account) return;
+
     setIsLoading(true);
     try {
       await select({
-        account: account as Account,
+        account: account,
         card_id: id,
       });
     } finally {
@@ -34,7 +36,7 @@ export const Select = ({ id }: { id: number }) => {
     return (
       !account ||
       !master ||
-      account === master ||
+      account.address === master.address ||
       !player ||
       !player.has(new Achievement(AchievementType.OracleStone)) ||
       player.card_id === id

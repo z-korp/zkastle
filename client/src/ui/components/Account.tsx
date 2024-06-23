@@ -19,7 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faRocket } from "@fortawesome/free-solid-svg-icons";
 
 export const Account = () => {
-  const {
+  /*const {
     account: { account, create, clear, list, select },
   } = useDojo();
 
@@ -75,5 +75,5 @@ export const Account = () => {
         </Tooltip>
       </TooltipProvider>
     </div>
-  );
+  );*/
 };

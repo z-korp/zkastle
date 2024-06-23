@@ -47,7 +47,7 @@ const Table: React.FC = () => {
 
   const firstRender = useRef(true);
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
   const { game } = useGame({
     gameId: player?.game_id || "0x0",
   });

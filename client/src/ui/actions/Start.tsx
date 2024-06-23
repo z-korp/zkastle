@@ -15,7 +15,7 @@ export const Start = () => {
     },
   } = useDojo();
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
   const { game } = useGame({
     gameId: player?.game_id || "0x0",
   });
@@ -23,6 +23,8 @@ export const Start = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = useCallback(async () => {
+    if (!account) return;
+
     setIsLoading(true);
     try {
       const {
@@ -35,7 +37,7 @@ export const Start = () => {
         beta,
       } = await fetchVrfData();
       await start({
-        account: account as Account,
+        account: account,
         seed,
         x: proof_gamma_x,
         y: proof_gamma_y,
@@ -53,7 +55,7 @@ export const Start = () => {
     return (
       !account ||
       !master ||
-      account === master ||
+      account.address === master.address ||
       !player ||
       (!!game && !game.isOver())
     );

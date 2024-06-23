@@ -27,7 +27,7 @@ export const Header = () => {
 
   const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
 
   const navigate = useNavigate();
 
@@ -53,7 +53,6 @@ export const Header = () => {
             <p className="text-2xl max-w-44 truncate">{player.name}</p>
           )}
           <div className="flex gap-2">
-            <Account />
             <ModeToggle />
           </div>
         </div>
@@ -77,9 +76,9 @@ export const Header = () => {
               <Leaderboard />
             </div>
             <div className="flex flex-col gap-5 p-4">
-              <div className="flex flex-col gap-2 items-center">
+              {/*<div className="flex flex-col gap-2 items-center">
                 <p className="self-start">Burner Account</p> <Account />
-              </div>
+              </div>*/}
               <div className="flex flex-col gap-2 items-center">
                 <p className="self-start">Theme</p> <ModeToggle />
               </div>

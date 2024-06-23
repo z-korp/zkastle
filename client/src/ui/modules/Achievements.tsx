@@ -34,7 +34,7 @@ export const Achievements = () => {
     account: { account },
   } = useDojo();
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
   const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
   const groups = useMemo(() => Game.getAchievements(), []);
   const selectable = useMemo(() => {

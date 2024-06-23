@@ -26,7 +26,7 @@ export const Storage = () => {
 
   const { resources, storage, costs, callback, setStorage, reset } =
     useGameStore();
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
   const { game } = useGame({
     gameId: player?.game_id || "0x0",
   });

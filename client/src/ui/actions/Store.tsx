@@ -27,7 +27,7 @@ export const Store = ({
 
   const { setStorage, setCosts, setCallback } = useGameStore();
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
   const { game } = useGame({
     gameId: player?.game_id || "0x0",
   });
@@ -35,13 +35,15 @@ export const Store = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = useCallback(async () => {
+    if (!account) return;
+
     setIsLoading(true);
     try {
       const paid = costs.filter((cost) => !cost.isNull()).length > 0;
       // If free, then send the store action
       if (!paid) {
         await play({
-          account: account as Account,
+          account: account,
           action: new Action(ActionType.Store).into(),
           choice,
           resources: 0n,
@@ -53,7 +55,7 @@ export const Store = ({
       setCosts(costs);
       setCallback(async (resources: bigint) => {
         await play({
-          account: account as Account,
+          account: account,
           action: new Action(ActionType.Store).into(),
           choice,
           resources,
@@ -67,7 +69,12 @@ export const Store = ({
 
   const disabled = useMemo(() => {
     return (
-      !enabled || !account || !master || account === master || !player || !game
+      !enabled ||
+      !account ||
+      !master ||
+      account.address === master.address ||
+      !player ||
+      !game
     );
   }, [enabled, account, master, player, game]);
 

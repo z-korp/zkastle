@@ -12,7 +12,6 @@ import {
 import { Button } from "@/ui/elements/button";
 import { Input } from "@/ui/elements/input";
 import { usePlayer } from "@/hooks/usePlayer";
-import { Account } from "starknet";
 import { MAX_CHAR_PSEUDO } from "../constants";
 
 export const Create = () => {
@@ -27,19 +26,23 @@ export const Create = () => {
     },
   } = useDojo();
 
-  const { player } = usePlayer({ playerId: account.address });
+  const { player } = usePlayer({ playerId: account?.address });
 
   const handleClick = useCallback(async () => {
+    if (!account) return;
+
     setIsLoading(true);
     try {
-      await create({ account: account as Account, name: playerName });
+      await create({ account: account, name: playerName });
     } finally {
       setIsLoading(false);
     }
   }, [account, playerName]);
 
   const disabled = useMemo(() => {
-    return !account || !master || account === master || !!player;
+    return (
+      !account || !master || account.address === master.address || !!player
+    );
   }, [account, master, player]);
 
   if (disabled) return null;
