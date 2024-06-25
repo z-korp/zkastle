@@ -2,6 +2,8 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from "@/ui/elements/dialog";
 import {
@@ -13,13 +15,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/ui/elements/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/ui/elements/pagination";
 import { Button } from "@/ui/elements/button";
 import { AchievementDetail, Game } from "@/dojo/game/models/game";
 import { useGames } from "@/hooks/useGames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKhanda, faStar } from "@fortawesome/free-solid-svg-icons";
 import { usePlayer } from "@/hooks/usePlayer";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+const GAME_PER_PAGE = 5;
+const MAX_PAGE_COUNT = 5;
 
 export const Leaderboard = () => {
   return (
@@ -29,7 +43,8 @@ export const Leaderboard = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="flex items-center text-2xl">
-          Leaderboard
+          <DialogTitle>Leaderboard</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
         <div className="m-auto">
           <Content />
@@ -41,42 +56,101 @@ export const Leaderboard = () => {
 
 export const Content = () => {
   const { games } = useGames();
+  const [page, setPage] = useState<number>(1);
+  const [pageCount, setPageCount] = useState<number>(0);
+
+  useEffect(() => {
+    const rem = Math.floor(games.length / GAME_PER_PAGE) + 1;
+    // setPage(rem);
+    setPageCount(rem);
+  }, [games]);
+
+  const { start, end } = useMemo(() => {
+    const start = page - 1;
+    const end = start + GAME_PER_PAGE;
+    return { start, end };
+  }, [page]);
+
+  const handlePrevious = useCallback(() => {
+    if (page === 1) return;
+    setPage((prev) => prev - 1);
+  }, [page]);
+
+  const handleNext = useCallback(() => {
+    if (page === pageCount) return;
+    setPage((prev) => prev + 1);
+  }, [page, pageCount]);
+
   const disabled = useMemo(
     () =>
-      games.filter((game) => !!game.getScore() || !!game.getUpgrade()).length >
-      0,
+      games.filter((game) => true || !!game.getScore() || !!game.getUpgrade())
+        .length > 0,
     [games],
   );
 
   return (
-    <Table className="text-md">
-      <TableCaption className={`${disabled && "hidden"}`}>
-        Leaderbord is waiting for its best players to make history
-      </TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-left">Rank</TableHead>
-          <TableHead className="text-center">
-            <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
-          </TableHead>
-          <TableHead className="text-center">
-            <FontAwesomeIcon icon={faKhanda} className="text-slate-500" />
-          </TableHead>
-          <TableHead className="text-center">Achievements</TableHead>
-          <TableHead>Name</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {games
-          .sort((a, b) => b.getUpgrade() - a.getUpgrade())
-          .sort((a, b) => b.getScore() - a.getScore())
-          .slice(0, 10)
-          .filter((game) => !!game.getScore() || !!game.getUpgrade())
-          .map((game, index) => (
-            <Row key={index} rank={index + 1} game={game} />
-          ))}
-      </TableBody>
-    </Table>
+    <>
+      <Table className="text-md">
+        <TableCaption className={`${disabled && "hidden"}`}>
+          Leaderbord is waiting for its best players to make history
+        </TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-left">Rank</TableHead>
+            <TableHead className="text-center">
+              <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
+            </TableHead>
+            <TableHead className="text-center">
+              <FontAwesomeIcon icon={faKhanda} className="text-slate-500" />
+            </TableHead>
+            <TableHead className="text-center">Achievements</TableHead>
+            <TableHead>Name</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {games
+            .sort((a, b) => b.getUpgrade() - a.getUpgrade())
+            .sort((a, b) => b.getScore() - a.getScore())
+            .slice(start, end)
+            .filter((game) => true || !!game.getScore() || !!game.getUpgrade())
+            .map((game, index) => (
+              <Row
+                key={index}
+                rank={(page - 1) * GAME_PER_PAGE + index + 1}
+                game={game}
+              />
+            ))}
+        </TableBody>
+      </Table>
+      <Pagination className={`${!disabled && "hidden"}`}>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className={`${page === 1 && "opacity-50"}`}
+              onClick={handlePrevious}
+            />
+          </PaginationItem>
+          {Array.from({ length: Math.min(pageCount, MAX_PAGE_COUNT) }).map(
+            (_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  isActive={index + 1 === page}
+                  onClick={() => setPage(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ),
+          )}
+          <PaginationItem>
+            <PaginationNext
+              className={`${page === pageCount && "opacity-50"}`}
+              onClick={handleNext}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </>
   );
 };
 
