@@ -167,6 +167,7 @@ export const Canvas = ({
         <Card
           data={{ card: item.card, side: item.side, id: 0 }}
           isFlipped={hover}
+          fgDescription={item.achievement.effect()}
           bgDescription={item.achievement.description()}
         />
       </div>

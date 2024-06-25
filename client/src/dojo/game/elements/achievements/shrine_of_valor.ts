@@ -36,6 +36,6 @@ export const ShrineOfValor: AchievementInterface = class ShrineOfValor {
   }
 
   public static effect(): string {
-    return "";
+    return "Single usage";
   }
 };
