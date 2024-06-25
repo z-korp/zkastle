@@ -999,10 +999,10 @@
         ]
       }
     ],
-    "address": "0x5928c4dc0f4716dae618377b8c8325824813a01458a359d4329ced00b293ead",
-    "transaction_hash": "0x3702b023e00b4c098f12fe5b9285cdee74ff40ddf8869e0ae26803ef117fdc9",
+    "address": "0x1c4e8343f99f2bc9488908cb054bdffad202973b2961d16ae6c201aebf56a23",
+    "transaction_hash": "0x5c7cae23d8494dd48f900a1866a8cb5bb61893fbe8536700d22a6949fecdd33",
     "block_number": 3,
-    "seed": "v1",
+    "seed": "v8",
     "metadata": {
       "profile_name": "slot",
       "rpc_url": "https://api.cartridge.gg/x/zkastle/katana"
@@ -1019,9 +1019,9 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": "0x4617bce680818738984906efde1d9563dc0d7f9bccc3c7127ae52692d381270",
-      "class_hash": "0x3f57b011e7adc1d223f744e93ad35906e3e3013e5f4818f06cc2e3c4ec330bd",
-      "original_class_hash": "0x3f57b011e7adc1d223f744e93ad35906e3e3013e5f4818f06cc2e3c4ec330bd",
+      "address": "0x1cc7632abb73cbd508ea74b7237c58ec0e7cbd60128e8dcaac9dab7d1ede68a",
+      "class_hash": "0x7fa4a9280be6c689dd7d6bf5130eb44dcc39ae5c849fa27805c1db3e78e4646",
+      "original_class_hash": "0x7fa4a9280be6c689dd7d6bf5130eb44dcc39ae5c849fa27805c1db3e78e4646",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
