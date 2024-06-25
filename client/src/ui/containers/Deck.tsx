@@ -54,11 +54,12 @@ export const DeckCard = (props: DeckCardProps) => {
   const isFlipped = useMemo(() => {
     // Show the card flipped if in Deck pile except for the first card
     // or if there are less than 3 cards in the deck
+    if (!game) return false;
     return (
       card.position === PositionType.Deck &&
-      (!isFirst(card) || game?.getRemaining() < 3)
+      (!isFirst(card) || game.getRemaining() < 3)
     );
-  }, [card, game]);
+  }, [card, game, isFirst]);
 
   const stored = useMemo(() => {
     return game.inStorage(card.data.id);
