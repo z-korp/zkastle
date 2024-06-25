@@ -63,7 +63,7 @@ export const Start = () => {
 
   return (
     <Button
-      disabled={disabled || isLoading}
+      disabled={isLoading}
       isLoading={isLoading}
       onClick={handleClick}
       className="text-xl"

@@ -51,11 +51,7 @@ export const Surrender = () => {
       <div className="text-2xl hidden md:block">Surrender</div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button
-            size={"icon"}
-            disabled={disabled || isLoading}
-            isLoading={isLoading}
-          >
+          <Button size={"icon"} disabled={isLoading} isLoading={isLoading}>
             <FontAwesomeIcon icon={faFontAwesome} className="h-6 w-6" />
           </Button>
         </DialogTrigger>
@@ -71,7 +67,7 @@ export const Surrender = () => {
             <DialogClose asChild className="w-1/2">
               <Button
                 variant="destructive"
-                disabled={disabled || isLoading}
+                disabled={isLoading}
                 isLoading={isLoading}
                 onClick={handleClick}
               >
