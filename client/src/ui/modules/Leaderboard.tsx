@@ -66,7 +66,7 @@ export const Content = () => {
   }, [games]);
 
   const { start, end } = useMemo(() => {
-    const start = page - 1;
+    const start = (page - 1) * GAME_PER_PAGE;
     const end = start + GAME_PER_PAGE;
     return { start, end };
   }, [page]);
