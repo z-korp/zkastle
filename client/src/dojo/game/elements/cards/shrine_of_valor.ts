@@ -4,6 +4,8 @@ import { Resource } from "../../types/resource";
 import { Side, SideType } from "../../types/side";
 import { CardInterface } from "./interface";
 
+const MESSAGE = "Single use";
+
 export const ShrineOfValor: CardInterface = class ShrineOfValor {
   public static resource(side: Side): Resource {
     switch (side.value) {
@@ -48,7 +50,17 @@ export const ShrineOfValor: CardInterface = class ShrineOfValor {
   }
 
   public static cost(side: Side, action: Action): Resource[] {
-    return [];
+    switch (action.value) {
+      case ActionType.Store:
+        switch (side.value) {
+          case SideType.One:
+            return [new Resource(0, 0, 0, MESSAGE)];
+          default:
+            return [];
+        }
+      default:
+        return [];
+    }
   }
 
   public static condition(
