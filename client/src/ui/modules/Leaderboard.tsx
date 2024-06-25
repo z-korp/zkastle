@@ -59,11 +59,17 @@ export const Content = () => {
   const [page, setPage] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(0);
 
-  useEffect(() => {
-    const rem = Math.floor(games.length / GAME_PER_PAGE) + 1;
-    // setPage(rem);
-    setPageCount(rem);
+  const sorteds = useMemo(() => {
+    return games
+      .sort((a, b) => b.getUpgrade() - a.getUpgrade())
+      .sort((a, b) => b.getScore() - a.getScore())
+      .filter((game) => !!game.getScore() || !!game.getUpgrade());
   }, [games]);
+
+  useEffect(() => {
+    const rem = Math.floor(sorteds.length / (GAME_PER_PAGE + 1)) + 1;
+    setPageCount(rem);
+  }, [sorteds]);
 
   const { start, end } = useMemo(() => {
     const start = (page - 1) * GAME_PER_PAGE;
@@ -81,12 +87,7 @@ export const Content = () => {
     setPage((prev) => prev + 1);
   }, [page, pageCount]);
 
-  const disabled = useMemo(
-    () =>
-      games.filter((game) => !!game.getScore() || !!game.getUpgrade())
-        .length > 0,
-    [games],
-  );
+  const disabled = useMemo(() => sorteds.length > 0, [sorteds]);
 
   return (
     <>
@@ -108,18 +109,13 @@ export const Content = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {games
-            .sort((a, b) => b.getUpgrade() - a.getUpgrade())
-            .sort((a, b) => b.getScore() - a.getScore())
-            .slice(start, end)
-            .filter((game) => !!game.getScore() || !!game.getUpgrade())
-            .map((game, index) => (
-              <Row
-                key={index}
-                rank={(page - 1) * GAME_PER_PAGE + index + 1}
-                game={game}
-              />
-            ))}
+          {sorteds.slice(start, end).map((game, index) => (
+            <Row
+              key={index}
+              rank={(page - 1) * GAME_PER_PAGE + index + 1}
+              game={game}
+            />
+          ))}
         </TableBody>
       </Table>
       <Pagination className={`${!disabled && "hidden"}`}>
