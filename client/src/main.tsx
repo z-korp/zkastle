@@ -6,8 +6,8 @@ import { setup, SetupResult } from "./dojo/setup.ts";
 import { DojoProvider } from "./dojo/context.tsx";
 import { dojoConfig } from "../dojo.config.ts";
 import { Loading } from "@/ui/screens/Loading";
-import { Header } from "./ui/containers/Header.tsx";
 import { MusicPlayerProvider } from "./contexts/music.tsx";
+import { SoundPlayerProvider } from "./contexts/sound.tsx";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -42,7 +42,9 @@ function Main() {
       <MusicPlayerProvider>
         {!loading && setupResult ? (
           <DojoProvider value={setupResult}>
-            <App />
+            <SoundPlayerProvider>
+              <App />
+            </SoundPlayerProvider>
           </DojoProvider>
         ) : (
           <Loading enter={enter} setEnter={setEnter} />
