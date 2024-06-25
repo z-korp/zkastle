@@ -32,7 +32,7 @@ export const ShrineOfValor: AchievementInterface = class ShrineOfValor {
   }
 
   public static description(): string {
-    return "Have 30+ points and all Monasteries at IV at the end of the game.";
+    return "Have 30+ points and all Monasteries at III at the end of the game.";
   }
 
   public static effect(): string {
