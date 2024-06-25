@@ -24,8 +24,8 @@ initializer_class_hash = "0xbeef"
 
 [profile.dev.tool.dojo.env]
 rpc_url = "http://localhost:5050/"
-account_address = "0x6b12008f51ab9bb1b078e175cf0f7a18e7e59deb8125b2c544ebac9386b3929"
-private_key = "0x7de91e7a859544bd2bf5354b2aff2253777a9c7b2c5e306a0718d06bf272697"
+account_address = "0x6b86e40118f29ebe393a75469b4d926c7a44c2e2681b6d319520b7c1156d114"
+private_key = "0x1c9053c053edf324aec366a34c6901b1095b07af69495bffec7d7fe21effb1b"
 
 [profile.slot.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/zkastle/katana"

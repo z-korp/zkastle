@@ -3,10 +3,10 @@ kind = "WorldContract"
 class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
 original_class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
 abi = "manifests/dev/abis/deployments/dojo_world_world.json"
-address = "0x26663f285f4571e8b1f980cb6537f1a6eeb63291e2aed8216bf4ea5678ffc8a"
-transaction_hash = "0x7c9ca010c10410238d60400245d041cf5a6ebeec217d2cb152b76d262c6fa9f"
-block_number = 24
-seed = "v0"
+address = "0x63abf335f66aeaefe2b35c329d944e0e33e8cc225f9dcb21fb82759a774f300"
+transaction_hash = "0x3cb87ac667f95cadc6b5f4cc433dbee0e51a6902e794b4e80a8433a1b233238"
+block_number = 3
+seed = "zkastle"
 name = "dojo::world::world"
 
 [world.metadata]
@@ -21,9 +21,9 @@ name = "dojo::base::base"
 
 [[contracts]]
 kind = "DojoContract"
-address = "0x9315765c7ede4cc632748a8e0f1473df295b06e5064785467443a6f74fac4b"
-class_hash = "0x49c15e406c58bfb8fb08f3a18da08ff25eee4c201f9261034a2b0ec40b0da4c"
-original_class_hash = "0x49c15e406c58bfb8fb08f3a18da08ff25eee4c201f9261034a2b0ec40b0da4c"
+address = "0x51ec0524b87b30b3309fab1da22400d2d119d447eee7d32297a9933baa6505e"
+class_hash = "0x637413abf87e5fc283bb40b9da819c9e3177d64562646697521603b97acefe9"
+original_class_hash = "0x637413abf87e5fc283bb40b9da819c9e3177d64562646697521603b97acefe9"
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
 abi = "manifests/dev/abis/deployments/contracts/zkastle_systems_actions_actions.json"
 reads = []
@@ -104,8 +104,8 @@ key = false
 
 [[models]]
 kind = "DojoModel"
-class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
-original_class_hash = "0x445885f9d3acbc91a7579683e6c4e5aa2ddf46d6250d8244bca529e84a3f3cd"
+class_hash = "0x4be10cbeb28a10a5b5e5fb55c41269de0fb6ea6eaeec2ac11395e186b9f9e1c"
+original_class_hash = "0x4be10cbeb28a10a5b5e5fb55c41269de0fb6ea6eaeec2ac11395e186b9f9e1c"
 abi = "manifests/dev/abis/deployments/models/zkastle_models_index_player.json"
 name = "zkastle::models::index::player"
 
@@ -120,7 +120,17 @@ type = "u32"
 key = false
 
 [[models.members]]
+name = "card_id"
+type = "u8"
+key = false
+
+[[models.members]]
 name = "achievements"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "enables"
 type = "u32"
 key = false
 

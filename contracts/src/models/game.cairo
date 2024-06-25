@@ -353,7 +353,7 @@ mod tests {
 
     // Local imports
 
-    use super::{Game, GameTrait, AssertTrait, Action, Resource, ResourceTrait, Packer};
+    use super::{Game, GameTrait, AssertTrait, Action, Resource, ResourceTrait, Packer, Deck, DeckTrait, Card, CardTrait};
 
     // Constants
 
@@ -375,7 +375,7 @@ mod tests {
         assert_eq!(game.cards > 0x8000000000000000000, true);
         assert_eq!(game.cards < 0x2000000000000000000000, true);
         // Expecting the 16 cards to be side one at beginning
-        assert_eq!(game.sides, 0x9249249249249249);
+        assert_eq!(game.sides, 0x209248249249249249);
     }
 
     #[test]
@@ -389,7 +389,7 @@ mod tests {
         assert_eq!(game.cards > 0x200000000000000000000000000, true);
         assert_eq!(game.cards < 0x80000000000000000000000000000, true);
         // Expecting the 22 cards to be side one at beginning, except
-        assert_eq!(game.sides, 0x924924924924944A);
+        assert_eq!(game.sides, 0x20924824924924944A);
     }
 
     #[test]
@@ -578,5 +578,49 @@ mod tests {
         let achievements = game.assess_achievements();
         assert_eq!(game.over, true);
         assert_eq!(achievements, 0xa);
+    }
+
+    #[test]
+    fn test_game_rotate_samurai_horn() {
+        let deck = Deck::Base;
+        let ids: Array<u8> = deck.ids(Card::SamuraiHorn);
+        let first_card: u8 = *ids.at(0);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, first_card, ACHIEVEMENTS, SEED);
+        // b000001000011001001001001000_001001001001001001001001001001001001001001001001
+        game.sides = 0x219248249249249249;
+        game.start();
+        game.perform(Action::Rotate, true, 0);
+        // b000001000100001001001001000_001001001001001001001001001001001001001001001001
+        assert_eq!(game.sides, 0x221248249249249249);
+    }
+
+    #[test]
+    fn test_game_rotate_samurai_horn_upgrade() {
+        let deck = Deck::Base;
+        let ids: Array<u8> = deck.ids(Card::SamuraiHorn);
+        let first_card: u8 = *ids.at(0);
+        let mut game = GameTrait::new(GAME_ID, PLAYER_ID, first_card, ACHIEVEMENTS, SEED);
+        game.stores = 0b00110_00001;
+        game.start();
+        game.perform(Action::Flip, true, 0b00110_00001);
+        // b000001000011001001001001000_001001001001001001001001001001001001001001001001
+        assert_eq!(game.sides, 0x219248249249249249);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Discard, true, 0);
+        game.perform(Action::Rotate, true, 0);
     }
 }

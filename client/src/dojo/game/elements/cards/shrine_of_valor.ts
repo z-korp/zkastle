@@ -10,7 +10,7 @@ export const ShrineOfValor: CardInterface = class ShrineOfValor {
       case SideType.One:
         return new Resource(1, 1, 1);
       default:
-        return new Resource(0, 0, 0);
+        return new Resource(1, 1, 1);
     }
   }
 

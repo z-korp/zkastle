@@ -37,7 +37,7 @@ export const Remove = ({ index }: { index: number }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [account]);
+  }, [account, index]);
 
   const disabled = useMemo(() => {
     return !account || !master || account === master || !player || !game;

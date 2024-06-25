@@ -41,11 +41,11 @@ export const Rotate = ({
     setIsLoading(true);
     try {
       const paid = costs.filter((cost) => !cost.isNull()).length > 0;
-      // If free, then send the store action
+      // If free, then send the rotate action
       if (!paid) {
         await play({
           account: account as Account,
-          action: new Action(ActionType.Store).into(),
+          action: new Action(ActionType.Rotate).into(),
           choice,
           resources: 0n,
         });

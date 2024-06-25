@@ -8,6 +8,8 @@ impl CardImpl of CardTrait {
     #[inline(always)]
     fn resource(side: Side) -> Resource {
         match side {
+            // Add this to consider the resource after being stored
+            Side::None => ResourceTrait::new(1, 1, 1),
             Side::One => ResourceTrait::new(1, 1, 1),
             _ => ResourceTrait::new(0, 0, 0),
         }
