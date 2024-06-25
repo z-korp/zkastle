@@ -104,7 +104,12 @@ export class Game {
         };
       },
     );
-    this.cards = [this.card_one, this.card_two, this.card_three, ...this.cards];
+    this.cards = [
+      this.card_one,
+      this.card_two,
+      this.card_three,
+      ...this.cards,
+    ].filter((card) => card.id !== 0);
   }
 
   public static getUniqueCards(): { card: Card; side: Side }[][] {

@@ -1,13 +1,13 @@
 import { useGameStore } from "@/stores/game";
 import { motion, AnimatePresence } from "framer-motion";
-import Card from "../components/Card/Card";
+import Card from "./Card/Card";
 import { useMediaQuery } from "react-responsive";
 
-interface ShowUpradeProps {
+interface UpgradeProps {
   coords: { x: number; y: number };
 }
 
-export const ShowUprade: React.FC<ShowUpradeProps> = ({ coords }) => {
+export const Upgrade: React.FC<UpgradeProps> = ({ coords }) => {
   const isMdOrLarger = useMediaQuery({ query: "(min-width: 768px)" });
 
   const { upgradeToShow } = useGameStore();

@@ -1,7 +1,7 @@
 import { Header } from "@/ui/containers/Header";
 import { Create } from "../actions/Create";
 import { Start } from "../actions/Start";
-import Table from "../containers/Table";
+import { Board } from "../containers/Board";
 import { GameInfo } from "../containers/GameInfo";
 import { GameOver } from "../containers/GameOver";
 
@@ -19,7 +19,7 @@ export const Home = () => {
           <GameOver />
         </div>
         <div className="absolute top-0 flex justify-center gap-4"></div>
-        <Table />
+        <Board />
       </div>
     </div>
   );

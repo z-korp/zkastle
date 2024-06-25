@@ -130,7 +130,9 @@ const Card: React.FC<CardProps> = ({
                   </div>
                 </TooltipTrigger>
                 {stored && (
-                  <TooltipContent className="">Already stored</TooltipContent>
+                  <TooltipContent className="text-black translate-y-8">
+                    Already stored
+                  </TooltipContent>
                 )}
               </Tooltip>
             </TooltipProvider>
