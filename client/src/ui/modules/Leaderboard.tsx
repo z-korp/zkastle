@@ -83,7 +83,7 @@ export const Content = () => {
 
   const disabled = useMemo(
     () =>
-      games.filter((game) => true || !!game.getScore() || !!game.getUpgrade())
+      games.filter((game) => !!game.getScore() || !!game.getUpgrade())
         .length > 0,
     [games],
   );
@@ -112,7 +112,7 @@ export const Content = () => {
             .sort((a, b) => b.getUpgrade() - a.getUpgrade())
             .sort((a, b) => b.getScore() - a.getScore())
             .slice(start, end)
-            .filter((game) => true || !!game.getScore() || !!game.getUpgrade())
+            .filter((game) => !!game.getScore() || !!game.getUpgrade())
             .map((game, index) => (
               <Row
                 key={index}
