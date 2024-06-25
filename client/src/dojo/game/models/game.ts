@@ -145,6 +145,10 @@ export class Game {
     return this.stores.some(({ id }) => id === card_id);
   }
 
+  public isStorageFull(): boolean {
+    return this.stores.filter(({ id }) => id !== 0).length === STORE_SLOT_COUNT;
+  }
+
   public getScore(): number {
     let score = 0;
     this.sides.forEach((side: Side, index: number) => {

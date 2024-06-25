@@ -70,7 +70,9 @@ export const Storage = () => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="flex flex-col items-center">
           <DialogTitle className="text-2xl">Storage</DialogTitle>
-          <DialogDescription>Select the resources to spend</DialogDescription>
+          <DialogDescription>
+            Select the resources to spend or to remove
+          </DialogDescription>
           <Cost resources={costs} textColor="text-neutral-300" />
         </DialogHeader>
         <div className="flex flex-col gap-4 min-w-60 items-center">

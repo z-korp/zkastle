@@ -29,17 +29,19 @@ export const Store = ({
 
   const { player } = usePlayer({ playerId: account.address });
   const { game } = useGame({
-    gameId: player?.game_id || "0x0",
+    gameId: player?.game_id,
   });
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = useCallback(async () => {
+    if (!game) return;
     setIsLoading(true);
     try {
       const paid = costs.filter((cost) => !cost.isNull()).length > 0;
-      // If free, then send the store action
-      if (!paid) {
+      const full = game.isStorageFull();
+      // If free and storage is not full, then send the store action
+      if (!paid && !full) {
         await play({
           account: account as Account,
           action: new Action(ActionType.Store).into(),
@@ -63,7 +65,7 @@ export const Store = ({
     } finally {
       setIsLoading(false);
     }
-  }, [account, costs]);
+  }, [account, game, costs]);
 
   const disabled = useMemo(() => {
     return (
