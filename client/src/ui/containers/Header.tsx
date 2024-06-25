@@ -72,7 +72,7 @@ export const Header = () => {
           )}
           <div className="flex gap-4">
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
                   <FontAwesomeIcon icon={faGear} />
                 </Button>
