@@ -2,6 +2,7 @@ use core::clone::Clone;
 // Internal imports
 
 use zkastle::elements::cards;
+use zkastle::types::achievement::Achievement;
 use zkastle::types::side::Side;
 use zkastle::types::action::Action;
 use zkastle::types::deck::Deck;
@@ -208,6 +209,22 @@ impl CardImpl of CardTrait {
             Card::MonkStaff => cards::monk_staff::CardImpl::condition(side, action, deck, sides),
             Card::ShogunAxe => cards::shogun_axe::CardImpl::condition(side, action, deck, sides),
             _ => false,
+        }
+    }
+
+    #[inline(always)]
+    fn achievement(self: Card) -> Achievement {
+        match self {
+            Card::OniFang => Achievement::OniFang,
+            Card::ShrineOfValor => Achievement::ShrineOfValor,
+            Card::DragonHeart => Achievement::DragonHeart,
+            Card::GuardianKami => Achievement::GuardianKami,
+            Card::SpiritualForge => Achievement::SpiritualForge,
+            Card::SamuraiHorn => Achievement::SamuraiHorn,
+            Card::OracleStone => Achievement::OracleStone,
+            Card::MonkStaff => Achievement::MonkStaff,
+            Card::ShogunAxe => Achievement::ShogunAxe,
+            _ => Achievement::None,
         }
     }
 }

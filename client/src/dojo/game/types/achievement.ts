@@ -65,6 +65,10 @@ export class Achievement {
     ];
   }
 
+  public isNone(): boolean {
+    return this.value === AchievementType.None;
+  }
+
   public getIcon(): string {
     switch (this.value) {
       case AchievementType.OniFang:

@@ -37,6 +37,7 @@ import monk_staff from "/assets/monk-staff-bg.png";
 import shogun_axe from "/assets/shogun-axe-bg.png";
 
 import { Action } from "./action";
+import { Achievement, AchievementType } from "./achievement";
 
 export enum CardType {
   None = "None",
@@ -412,6 +413,31 @@ export class Card {
         return ShogunAxe.cost(side, action);
       default:
         return [];
+    }
+  }
+
+  public getAchievement(): Achievement {
+    switch (this.value) {
+      case CardType.OniFang:
+        return new Achievement(AchievementType.OniFang);
+      case CardType.ShrineOfValor:
+        return new Achievement(AchievementType.ShrineOfValor);
+      case CardType.DragonHeart:
+        return new Achievement(AchievementType.DragonHeart);
+      case CardType.GuardianKami:
+        return new Achievement(AchievementType.GuardianKami);
+      case CardType.SpiritualForge:
+        return new Achievement(AchievementType.SpiritualForge);
+      case CardType.SamuraiHorn:
+        return new Achievement(AchievementType.SamuraiHorn);
+      case CardType.OracleStone:
+        return new Achievement(AchievementType.OracleStone);
+      case CardType.MonkStaff:
+        return new Achievement(AchievementType.MonkStaff);
+      case CardType.ShogunAxe:
+        return new Achievement(AchievementType.ShogunAxe);
+      default:
+        return new Achievement(AchievementType.None);
     }
   }
 }

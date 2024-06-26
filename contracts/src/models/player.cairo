@@ -6,7 +6,7 @@ use alexandria_math::bitmap::Bitmap;
 
 use zkastle::constants;
 use zkastle::models::index::Player;
-use zkastle::types::card::Card;
+use zkastle::types::card::{Card, CardTrait};
 use zkastle::types::deck::{Deck, DeckTrait};
 use zkastle::types::achievement::{Achievement, AchievementTrait};
 
@@ -74,10 +74,21 @@ impl PlayerAssert of AssertTrait {
 
     #[inline(always)]
     fn assert_is_selectable(self: Player, card_id: u8) {
+        // [Check] Card is a valid one
         let deck: Deck = Deck::Base;
         let card: u8 = deck.get(card_id).into();
         assert(card != Card::None.into(), errors::PLAYER_INVALID_CARD);
+        // [Check] Oracle Stone is unlocked
         let index = Achievement::OracleStone.index();
+        assert(Bitmap::get_bit_at(self.achievements, index), errors::PLAYER_ACHIEVEMENT_LOCKED);
+        // [Check] The selected card got its achievement unlocked if it exists
+        let card: Card = card.into();
+        let achievement: Achievement = card.achievement();
+        let achievement_id: u8 = achievement.into();
+        if (achievement_id == 0) {
+            return;
+        }
+        let index = achievement.index();
         assert(Bitmap::get_bit_at(self.achievements, index), errors::PLAYER_ACHIEVEMENT_LOCKED);
     }
 

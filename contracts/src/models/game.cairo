@@ -353,7 +353,10 @@ mod tests {
 
     // Local imports
 
-    use super::{Game, GameTrait, AssertTrait, Action, Resource, ResourceTrait, Packer, Deck, DeckTrait, Card, CardTrait};
+    use super::{
+        Game, GameTrait, AssertTrait, Action, Resource, ResourceTrait, Packer, Deck, DeckTrait,
+        Card, CardTrait
+    };
 
     // Constants
 

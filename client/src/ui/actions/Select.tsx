@@ -4,6 +4,7 @@ import { Account } from "starknet";
 import { Button } from "@/ui/elements/button";
 import { usePlayer } from "@/hooks/usePlayer";
 import { Achievement, AchievementType } from "@/dojo/game/types/achievement";
+import { Deck, DeckType } from "@/dojo/game/types/deck";
 
 export const Select = ({ id }: { id: number }) => {
   const {
@@ -31,15 +32,19 @@ export const Select = ({ id }: { id: number }) => {
   }, [account, id]);
 
   const disabled = useMemo(() => {
+    const deck = new Deck(DeckType.Base);
+    const card = deck.reveal(id);
+    const achievement = card.getAchievement();
     return (
       !account ||
       !master ||
       account === master ||
       !player ||
       !player.has(new Achievement(AchievementType.OracleStone)) ||
+      !(achievement.isNone() || player.has(achievement)) ||
       player.card_id === id
     );
-  }, [account, master, player]);
+  }, [account, master, player, id]);
 
   return (
     <Button
