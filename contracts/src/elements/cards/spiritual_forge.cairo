@@ -73,7 +73,7 @@ impl CardImpl of CardTrait {
                                     sides, index, SIDE_BIT_SIZE, deck.count()
                                 );
                                 let side: Side = raw.into();
-                                let upgrade: u8 = Card::Farm.upgrade(side);
+                                let upgrade: u8 = Card::Tower.upgrade(side);
                                 if upgrade < 3 {
                                     break false;
                                 };
